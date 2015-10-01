@@ -20,7 +20,7 @@
     <div class="wrapper">
     <div class="header">
         <h3>NewsPortal Admin Panel</h3>
-        <ul style="width:32%;">
+        <ul style="width:41%;">
             <li><a href="<?php echo $this->webroot;?>dashboard/">Home</a></li>
            <li><a href="<?php echo $this->webroot;?>dashboard/category">Category</a></li>
            <li><a href="<?php echo $this->webroot;?>dashboard/news">News</a></li>
