@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 01, 2015 at 12:49 PM
+-- Generation Time: Oct 01, 2015 at 12:57 PM
 -- Server version: 5.6.20
 -- PHP Version: 5.5.15
 
@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS `newsmanagers` (
   `title` varchar(650) NOT NULL,
   `image` varchar(650) NOT NULL,
   `audio` varchar(650) NOT NULL,
-  `video` varchar(650) NOT NULL,
+  `video` text NOT NULL,
   `description` text NOT NULL,
   `national` int(11) NOT NULL,
   `region` int(11) NOT NULL,
