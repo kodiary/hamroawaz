@@ -13,7 +13,7 @@ News Standard:
 }?>
 </select>
 </p>
-<p class="regionname" style="display: none;">
+<p class="regionname" style="">
 Enter news category:
 <input type="text" name="regionname" class=""/><br />
 <input type="submit" name="submit"/>
@@ -21,7 +21,7 @@ Enter news category:
 </p>
 </div>
 <script>
-
+/*
 $(function(){
    
   $('.category').change(function() {
@@ -38,6 +38,6 @@ $(function(){
     
 });
 })
-
+*/
 
 </script>
