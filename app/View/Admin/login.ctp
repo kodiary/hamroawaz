@@ -6,4 +6,5 @@
 <hr />
 <input type="submit" value="Login" name="submit" class="btn btn-primary btn-large" />
 </form>
+<a href="<?php echo $this->webroot; ?>Dashboard/forget">Forgot your password?</a>
 </div>

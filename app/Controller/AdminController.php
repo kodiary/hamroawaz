@@ -25,6 +25,7 @@ class AdminController extends AppController
     function loginVerify()
     {
         $this->loadModel('Admin');
+        
         if(isset($_POST) && $_POST)
         {
             $q=$this->Admin->find('first',array('conditions'=>array('username'=>$_POST['un'] , 'password'=>$_POST['pw'])));
@@ -32,8 +33,10 @@ class AdminController extends AppController
             {
                 $this->Session->write('admin',$_POST['un']);
             }
-            $this->redirect('login');            
+            $this->redirect('login'); 
+                      
         }
+        
         
     }
 }
