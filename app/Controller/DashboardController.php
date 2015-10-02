@@ -26,15 +26,13 @@ class DashboardController extends AppController
        $this->set('list',$a);
     }
      function addNews(){
-       //debug($_POST);die();
+      // debug($_POST);die();
         $this->loadModel('Newsmanager');
-        
-        
         $images=$_FILES['image']['name'];
-        if(!empty($_FILES['image']['name'])){
         $arr=explode('.',$images);
         $ext=end($arr);
         $rand=rand(100000,999999).'_'.rand(100000,999999).'.'.$ext;
+         if($ext == 'jpg' || $ext == 'JPGE'|| $ext == 'png'|| $ext == 'gif'|| $ext == 'JPG'|| $ext == 'PNG'|| $ext == 'GIF'){
         $path=APP.'/webroot/news/image/'.$rand;
         $thumbpath=APP.'/webroot/news/image/thumb/'.$rand;
          $thumbpath1=APP.'/webroot/news/image/thumb1/'.$rand;
@@ -47,24 +45,36 @@ class DashboardController extends AppController
                  $resizeObj -> resizeImage(600, 432,'exact');
                 $resizeObj -> saveImage($thumbpath1, 100);
                  unlink($path);
-        }
-        $_POST['image']=$rand;
+        }else{
+             $this->Session->setFlash('Invalid File Extension');    
+                $this->redirect('addNews');
+ }
+ $_POST['image']=$rand;
+        
+     
         $audio=$_FILES['audio']['name'];
-        if(!empty($_FILES['audio']['name'])){
+      
         $arr=explode('.',$audio);
         $ext=end($arr);
         $randd=rand(100000,999999).'_'.rand(100000,999999).'.'.$ext;
+          if($ext == 'mp3' || $ext == 'wav')
+                {
         $path=APP.'/webroot/news/audio/'.$randd;
         move_uploaded_file($_FILES['audio']['tmp_name'],$path);
-        
+        }else{
+             $this->Session->setFlash('Invalid File Extension');    
+                $this->redirect('addNews');
+            
         }
-        $_POST['audio']=$randd;
-        
+     $_POST['audio']=$randd;
+ 
+       
         $slider=$_FILES['slider']['name'];
         if(!empty($_FILES['slider']['name'])){
         $arr=explode('.',$slider);
         $ext=end($arr);
         $rand2=rand(100000,999999).'_'.rand(100000,999999).'.'.$ext;
+        if($ext == 'jpg' || $ext == 'JPGE'|| $ext == 'png'|| $ext == 'gif'|| $ext == 'JPG'|| $ext == 'PNG'|| $ext == 'GIF'){
         $path=APP.'/webroot/news/slider/'.$rand2;
         move_uploaded_file($_FILES['slider']['tmp_name'],$path);
          $thumbpath=APP.'/webroot/news/slider/thumb/'.$rand2;
@@ -77,9 +87,14 @@ class DashboardController extends AppController
                  $resizeObj -> resizeImage(940, 450,'exact');
                 $resizeObj -> saveImage($thumbpath1, 100);
                  unlink($path);
+        }else{
+             $this->Session->setFlash('Invalid File Extension');    
+                $this->redirect('addNews');
+            
+        }
         }
         $_POST['slider']=$rand2;
-    
+ 
     
        $this->Newsmanager->create();
        $this->Newsmanager->save($_POST);
@@ -97,9 +112,108 @@ class DashboardController extends AppController
  }
     function editNews($id){
     $this->loadModel('Newsmanager');
-    $this->Newsmanager->id=$id;
-    $q=$this->Newsmanager->find('first');
+$arr['conditions']=array('id'=>$id);
+   // $this->Newsmanager->id=$id;
+    $q=$this->Newsmanager->find('first',$arr);
+ 
     $this->set('edit',$q);
+    
+    $this->loadModel('Categorymanager');
+      $q= $this->Categorymanager->find('all',array('order' => array('display_order' => 'asc')));
+    $this->set('order',$q);
+     $this->loadModel('Newsmanager');
+     $a=$this->Newsmanager->find('all');
+       $this->set('list',$a);
+    }
+    function updateNews($id){
+        // debug($_POST);die();
+         $this->loadModel('Newsmanager');
+        
+        if($_FILES['image']['name']){
+        $images=$_FILES['image']['name'];
+        $arr=explode('.',$images);
+        $ext=end($arr);
+        $rand=rand(100000,999999).'_'.rand(100000,999999).'.'.$ext;
+         if($ext == 'jpg' || $ext == 'JPGE'|| $ext == 'png'|| $ext == 'gif'|| $ext == 'JPG'|| $ext == 'PNG'|| $ext == 'GIF'){
+        $path=APP.'/webroot/news/image/'.$rand;
+        $thumbpath=APP.'/webroot/news/image/thumb/'.$rand;
+         $thumbpath1=APP.'/webroot/news/image/thumb1/'.$rand;
+        move_uploaded_file($_FILES['image']['tmp_name'],$path);
+         $resizeObj = new resize($path);
+                 $resizeObj -> resizeImage(250, 180,'exact');
+                 $resizeObj -> saveImage($thumbpath, 100);
+                 unset($resizeObj);
+                 $resizeObj = new resize($path);
+                 $resizeObj -> resizeImage(600, 432,'exact');
+                $resizeObj -> saveImage($thumbpath1, 100);
+                 unlink($path);
+        }else{
+             $this->Session->setFlash('Invalid File Extension');    
+                $this->redirect('addNews');
+ }
+ 
+       
+        
+        $_POST['image']=$rand;
+     }   
+     if($_FILES['audio']['name']){
+        $audio=$_FILES['audio']['name'];
+      
+        $arr=explode('.',$audio);
+        $ext=end($arr);
+        $randd=rand(100000,999999).'_'.rand(100000,999999).'.'.$ext;
+          if($ext == 'mp3' || $ext == 'wav')
+                {
+        $path=APP.'/webroot/news/audio/'.$randd;
+        move_uploaded_file($_FILES['audio']['tmp_name'],$path);
+        }else{
+             $this->Session->setFlash('Invalid File Extension');    
+                $this->redirect('addNews');
+            
+        }
+     $_POST['audio']=$randd;
+     }
+        if($_FILES['slider']['name']){
+        $slider=$_FILES['slider']['name'];
+        if(!empty($_FILES['slider']['name'])){
+        $arr=explode('.',$slider);
+        $ext=end($arr);
+        $rand2=rand(100000,999999).'_'.rand(100000,999999).'.'.$ext;
+        if($ext == 'jpg' || $ext == 'JPGE'|| $ext == 'png'|| $ext == 'gif'|| $ext == 'JPG'|| $ext == 'PNG'|| $ext == 'GIF'){
+        $path=APP.'/webroot/news/slider/'.$rand2;
+        move_uploaded_file($_FILES['slider']['tmp_name'],$path);
+         $thumbpath=APP.'/webroot/news/slider/thumb/'.$rand2;
+         $thumbpath1=APP.'/webroot/news/slider/thumb1/'.$rand2;
+        $resizeObj = new resize($path);
+                 $resizeObj -> resizeImage(250, 180,'exact');
+                 $resizeObj -> saveImage($thumbpath, 100);
+                 unset($resizeObj);
+                 $resizeObj = new resize($path);
+                 $resizeObj -> resizeImage(940, 450,'exact');
+                $resizeObj -> saveImage($thumbpath1, 100);
+                 unlink($path);
+        }else{
+             $this->Session->setFlash('Invalid File Extension');    
+                $this->redirect('addNews');
+            
+        }
+        }
+        $_POST['slider']=$rand2;
+    }
+    
+       $this->Newsmanager->id=$id;
+       $this->Newsmanager->save($_POST);
+       $this->loadModel('News_category');
+       $cat=$_POST['category'];
+       $cc='';
+      foreach($cat as $ca){
+        $arr1['cat_id']=$ca;
+        $arr1['news_id']=$id;
+       //$this->News_category->create();
+       $this->News_category->save($arr1);
+    }
+    //debug($arr1);die();
+      $this->redirect('news');
     }
 
     function deleteNews($id){

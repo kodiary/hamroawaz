@@ -15,8 +15,8 @@ Category:<br />
 <input type="checkbox" name="category[]" value="<?php echo $ord['Categorymanager']['id'];?>" /><?php echo $ord['Categorymanager']['title'];?>&nbsp;&nbsp;
 <?php }?><br /><br />
 
-Standard:&nbsp;<input type="radio" name="standard" value="1" class="standard" required="required"/> National<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" value="2" name="standard" required="required"/> International<br/><br />
+Standard:&nbsp;<input type="radio" name="national" value="1" class="standard" required="required"/> National<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" value="2" name="national" required="required"/> International<br/><br />
 <p class="hid" style="display: none;">
 Region:<select name="region">
 <option selected="selected" value="notnational">....</option>
@@ -44,8 +44,8 @@ Zone:<select name="zone">
 <br />
 </p>
 Slider:<br /><input type="file" name="slider"/><br /><br />
-Is_headline:&nbsp;<input type="radio" value="1" name="headline" required="required"/> Yes
-<input type="radio" value="0" name="headline" required="required"/> No<br/><br />
+Is_headline:&nbsp;<input type="radio" value="1" name="is_headline" required="required"/> Yes
+<input type="radio" value="0" name="is_headline" required="required"/> No<br/><br />
 
 <input type="submit" class="submit" name="submit" value="SUBMIT"/>
 </form>
@@ -81,7 +81,7 @@ $(function(){
     $(".addnews").click(function(){
         $(".newcontainer").toggle();
     })
-    $( 'input[name="standard"]:radio' ).change(function() {       
+    $( 'input[name="national"]:radio' ).change(function() {       
    if (this.value == 1) {
             $(this).parent().find("p.hid").show();
         }
