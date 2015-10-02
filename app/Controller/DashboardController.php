@@ -26,7 +26,6 @@ class DashboardController extends AppController
            
      
     }
-<<<<<<< HEAD
     function setting()
     {
          $un= $this->Session->read('admin');
@@ -35,11 +34,6 @@ class DashboardController extends AppController
          $this->set('value',$q);
                       
     
-=======
-    
-    function setting(){
-        
->>>>>>> d7dcd75bf137f18932fe64cb52a6f2e42a776510
     }
     function logout()
     {
