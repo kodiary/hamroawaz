@@ -5,9 +5,12 @@ News Title:<br />
 
 Image:<br /><input type="file" name="image" value="<?php echo  $edit['Newsmanager']['image'];?>" /><br /><br />
 <div class="thumb" style="margin: 10px 0;">
-    <img src="<?php echo $this->webroot.'news/image/thumb/'.$edit['Newsmanager']['image'];?>" style="width:690x;"/>
+    <img src="<?php echo $this->webroot.'news/image/thumb/'.$edit['Newsmanager']['image'];?>" style="width:690x;"/><br />
+    <?php echo $edit['Newsmanager']['image'];?>
 </div>
-Audio:<br /><input type="file" name="audio" /><br /><br />
+Audio:<br /><input type="file" name="audio" /><br />
+<?php echo $edit['Newsmanager']['audio'];?>
+<br /><br />
 Video:<br /><textarea name="video" >
 <?php echo strip_tags($edit['Newsmanager']['video']);?>
 </textarea>
@@ -18,9 +21,12 @@ Description:<br />
 </textarea><br />
 
 Category:<br />
-<?php foreach($order as $ord){?>
-<input type="checkbox" name="category[]" value="<?php echo $ord['Categorymanager']['id'];?>" /><?php echo $ord['Categorymanager']['title'];?>&nbsp;&nbsp;
-<?php }?><br /><br />
+<?php foreach($order as $ord){
+       ?>
+<input type="checkbox" name="category[]" value="<?php echo $ord['Categorymanager']['id'];?>" <?php foreach($list as $lis){if($ord['Categorymanager']['id']==$lis['News_category']['cat_id']){echo "checked";}} ?> /><?php echo $ord['Categorymanager']['title'];?>&nbsp;&nbsp;
+<?php 
+}
+?><br /><br />
 
 Standard:&nbsp;<input type="radio" name="national" value="1" class="standard" <?php $nation=$edit['Newsmanager']['national']; if(isset($nation) && $nation==1) echo "checked";?> /> National<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" value="2" name="national" <?php $nation=$edit['Newsmanager']['national']; if(isset($nation) && $nation==2) echo "checked";?>/> International<br/><br />
@@ -48,7 +54,8 @@ Zone:<select name="zone">
 </select>
 <br />
 </p>
-Slider:<br /><input type="file" name="slider" value="<?php echo $edit['Newsmanager']['slider'];?>"/>
+Slider:<br /><input type="file" name="slider" value="<?php echo $edit['Newsmanager']['slider'];?>"/><br />
+<?php echo $edit['Newsmanager']['slider'];?>
 <div class="thumb" style="margin: 10px 0;">
     <img src="<?php echo $this->webroot.'news/slider/thumb/'.$edit['Newsmanager']['slider'];?>" style="width:690x;"/>
 </div>
@@ -56,7 +63,7 @@ Slider:<br /><input type="file" name="slider" value="<?php echo $edit['Newsmanag
 <br /><br />
 Is_headline:&nbsp;<input type="radio" value="1"  name="is_headline"  <?php $check=$edit['Newsmanager']['is_headline']; if(isset($check) && $check==1) echo "checked";?>/> Yes
 <input type="radio" value="0" name="is_headline"  <?php $check=$edit['Newsmanager']['is_headline']; if(isset($check) && $check==0) echo "checked";?>/> No<br/><br />
-
+<br />
 <input type="submit" class="submit" name="submit" value="SUBMIT"/>
 </form>
 </div>
