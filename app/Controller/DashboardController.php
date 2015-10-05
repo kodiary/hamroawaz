@@ -68,6 +68,34 @@ class DashboardController extends AppController
          
          
     }
+    function category()
+    {
+        $this->loadModel('Categorymanager');
+        $cat=$this->Categorymanager->find('all');
+        $this->set('cat',$cat);
+    }
+    function addcategory($id=0)
+    {   
+       $this->loadModel('Categorymanager');
+       if(isset($_POST['title']) && $_POST['title'])
+       $arr['title']=$_POST['title'];
+       if($id==0)
+       {
+       $this->Categorymanager->create();
+       $this->Categorymanager->save($arr);
+       $this->redirect('/category');
+       }
+       $this->Categorymanager->id=$id;
+       $this->Categorymanager->save($arr);
+       $this->redirect('/category');
+
     
+    }
+    function del($id)
+    {
+        $this->loadModel('Categorymanager');
+        $this->Categorymanager->delete($id);
+        $this->redirect('/category');
+    }
   }
   ?> 
