@@ -122,6 +122,7 @@ class DashboardController extends AppController
  
  function editNews($id){
     $this->loadModel('Newsmanager');
+      
     $arr['conditions']=array('id'=>$id);
    // $this->Newsmanager->id=$id;
     $q=$this->Newsmanager->find('first',$arr);
@@ -374,6 +375,17 @@ class DashboardController extends AppController
         $this->loadModel('Categorymanager');
         $this->Categorymanager->delete($id);
         $this->redirect('/category');
+    }
+    function order()
+    {
+    $this->loadModel('Categorymanager');
+
+    foreach($_POST['id'] as $v=>$k)
+    {
+        $this->Categorymanager->id=$k;
+       $this->Categorymanager->saveField('display_order', ++$v);   
+    }
+    die();
     }
   }
   ?> 

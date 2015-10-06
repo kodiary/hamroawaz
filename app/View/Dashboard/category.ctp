@@ -1,20 +1,26 @@
 <head>
-  <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
-  <script src="//code.jquery.com/jquery-1.10.2.js"></script>
   <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-  <link rel="stylesheet" href="/resources/demos/style.css">
-  <style>
-  #sortable { list-style-type: none; margin: 0; padding: 0; width: 60%; }
-  #sortable td { margin: 0 3px 3px 3px; padding: 0.4em; padding-left: 1.5em; font-size: 1.4em; height: 18px; }
- 
-  
-  </style>
   <script>
   $(function() {
-    $( "#sortable tbody" ).sortable();
-    $( "#sortable " ).disableSelection();
+    $( "#sor tbody" ).sortable(
+    {
+
+    cursor: 'move',
+    stop:function(i) {
+
+        $.ajax({
+            type: "post",
+            url: "<?php echo $this->webroot; ?>Dashboard/order",
+            data: $("#sor tbody .ids").serialize(),
+                         
+        });
+    }
+    });
+    $( "#sor " ).disableSelection();
   });
   </script>
+  
+  
 </head>
 <div>
     <h1>Catagory</h1>
@@ -26,29 +32,31 @@
        <input type="submit" value="submit"/>
        </form>
        </div>
-       <div>
-           <table id="sortable"  >
-            <tr><th>Id</th><th>Title</th><th>Action</th></tr>
+       <div >
+           <table id="sor" >
+            <thead><tr><th>Id</th><th>Title</th><th>Action</th></tr></thead>
+            <tbody>
             <?php foreach($cat as $cat) 
             {
-                ?><tr>
-                <td ><?php echo $cat['Categorymanager']['id'];?>
+                ?>
+                <tr>
+                <td><?php echo $cat['Categorymanager']['id'];?><input class="ids" name="id[]" type="hidden" value="<?php echo $cat['Categorymanager']['id'];?>" /></td>
                 <td><?php echo $cat['Categorymanager']['title'];?></td>
-                <td><a class="edit" href="javascript:void(0);">Edit</a>
-                <div class="ed" style="display: none;">
-                <form action="<?php echo $this->webroot; ?>Dashboard/addcategory/<?php echo $cat['Categorymanager']['id']; ?>" method="post">
-                <input type="text" placeholder="title" name="title"  />
-                <input type="submit" value="submit"/>
-                </form>
-                </div>
-                </td>
-                <td><a href="<?php echo $this->webroot; ?>Dashboard/del/<?php echo $cat['Categorymanager']['id']; ?>">Delete</a></tr>
+                <td>
+                <a class="edit" href="javascript:void(0);" title="<?php echo $cat['Categorymanager']['title'];?>" id="<?php echo $cat['Categorymanager']['id'];?>">Edit</a>
+                <a href="<?php echo $this->webroot; ?>Dashboard/del/<?php echo $cat['Categorymanager']['id']; ?>">Delete</a></td></tr>
                 <?php              
             }
             ?>
-       
+            </tbody>
            </table>
        </div>
+       <div class="ed" style="display: none;">
+                    <form action="" id="form1" method="post">
+                    <input type="text" placeholder="" name="title" id='title1' />
+                    <input type="submit" value="submit"/>
+                    </form>
+                     </div>
     </div>   
 </div>
 <script>
@@ -58,8 +66,14 @@ $(function(){
     });
     
     $(".edit").click(function(){
-    //$(".ed").closest("tr").show();
-    $(this).parent().find(".ed").toggle('slow');
+    var t =$(this).attr('title');
+    var id =$(this).attr('id');
+    $(".ed").toggle('slow');
+    $('#title1').val(t);
+    $('#form1').attr('action','<?php echo $this->webroot; ?>Dashboard/addcategory/'+id);
+    
+    
+    //$(this).parent().find(".ed").toggle('slow');
     });  
     
    
