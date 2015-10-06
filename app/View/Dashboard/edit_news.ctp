@@ -5,9 +5,26 @@ News Title:<br />
 
 Image:<br /><input type="file" name="image" value="<?php echo  $edit['Newsmanager']['image'];?>" /><br /><br />
 <div class="thumb" style="margin: 10px 0;">
-    <img src="<?php echo $this->webroot.'news/image/thumb/'.$edit['Newsmanager']['image'];?>" style="width:690x;"/><br />
+    <img src="<?php echo $this->webroot.'news/image/thumb/'.$edit['Newsmanager']['image'];?>"  style="width:690x;"/><br />
     <?php echo $edit['Newsmanager']['image'];?>
+   <div class="docrop">
+  <a href="javascript:void(0)" class="imgcrop">Crop</a> 
+   </div>   
+   <div class="mainimg" style="display:none;">
+<img src="<?php echo $this->webroot.'news/image/'.$edit['Newsmanager']['image'];?>"  id="target" style="width:100%;"/>
+<form id="coords" action="" method="post">
+<input type="text" id="x1" value=""/>
+<input type="text" id="y1" value=""/>
+<input type="text" id="x2" value=""/>
+<input type="text" id="y2" value=""/>
+<input type="text" id="w" value=""/>
+<input type="text" id="h" value=""/>
+<input type="submit" value="Save Crop"/>
+</form>
+
 </div>
+</div>
+ 
 Audio:<br /><input type="file" name="audio" /><br />
 <?php echo $edit['Newsmanager']['audio'];?>
 <br /><br />
@@ -57,7 +74,7 @@ Zone:<select name="zone">
 Slider:<br /><input type="file" name="slider" value="<?php echo $edit['Newsmanager']['slider'];?>"/><br />
 <?php echo $edit['Newsmanager']['slider'];?>
 <div class="thumb" style="margin: 10px 0;">
-    <img src="<?php echo $this->webroot.'news/slider/thumb/'.$edit['Newsmanager']['slider'];?>" style="width:690x;"/>
+    <img src="<?php echo $this->webroot.'news/slider/thumb/'.$edit['Newsmanager']['slider'];?>" class="target" style="width:690x;"/>
 </div>
 
 <br /><br />
@@ -66,9 +83,44 @@ Is_headline:&nbsp;<input type="radio" value="1"  name="is_headline"  <?php $chec
 <br />
 <input type="submit" class="submit" name="submit" value="SUBMIT"/>
 </form>
+
 </div>
 <script>
 $(function(){
+      
+    $('.imgcrop').click(function(){
+    $(this).closest('.thumb').find('.mainimg').toggle('style');
+    });
+    
+    
+     var jcrop_api;
+    initcrop();
+    function initcrop(){
+    $('#target').Jcrop({
+      bgColor:'white',
+      onChange:   showCoords,
+      onSelect:   showCoords,
+      onRelease:  clearCoords,
+     //minSize: [ 250 ,180 ],
+        //maxSize: [ 600, 432 ]
+    },function(){
+      jcrop_api = this;
+       jcrop_api.animateTo([210,141,460,321]);
+    });
+  }
+
+    jQuery('#coords input').live('change',function(e){
+      var x1 = $('#x1').val(),
+          x2 = $('#x2').val(),
+          y1 = $('#y1').val(),
+          y2 = $('#y2').val();
+      jcrop_api.setSelect([x1,y1,x2,y2]);
+    });
+
+  
+    
+    
+    
    $( 'input[name="national"]:radio' ).change(function() {       
    if (this.value == 1) {
             $(this).parent().find("p.hid").show();
@@ -83,7 +135,34 @@ var selected = $("input[type='radio'][name='national']:checked");
     if(selectedVal==1){
         $("p.hid").show();
     }
+    
+   
+ 
 });
+  function showCoords(c)
+  {
+    $('#x1').val(c.x);
+    $('#y1').val(c.y);
+    $('#x2').val(c.x2);
+    $('#y2').val(c.y2);
+    $('#w').val(c.w);
+    $('#h').val(c.h);
+  };
+
+  function clearCoords()
+  {
+    $('#coords input').val('');
+  };
+function imageSize(img){
+  var theImage = new Image();
+  $(theImage).load(function() {
+    var imgwidth = this.width;
+    var imgheight = this.height;
+
+    alert(imgwidth+'-'+imgheight);
+  });
+  theImage.src = img.attr('src');
+}
 
 
 

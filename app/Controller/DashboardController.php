@@ -86,7 +86,7 @@ class DashboardController extends AppController
          $resizeObj = new resize($path);
          $resizeObj -> resizeImage(600, 432,'exact');
          $resizeObj -> saveImage($thumbpath1, 100);
-         unlink($path);
+         //unlink($path);
       /* -------------slider Upload----------------*/  
       move_uploaded_file($_FILES['slider']['tmp_name'],$path2);
          $thumbpath=APP.'/webroot/news/slider/thumb/'.$rand2;
@@ -98,7 +98,7 @@ class DashboardController extends AppController
         $resizeObj = new resize($path2);
         $resizeObj -> resizeImage(940, 450,'exact');
         $resizeObj -> saveImage($thumbpath1, 100);
-        unlink($path2);
+       // unlink($path2);
       /* -------------audio Upload----------------*/  
        move_uploaded_file($_FILES['audio']['tmp_name'],$path1);
         
@@ -226,7 +226,7 @@ class DashboardController extends AppController
          $resizeObj = new resize($path);
          $resizeObj -> resizeImage(600, 432,'exact');
          $resizeObj -> saveImage($thumbpath1, 100);
-         unlink($path);
+        // unlink($path);
       /* -------------slider Upload----------------*/  
       unlink($delslider);
       unlink($delslider1);
@@ -240,7 +240,7 @@ class DashboardController extends AppController
         $resizeObj = new resize($path2);
         $resizeObj -> resizeImage(940, 450,'exact');
         $resizeObj -> saveImage($thumbpath1, 100);
-        unlink($path2);
+        //unlink($path2);
       /* -------------audio Upload----------------*/  
       unlink($delaudio);
        move_uploaded_file($_FILES['audio']['tmp_name'],$path1);
