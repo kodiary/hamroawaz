@@ -42,7 +42,7 @@ Class Resize
          $optimalWidth  = $optionArray['optimalWidth'];
     $optimalHeight = $optionArray['optimalHeight'];
     $this->imageResized=imagecreatetruecolor($optimalWidth,$optimalHeight);
-    imagecopyresampled($this->imageResized,$this->image,0, 0, 0, 0,$optimalWidth, $optimalHeight, $this->width, $this->height);
+    imagecopyresampled($this->imageResized,$this->image,0, 0, (int)$_POST['x1'],(int)$_POST['y1'],$optimalWidth, $optimalHeight, (int)$_POST['w'], (int)$_POST['h']);
   if ($option == 'crop') {
         $this->crop($optimalWidth, $optimalHeight, $newWidth, $newHeight);
     }
