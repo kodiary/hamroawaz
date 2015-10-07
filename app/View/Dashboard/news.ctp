@@ -1,9 +1,30 @@
+
 <h2><button class="addnews">Add News</button></h2>
 <div class="newcontainer" style="display: none;">
-<form action="<?php echo $this->webroot;?>dashboard/addNews" method="POST" enctype="multipart/form-data">
+<form id="upload_form" action="<?php echo $this->webroot;?>dashboard/addNews" method="POST" enctype="multipart/form-data">
 News Title:<br />
 <input type="text" name="title" required="required"/><br/>
-Image:<br /><input type="file" name="image" required="required"/><br /><br />
+Image:<br />
+         <input type="hidden" id="x1" name="x1" />
+        <input type="hidden" id="y1" name="y1" />
+        <input type="hidden" id="x2" name="x2" />
+        <input type="hidden" id="y2" name="y2" />
+       <div> <input type="file" name="image_file" id="image_file" onchange="fileSelectHandler()" /></div>
+       <div class="error"> </div>
+        <div class="step2">
+            <h2>Step2: Please select a crop region</h2>
+            <img id="preview" />
+
+            <div class="info">
+                <label>File size</label> <input type="text" id="filesize" name="filesize" />
+                <label>Type</label> <input type="text" id="filetype" name="filetype" />
+                <label>Image dimension</label> <input type="text" id="filedim" name="filedim" />
+                <label>W</label> <input type="text" id="w" name="w" />
+                <label>H</label> <input type="text" id="h" name="h" />
+            </div>
+
+            
+        </div><br /><br /><br />
 Audio:<br /><input type="file" name="audio" required="required"/><br /><br />
 Video:<br /><textarea name="video" required="required"></textarea>
 <br />
