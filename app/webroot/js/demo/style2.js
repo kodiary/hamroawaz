@@ -15,18 +15,18 @@ function checkForm() {
 
 // update info by cropping (onChange and onSelect events handler)
 function updateInfo(e) {
-    $('#x1').val(e.x);
-    $('#y1').val(e.y);
-    $('#x2').val(e.x2);
-    $('#y2').val(e.y2);
-    $('#w').val(e.w);
-    $('#h').val(e.h);
+    $('#x3').val(e.x);
+    $('#y3').val(e.y);
+    $('#x4').val(e.x2);
+    $('#y4').val(e.y2);
+    $('#w1').val(e.w);
+    $('#h1').val(e.h);
 };
 
 // clear info by cropping (onRelease event handler)
 function clearInfo() {
-    $('.info #w').val('');
-    $('.info #h').val('');
+    $('.info #w1').val('');
+    $('.info #h1').val('');
 };
 
 // Create variables (in this scope) to hold the Jcrop API and image size
@@ -35,7 +35,7 @@ var jcrop_api, boundx, boundy;
 function fileSelectHandler() {
 
     // get selected file
-    var oFile = $('#image_file')[0].files[0];
+    var oFile = $('#image_file1')[0].files[0];
 
     // hide all errors
     $('.error').hide();
