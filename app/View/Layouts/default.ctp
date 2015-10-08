@@ -5,6 +5,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" media="screen" href="<?php echo $this->webroot;?>css/superfish.css" type="text/css" />
 <link rel="stylesheet" media="screen" href="<?php echo $this->webroot;?>css/stylesheet.css" type="text/css" />
+<link rel="stylesheet" media="screen" href="<?php echo $this->webroot;?>css/style.css" type="text/css" />
 <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Droid+Serif:regular,italic,bold,bolditalic" type="text/css" />
 <script type="text/javascript" src="<?php echo $this->webroot;?>js/jquery-1.7.1.min.js"></script>
 <script src="<?php echo $this->webroot;?>js/hoverIntent.js" type="text/javascript"></script>

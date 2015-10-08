@@ -29,11 +29,13 @@
     <div class="wrapper">
     <div class="header">
         <h3>NewsPortal Admin Panel</h3>
-        <ul style="width:47%;">
+        <ul >
             <li><a href="<?php echo $this->webroot;?>dashboard/">Home</a></li>
            <li><a href="<?php echo $this->webroot;?>dashboard/category">Category</a></li>
            <li><a href="<?php echo $this->webroot;?>dashboard/news">News Manager</a></li>
            <li><a href="<?php echo $this->webroot;?>dashboard/setting">Setting</a></li>
+           <li><a href="<?php echo $this->webroot;?>dashboard/slider">Slider</a></li>
+            <li><a href="<?php echo $this->webroot;?>dashboard/pagemanager">Pagemanager</a></li>
             <li><a href="<?php echo $this->webroot;?>dashboard/logout">Logout</a></li>
             
         </ul>
