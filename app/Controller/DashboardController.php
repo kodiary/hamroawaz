@@ -413,7 +413,37 @@ class DashboardController extends AppController
         $this->Categorymanager->id=$k;
        $this->Categorymanager->saveField('display_order', ++$v);   
     }
-    die();
+    }
+    function slider()
+    {
+        
+    }
+    function sliderImage()
+    {
+        $this->loadModel('Slider');
+        $this->layout='blank';
+        $name=$_FILES['image']['name'];
+        $source = $_FILES['image']['tmp_name'];
+        list($width, $height) = getimagesize($source);
+        if($width>630 && $height>290)
+        {
+        $arr=explode('.',$name);
+        $ext=end($arr);
+        $rand=rand(100000,999999).'_'.rand(100000,999999).'.'.$ext;
+        $path=APP.'/webroot/slider/'.$rand;
+        move_uploaded_file($source,$path);
+        $arr['image']=$rand;
+        $this->Slider->create();
+        $this->Slider->save($arr);
+        $a=$this->webroot;
+       
+        echo '<img src="'.$a.'slider/'.$rand.'" />';
+        die();
+        }
+        else{
+        $this->Session->setFlash('plz uplode bigger size image');
+         $this->redirect('/Dashboard/slider');
+         }
     }
   }
   ?> 
