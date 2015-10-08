@@ -3,7 +3,7 @@
         <button >Add Slider Image</button>
     </div>
     <div style="display: none;" class="form" id='form' >
-       <input id="sortpicture" type="file" name="sortpic" />
+       <input id="sortpicture" type="file" name="sortpic" /><br /><strong>630*290</strong><br />
         <button id="upload">Upload</button>
     </div>
     <div class="response"></div>
