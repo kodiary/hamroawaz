@@ -73,14 +73,21 @@ Zone:<select name="zone">
 </select>
 <br />
 </p>
-Slider:<br /><input type="file" name="slider" value="<?php echo $edit['Newsmanager']['slider'];?>"/><br />
-<?php echo $edit['Newsmanager']['slider'];?>
-<div class="thumb" style="margin: 10px 0;">
-  <!--  <img src="<?php echo $this->webroot.'news/slider/thumb/'.$edit['Newsmanager']['slider'];?>" class="target" style="width:690x;"/>
-
---></div>
-
-<br /><br />
+Slider:Slider:<br />
+         <input type="hidden" id="x11" name="x11" />
+        <input type="hidden" id="y11" name="y11" />
+        <input type="hidden" id="x22" name="x22" />
+        <input type="hidden" id="y22" name="y22" />
+        <input type="hidden" id="w1" name="w1" />
+        <input type="hidden" id="h1" name="h1" />
+       <div> <input type="file" name="slider" id="slider" onchange="fileSelectHandler1()" /></div>
+       <div class="error1"> </div>
+        <div class="sliderstep2">
+            <h2>Please select a crop region</h2>
+            <img id="previewslider" />
+        </div>
+        <img src="<?php echo $this->webroot;?>news/slider/thumb/<?php echo $edit['Newsmanager']['slider'];?>" width="100px" height="100px"/>
+        <br /><br /><br />
 Is_headline:&nbsp;<input type="radio" value="1"  name="is_headline"  <?php $check=$edit['Newsmanager']['is_headline']; if(isset($check) && $check==1) echo "checked";?>/> Yes
 <input type="radio" value="0" name="is_headline"  <?php $check=$edit['Newsmanager']['is_headline']; if(isset($check) && $check==0) echo "checked";?>/> No<br/><br />
 <br />

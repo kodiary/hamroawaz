@@ -1,6 +1,8 @@
 <?php
 App::uses('Resize','Lib');
 App::load("Resize");
+App::uses('Resizeslider','Lib');
+App::load("Resizeslider");
 class DashboardController extends AppController
 {
     
@@ -103,12 +105,12 @@ class DashboardController extends AppController
        @chmod($path2, 0777);
          $thumbpath=APP.'/webroot/news/slider/thumb/'.$rand2;
          $thumbpath1=APP.'/webroot/news/slider/thumb1/'.$rand2;
-        $resizeObj = new resize($path2);
-        $resizeObj -> resizeImage(250, 180,'exact');
+        $resizeObj = new resize1($path2);
+        $resizeObj -> resizeImage($w1,$h1,'landscape');
         $resizeObj -> saveImage($thumbpath, 100);
         unset($resizeObj);
-        $resizeObj = new resize($path2);
-        $resizeObj -> resizeImage(940, 450,'exact');
+        $resizeObj = new resize1($path2);
+        $resizeObj -> resizeImage(940, 450,'landscape');
         $resizeObj -> saveImage($thumbpath1, 100);
        // unlink($path2);
        }
@@ -231,6 +233,8 @@ class DashboardController extends AppController
     /* -------------Image Upload----------------*/
        //unlink($delimg);
        //unlink($delimg1);
+       
+  if($_FILES['image_file']['name']){
         move_uploaded_file($_FILES['image_file']['tmp_name'],$path);
       
         $thumbpath=APP.'/webroot/news/image/thumb/'.$rand;
@@ -242,6 +246,7 @@ class DashboardController extends AppController
          $resizeObj = new resize($path);
          $resizeObj -> resizeImage(600, 432,'exact');
          $resizeObj -> saveImage($thumbpath1, 100);
+         }
         // unlink($path);
       /* -------------slider Upload----------------*/  
       if($_FILES['slider']['name']){
@@ -251,12 +256,12 @@ class DashboardController extends AppController
        chmod($path2, 0777);
          $thumbpath=APP.'/webroot/news/slider/thumb/'.$rand2;
          $thumbpath1=APP.'/webroot/news/slider/thumb1/'.$rand2;
-        $resizeObj = new resize($path2);
-        $resizeObj -> resizeImage(250, 180,'exact');
+        $resizeObj = new resize1($path2);
+        $resizeObj -> resizeImage($w1,$h1,'landscape');
         $resizeObj -> saveImage($thumbpath, 100);
         unset($resizeObj);
-        $resizeObj = new resize($path2);
-        $resizeObj -> resizeImage(940, 450,'exact');
+        $resizeObj = new resize1($path2);
+        $resizeObj -> resizeImage(940, 450,'landscape');
         $resizeObj -> saveImage($thumbpath1, 100);
         //unlink($path2);
         }

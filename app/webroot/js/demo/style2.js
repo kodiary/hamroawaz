@@ -1,30 +1,16 @@
 
-function bytesToSize(bytes) {
-    var sizes = ['Bytes', 'KB', 'MB'];
-    if (bytes == 0) return 'n/a';
-    var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
-    return (bytes / Math.pow(1024, i)).toFixed(1) + ' ' + sizes[i];
-};
-
-// check for selected crop region
-function checkForm() {
-    if (parseInt($('#w').val())) return true;
-    $('.error').html('Please select a crop region and then press Upload').show();
-    return false;
-};
-
 // update info by cropping (onChange and onSelect events handler)
-function updateInfo(e) {
-    $('#x3').val(e.x);
-    $('#y3').val(e.y);
-    $('#x4').val(e.x2);
-    $('#y4').val(e.y2);
+function updateInfo1(e) {
+    $('#x11').val(e.x);
+    $('#y11').val(e.y);
+    $('#x22').val(e.x2);
+    $('#y22').val(e.y2);
     $('#w1').val(e.w);
     $('#h1').val(e.h);
 };
 
 // clear info by cropping (onRelease event handler)
-function clearInfo() {
+function clearInfo1() {
     $('.info #w1').val('');
     $('.info #h1').val('');
 };
@@ -32,42 +18,47 @@ function clearInfo() {
 // Create variables (in this scope) to hold the Jcrop API and image size
 var jcrop_api, boundx, boundy;
 
-function fileSelectHandler() {
+function fileSelectHandler1() {
 
     // get selected file
-    var oFile = $('#image_file1')[0].files[0];
+    var oFile = $('#slider')[0].files[0];
 
     // hide all errors
-    $('.error').hide();
+    $('.error1').hide();
 
     // check for image type (jpg and png are allowed)
     var rFilter = /^(image\/jpeg|image\/png)$/i;
     if (! rFilter.test(oFile.type)) {
-        $('.error').html('Please select a valid image file (jpg and png are allowed)').show();
+        $('.error1').html('Please select a valid image file (jpg and png are allowed)').show();
         return;
     }
 
     // check for file size
     if (oFile.size > 250 * 1024) {
-        $('.error').html('You have selected too big file, please select a one smaller image file').show();
+        $('.error1').html('You have selected too big file, please select a one smaller image file').show();
         return;
     }
 
-    // preview element
-    var oImage = document.getElementById('preview');
+    // previewslider element
+    var oImage = document.getElementById('previewslider');
 
     // prepare HTML5 FileReader
     var oReader = new FileReader();
         oReader.onload = function(e) {
 
         // e.target.result contains the DataURL which we can use as a source of the image
+        
+        
         oImage.src = e.target.result;
         oImage.onload = function () { // onload event handler
-
+        
+        //alert(oImage.naturalWidth);
             // display step 2
-            $('.step2').fadeIn(500);
-           if(oImage.naturalWidth<400 || oImage.naturalHeight<100){
+            $('.sliderstep2').fadeIn(500);
+           if(oImage.naturalWidth<400 || oImage.naturalHeight<300){ 
             alert("image is not valid to be cropped");
+            $('#previewslider').attr('src','');
+            $('.sliderstep2').hide();
             return false;
            }
             // display some basic image info
@@ -80,20 +71,20 @@ function fileSelectHandler() {
             if (typeof jcrop_api != 'undefined') {
                 jcrop_api.destroy();
                 jcrop_api = null;
-                $('#preview').width(oImage.naturalWidth);
-                $('#preview').height(oImage.naturalHeight);
+                $('#previewslider').width(oImage.naturalWidth);
+                $('#previewslider').height(oImage.naturalHeight);
             }
 
             setTimeout(function(){
                 // initialize Jcrop
-                $('#preview').Jcrop({
+                $('#previewslider').Jcrop({
                     minSize: [32, 32], // min crop size
                     aspectRatio : 1, // keep aspect ratio 1:1
                     bgFade: true, // use fade effect
                     bgOpacity: .3, // fade opacity
-                    onChange: updateInfo,
-                    onSelect: updateInfo,
-                    onRelease: clearInfo
+                    onChange: updateInfo1,
+                    onSelect: updateInfo1,
+                    onRelease: clearInfo1
                 }, function(){
 
                     // use the Jcrop API to get the real image size

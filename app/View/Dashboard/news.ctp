@@ -64,7 +64,19 @@ Zone:<select name="zone">
 </select>
 <br />
 </p>
-Slider:<br /><input type="file" name="slider"/><br /><br />
+Slider:<br />
+         <input type="hidden" id="x11" name="x11" />
+        <input type="hidden" id="y11" name="y11" />
+        <input type="hidden" id="x22" name="x22" />
+        <input type="hidden" id="y22" name="y22" />
+        <input type="hidden" id="w1" name="w1" />
+        <input type="hidden" id="h1" name="h1" />
+       <div> <input type="file" name="slider" id="slider" onchange="fileSelectHandler1()" /></div>
+       <div class="error1"> </div>
+        <div class="sliderstep2" style="display:none;">
+            <h2>Please select a crop region</h2>
+            <img id="previewslider" />
+        </div><br /><br /><br />
 Is_headline:&nbsp;<input type="radio" value="1" name="is_headline" required="required"/> Yes
 <input type="radio" value="0" name="is_headline" required="required"/> No<br/><br />
 
