@@ -1,20 +1,18 @@
 <?php
-Class Resize
+Class Resize1
 {
      private $image;
     private $width;
     private $height;
     private $imageResized;
     
-    function __construct($fileName)
+  public function __construct($filename)
     {
-        // *** Open up the file
-        $this->image = $this->openImage($fileName);
- 
-         $this->width  = imagesx($this->image);
-        $this->height = imagesy($this->image);
+ $this->image=$this->openImage($filename);
+ $this->width=imagesx($this->image);
+ $this->height=imagesy($this->image);
     }
-
+    
     
     private function openImage($file){
         
@@ -38,34 +36,25 @@ Class Resize
         }
         return $img;
     }
-    public function resizeImage($newWidth,$newHeight,$option="auto",$x1=0,$y1=0)
-{
- 
-    // *** Get optimal width and height - based on $option
-    $optionArray = $this->getDimensions($newWidth, $newHeight, strtolower($option));
- 
-    $optimalWidth  = $optionArray['optimalWidth'];
+    
+    public function resizeImage($newWidth,$newHeight,$option="auto"){
+        $optionArray=$this->getDimensions($newWidth,$newHeight,strtolower($option));
+         $optimalWidth  = $optionArray['optimalWidth'];
     $optimalHeight = $optionArray['optimalHeight'];
- 
-    // *** Resample - create image canvas of x, y size
-    $this->imageResized = imagecreatetruecolor($optimalWidth, $optimalHeight);
- imagealphablending($this->imageResized, false);
-imagesavealpha($this->imageResized, true);
-   // imagecopyresampled($this->imageResized, $this->image, 0, 0, 0, 0, $optimalWidth, $optimalHeight,$this->width, $this->height);
- imagecopyresampled($this->imageResized,$this->image,0, 0, $x1,$y1,$optimalWidth, $optimalHeight,$this->width, $this->height);
-    // *** if option is 'crop', then crop too
-    if ($option == 'crop') {
+    $this->imageResized=imagecreatetruecolor($optimalWidth,$optimalHeight);
+    imagecopyresampled($this->imageResized,$this->image,0,0,0,0,$optimalWidth, $optimalHeight, $newWidth,$newHeight);
+  if ($option == 'crop') {
         $this->crop($optimalWidth, $optimalHeight, $newWidth, $newHeight);
     }
-}
+ 
+    }
     
-     private function getDimensions($newWidth, $newHeight, $option)
+    private function getDimensions($newWidth, $newHeight, $option)
 {
  
    switch ($option)
     {
         case 'exact':
-            //die('here_');
             $optimalWidth = $newWidth;
             $optimalHeight= $newHeight;
             break;

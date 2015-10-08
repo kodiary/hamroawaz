@@ -1,8 +1,7 @@
 <?php
 App::uses('Resize','Lib');
 App::load("Resize");
-App::uses('Resizeslider','Lib');
-App::load("Resizeslider");
+
 class DashboardController extends AppController
 {
     
@@ -28,6 +27,7 @@ class DashboardController extends AppController
        $this->set('list',$a);
     }
      function addNews(){
+        
       
       $error=0;
       if(isset($_POST)){
@@ -45,7 +45,7 @@ class DashboardController extends AppController
         
          if($ext == 'jpg' || $ext == 'JPGE'|| $ext == 'png'|| $ext == 'gif'|| $ext == 'JPG'|| $ext == 'PNG'|| $ext == 'GIF'){
         $path=APP.'/webroot/news/image/'.$rand;
-        
+        echo $path."<br>";
         $thumbpath=APP.'/webroot/news/image/thumb/'.$rand;
         
          $thumbpath1=APP.'/webroot/news/image/thumb1/'.$rand;
@@ -74,8 +74,10 @@ class DashboardController extends AppController
         $arr=explode('.',$slider);
         $ext=end($arr);
         $rand2=rand(100000,999999).'_'.rand(100000,999999).'.'.$ext;
+        $slidename=rand(100000,999999).rand(100000,999999).'.'.$ext;
         if($ext == 'jpg' || $ext == 'JPGE'|| $ext == 'png'|| $ext == 'gif'|| $ext == 'JPG'|| $ext == 'PNG'|| $ext == 'GIF'){
-        $path2=APP.'/webroot/news/slider/'.$rand2;
+        $path2=APP.'webroot/slider/main'.$rand2;
+         $pathslide=APP.'webroot/slider/'.$rand2;
          $_POST['slider']=$rand2;
  
        }
@@ -84,35 +86,30 @@ class DashboardController extends AppController
              $error++;
             }
         }
-      
+      //debug($_POST);die();
     if($error==0){
         
         /* -------------Image Upload----------------*/
        
         move_uploaded_file($_FILES['image_file']['tmp_name'],$path);
-        
-         $resizeObj = new resize($path);
+        $resizeObj = new resize($path);
           $resizeObj -> resizeImage($w, $h,'exact');
          $resizeObj -> saveImage($thumbpath, 100);
          unset($resizeObj);
          $resizeObj = new resize($path);
-         $resizeObj -> resizeImage(600, 432,'exact');
+         $resizeObj -> resizeImage($w, $h,'exact',$_POST['x1'],$_POST['y1']);
          $resizeObj -> saveImage($thumbpath1, 100);
-         //unlink($path);
+         unlink($path);
       /* -------------slider Upload----------------*/  
       if($_FILES['slider']['name']){
       move_uploaded_file($_FILES['slider']['tmp_name'],$path2);
-       @chmod($path2, 0777);
-         $thumbpath=APP.'/webroot/news/slider/thumb/'.$rand2;
-         $thumbpath1=APP.'/webroot/news/slider/thumb1/'.$rand2;
-        $resizeObj = new resize1($path2);
-        $resizeObj -> resizeImage($w1,$h1,'landscape');
-        $resizeObj -> saveImage($thumbpath, 100);
-        unset($resizeObj);
-        $resizeObj = new resize1($path2);
-        $resizeObj -> resizeImage(940, 450,'landscape');
-        $resizeObj -> saveImage($thumbpath1, 100);
-       // unlink($path2);
+    
+        
+         //$thumbpath1=APP.'/webroot/news/slider/thumb1/'.$rand2;
+        $resizeObj = new resize($path2);
+        $resizeObj -> resizeImage(980,290,'exact');
+        $resizeObj -> saveImage($pathslide, 100);
+         unlink($path2);
        }
       /* -------------audio Upload----------------*/  
        move_uploaded_file($_FILES['audio']['tmp_name'],$path1);
@@ -214,12 +211,12 @@ class DashboardController extends AppController
         $arr=explode('.',$slider);
         $ext=end($arr);
         $rand2=rand(100000,999999).'_'.rand(100000,999999).'.'.$ext;
+        
         if($ext == 'jpg' || $ext == 'JPGE'|| $ext == 'png'|| $ext == 'gif'|| $ext == 'JPG'|| $ext == 'PNG'|| $ext == 'GIF'){
-        $path2=APP.'/webroot/news/slider/'.$rand2;
-         $thumbpath=APP.'/webroot/news/slider/thumb/'.$rand2;
-         $thumbpath1=APP.'/webroot/news/slider/thumb1/'.$rand2;
-     $delslider=APP.'/webroot/news/slider/thumb/'.$a['Newsmanager']['slider'];
-      $delslider1=APP.'/webroot/news/slider/thumb1/'.$a['Newsmanager']['slider'];
+        $path2=APP.'/webroot/news/slider/main/'.$rand2;
+         $pathslide=APP.'webroot/slider/'.$rand2;
+     
+      $delslider=APP.'/webroot/news/slider/'.$a['Newsmanager']['slider'];
         }else{
              $this->Session->setFlash('Invalid File Extension');    
                 $error++;
@@ -251,19 +248,14 @@ class DashboardController extends AppController
       /* -------------slider Upload----------------*/  
       if($_FILES['slider']['name']){
       unlink($delslider);
-      unlink($delslider1);
+      
       move_uploaded_file($_FILES['slider']['tmp_name'],$path2);
-       chmod($path2, 0777);
-         $thumbpath=APP.'/webroot/news/slider/thumb/'.$rand2;
-         $thumbpath1=APP.'/webroot/news/slider/thumb1/'.$rand2;
-        $resizeObj = new resize1($path2);
-        $resizeObj -> resizeImage($w1,$h1,'landscape');
-        $resizeObj -> saveImage($thumbpath, 100);
-        unset($resizeObj);
-        $resizeObj = new resize1($path2);
-        $resizeObj -> resizeImage(940, 450,'landscape');
-        $resizeObj -> saveImage($thumbpath1, 100);
-        //unlink($path2);
+       if(isset($resizeObj))
+       unset($resizeObj);
+        $resizeObj = new resize($path2);
+        $resizeObj -> resizeImage(980,290,'exact');
+        $resizeObj -> saveImage($pathslide, 100);
+        unlink($path2);
         }
       /* -------------audio Upload----------------*/  
       if($_FILES['audio']['tmp_name']){
@@ -306,10 +298,9 @@ class DashboardController extends AppController
     unlink($path1);
    
      $slider=$q['Newsmanager']['slider'];
-    $path2=APP.'/webroot/news/slider/thumb/'.$slider;
-   // unlink($path2);
-    $pathh2=APP.'/webroot/news/slider/thumb1/'.$slider;
-    //unlink($pathh2);
+    $path2=APP.'/webroot/slider/'.$slider;
+   
+   unlink($path2);
     $this->Newsmanager->delete($id);
     $this->calldeletenewsCategory($id);
     $this->Session->setFlash('News Have been successfully deleted!!'); 
@@ -444,30 +435,6 @@ class DashboardController extends AppController
          $this->redirect('/Dashboard/slider');
          }
     }
-    function ajaxupload(){
-        
-        
-        $images=$_FILES['image_file']['name'];
-        
-        $arr=explode('.',$images);
-        
-        $ext=end($arr);
-        $rand=rand(100000,999999).'_'.rand(100000,999999).'.'.$ext;
-        
-         if($ext == 'jpg' || $ext == 'JPGE'|| $ext == 'png'|| $ext == 'gif'|| $ext == 'JPG'|| $ext == 'PNG'|| $ext == 'GIF'){
-        $path=APP.'/webroot/news/image/'.$rand;
-        
-        $thumbpath=APP.'/webroot/news/image/thumb/'.$rand;
-        
-         $thumbpath1=APP.'/webroot/news/image/thumb1/'.$rand;
-        
-        }else{
-             $this->Session->setFlash('Invalid File Extension');  
-             $error++;
-                
- }
- $_POST['image_file']=$rand;
- 
-    }
+
   }
   ?> 

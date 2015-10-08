@@ -16,7 +16,7 @@
             <script type="text/javascript" src="<?php echo $this->webroot;?>js/ckeditor/ckeditor.js"></script>
             <script type="text/javascript" src="<?php echo $this->webroot;?>js/demo/jquery.Jcrop.js"></script>
            <script type="text/javascript" src="<?php echo $this->webroot;?>js/demo/style.js"></script>
-          <script type="text/javascript" src="<?php echo $this->webroot;?>js/demo/style2.js"></script>
+         
             
            
 		

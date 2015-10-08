@@ -5,22 +5,21 @@
 News Title:<br />
 <input type="text" name="title" required="required"/><br/>
 Image:<br />
-         <input type="hidden" id="x1" name="x1" />
-        <input type="hidden" id="y1" name="y1" />
-        <input type="hidden" id="x2" name="x2" />
-        <input type="hidden" id="y2" name="y2" />
-        <input type="hidden" id="w" name="w" />
-        <input type="hidden" id="h" name="h" />
-        <input type="hidden" id="image" name="image" />
+         <input type="text" id="x1" name="x1" />
+        <input type="text" id="y1" name="y1" />
+        <input type="text" id="x2" name="x2" />
+        <input type="text" id="y2" name="y2" />
+        <input type="text" id="w" name="w" />
+        <input type="text" id="h" name="h" />
+       
         
        <div> <input type="file" name="image_file" id="image_file" onchange="fileSelectHandler()" /></div>
        <div class="error"> </div>
         <div class="step2">
+        <div class="cont">
             <h2>Step2: Please select a crop region</h2>
-            <img id="preview" />
-            <div class="cbtn">
-            <button type="button" class="cropimg">Crop</button>
             </div>
+            <img id="preview" />
             
 
             
@@ -40,13 +39,13 @@ Standard:&nbsp;<input type="radio" name="national" value="1" class="standard" re
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" value="2" name="national" required="required"/> International<br/><br />
 <p class="hid" style="display: none;">
 Region:<select name="region">
-<option selected="selected" value="notnational">....</option>
+<option selected="selected" value="notnational">Select Region</option>
 <option value="1">Himalayan</option>
 <option value="2">Hilly</option>
 <option value="3">Terai</option>
 </select><br />
 Zone:<select name="zone">
-<option selected="selected"  value="notnational">....</option>
+<option selected="selected"  value="notnational">Select Zone</option>
 <option value="1">Mechi</option>
 <option value="2">Koshi</option>
 <option value="3">Sagarmatha</option>
@@ -64,13 +63,14 @@ Zone:<select name="zone">
 </select>
 <br />
 </p>
-Slider:
+Slider:<input type="file" name="slider"/><br />
 Is_headline:&nbsp;<input type="radio" value="1" name="is_headline" required="required"/> Yes
 <input type="radio" value="0" name="is_headline" required="required"/> No<br/><br />
 
 <input type="submit" class="submit" name="submit" value="SUBMIT"/>
 </form>
 </div>
+<div class="showlist">
 <h4>list of News</h4>
 
 <div class="newslist">
@@ -97,10 +97,12 @@ foreach($list as $val){
 ?>
 
 </div>
+</div>
 <script>
 $(function(){
     $(".addnews").click(function(){
         $(".newcontainer").toggle();
+        $(".showlist").toggle();
     })
     $( 'input[name="national"]:radio' ).change(function() {       
    if (this.value == 1) {
@@ -111,19 +113,7 @@ $(function(){
         }
 })
  
-$(".cropimg").click(function(){
-    var x1=$('#x1').val();
-    var y1=$('#y1').val();
-    var w=$('#w').val();
-    var h=$('#h').val();
-    
-    $.ajax({
-        url:'<?php $this->webroot;?>dashboard/'
-    })
-   
-  
-    
-})
+
 });
 
 
