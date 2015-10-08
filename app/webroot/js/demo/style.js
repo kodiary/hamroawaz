@@ -92,8 +92,10 @@ function fileSelectHandler() {
             setTimeout(function(){
                 // initialize Jcrop
                 $('#preview').Jcrop({
-                    minSize: [32, 32], // min crop size
-                    aspectRatio : 1, // keep aspect ratio 1:1
+                    minSize: [200,150], // min crop size
+                     
+                     //xsize=$prevcnt.width(),
+                     //ysize=$prevcnt.height(),
                     bgFade: true, // use fade effect
                     bgOpacity: .3, // fade opacity
                     onChange: updateInfo,
