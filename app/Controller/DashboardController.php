@@ -407,7 +407,6 @@ class DashboardController extends AppController
     function order()
     {
     $this->loadModel('Categorymanager');
-
     foreach($_POST['id'] as $v=>$k)
     {
         $this->Categorymanager->id=$k;
@@ -444,6 +443,31 @@ class DashboardController extends AppController
         $this->Session->setFlash('plz uplode bigger size image');
          $this->redirect('/Dashboard/slider');
          }
+    }
+    function ajaxupload(){
+        
+        
+        $images=$_FILES['image_file']['name'];
+        
+        $arr=explode('.',$images);
+        
+        $ext=end($arr);
+        $rand=rand(100000,999999).'_'.rand(100000,999999).'.'.$ext;
+        
+         if($ext == 'jpg' || $ext == 'JPGE'|| $ext == 'png'|| $ext == 'gif'|| $ext == 'JPG'|| $ext == 'PNG'|| $ext == 'GIF'){
+        $path=APP.'/webroot/news/image/'.$rand;
+        
+        $thumbpath=APP.'/webroot/news/image/thumb/'.$rand;
+        
+         $thumbpath1=APP.'/webroot/news/image/thumb1/'.$rand;
+        
+        }else{
+             $this->Session->setFlash('Invalid File Extension');  
+             $error++;
+                
+ }
+ $_POST['image_file']=$rand;
+ 
     }
   }
   ?> 

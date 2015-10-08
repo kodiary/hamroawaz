@@ -73,21 +73,27 @@ Zone:<select name="zone">
 </select>
 <br />
 </p>
-Slider:Slider:<br />
-         <input type="hidden" id="x11" name="x11" />
-        <input type="hidden" id="y11" name="y11" />
-        <input type="hidden" id="x22" name="x22" />
-        <input type="hidden" id="y22" name="y22" />
-        <input type="hidden" id="w1" name="w1" />
-        <input type="hidden" id="h1" name="h1" />
-       <div> <input type="file" name="slider" id="slider" onchange="fileSelectHandler1()" /></div>
-       <div class="error1"> </div>
-        <div class="sliderstep2">
-            <h2>Please select a crop region</h2>
-            <img id="previewslider" />
-        </div>
-        <img src="<?php echo $this->webroot;?>news/slider/thumb/<?php echo $edit['Newsmanager']['slider'];?>" width="100px" height="100px"/>
-        <br /><br /><br />
+Slider:<br />
+         <input type="hidden" id="x1" name="x1" />
+        <input type="hidden" id="y1" name="y1" />
+        <input type="hidden" id="x2" name="x2" />
+        <input type="hidden" id="y2" name="y2" />
+       <div> <input type="file" name="image_file" id="image_file" onchange="fileSelectHandler()" /></div>
+       <div class="error"> </div>
+        <div class="step2">
+            <h2>Step2: Please select a crop region</h2>
+            <img id="preview" />
+
+            <div class="info">
+                <label>File size</label> <input type="text" id="filesize" name="filesize" />
+                <label>Type</label> <input type="text" id="filetype" name="filetype" />
+                <label>Image dimension</label> <input type="text" id="filedim" name="filedim" />
+                <label>W</label> <input type="text" id="w" name="w" />
+                <label>H</label> <input type="text" id="h" name="h" />
+            </div>
+
+            
+        </div><br /><br /><br />
 Is_headline:&nbsp;<input type="radio" value="1"  name="is_headline"  <?php $check=$edit['Newsmanager']['is_headline']; if(isset($check) && $check==1) echo "checked";?>/> Yes
 <input type="radio" value="0" name="is_headline"  <?php $check=$edit['Newsmanager']['is_headline']; if(isset($check) && $check==0) echo "checked";?>/> No<br/><br />
 <br />
