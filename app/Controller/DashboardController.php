@@ -378,7 +378,7 @@ class DashboardController extends AppController
     function category()
     {
         $this->loadModel('Categorymanager');
-        $cat=$this->Categorymanager->find('all');
+        $cat=$this->Categorymanager->find('all',array('order'=>array('display_order ASC')));
         $this->set('cat',$cat);
     }
     function addcategory($id=0)
