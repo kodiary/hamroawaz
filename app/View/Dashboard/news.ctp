@@ -9,19 +9,19 @@ Image:<br />
         <input type="hidden" id="y1" name="y1" />
         <input type="hidden" id="x2" name="x2" />
         <input type="hidden" id="y2" name="y2" />
+        <input type="hidden" id="w" name="w" />
+        <input type="hidden" id="h" name="h" />
+        <input type="hidden" id="image" name="image" />
+        
        <div> <input type="file" name="image_file" id="image_file" onchange="fileSelectHandler()" /></div>
        <div class="error"> </div>
         <div class="step2">
             <h2>Step2: Please select a crop region</h2>
             <img id="preview" />
-
-            <div class="info">
-                <label>File size</label> <input type="text" id="filesize" name="filesize" />
-                <label>Type</label> <input type="text" id="filetype" name="filetype" />
-                <label>Image dimension</label> <input type="text" id="filedim" name="filedim" />
-                <label>W</label> <input type="text" id="w" name="w" />
-                <label>H</label> <input type="text" id="h" name="h" />
+            <div class="cbtn">
+            <button type="button" class="cropimg">Crop</button>
             </div>
+            
 
             
         </div><br /><br /><br />
@@ -64,7 +64,7 @@ Zone:<select name="zone">
 </select>
 <br />
 </p>
-Slider:<br /><input type="file" name="slider"/><br /><br />
+Slider:
 Is_headline:&nbsp;<input type="radio" value="1" name="is_headline" required="required"/> Yes
 <input type="radio" value="0" name="is_headline" required="required"/> No<br/><br />
 
@@ -111,7 +111,19 @@ $(function(){
         }
 })
  
- 
+$(".cropimg").click(function(){
+    var x1=$('#x1').val();
+    var y1=$('#y1').val();
+    var w=$('#w').val();
+    var h=$('#h').val();
+    
+    $.ajax({
+        url:'<?php $this->webroot;?>dashboard/'
+    })
+   
+  
+    
+})
 });
 
 
