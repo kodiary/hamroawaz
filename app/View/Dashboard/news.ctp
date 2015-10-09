@@ -19,8 +19,8 @@ Image:<br />
             
         </div>
        <div class="error"> </div>
-        <div class="step2">
-        <div class="cont">
+        <div class="step2"style="display: none;">
+        <div class="cont" >
             <h2>Please select a crop region</h2>
             </div>
             <img id="preview" />

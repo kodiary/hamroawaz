@@ -6,11 +6,18 @@ class NewController extends AppController
     {
         $this->set('title','HamroAwaz');
         $this->loadModel('Categorymanager');
-        $this->loadModel('Slider');
-        $q=$this->Categorymanager->find('all');
-        $slider=$this->Slider->find('all');
-        $this->set('cat',$q);
+        $this->loadModel('Newsmanager');
+        $qcat=$this->Categorymanager->find('all');
+        $slider=$this->Newsmanager->find('all');
+        $this->set('cat',$qcat);
         $this->set('slider',$slider);   
+        
+        
+        $q=$this->Newsmanager->find('all',array(
+                               'order' => array('id' => 'DESC'),
+                               'limit'=>5
+                               ));
+        $this->set('val',$q);
     }
     
      function get_currency($from_Currency, $to_Currency, $amount) 
@@ -57,6 +64,30 @@ class NewController extends AppController
     function currency()
     {
         
+    }
+    function getHeadline(){
+      
+         $this->loadModel('Newsmanager');
+        $q=$this->Newsmanager->find('all',array(
+                               'order' => array('id' => 'DESC'),
+                               'limit'=>3
+                               ));
+        return $q;
+    }
+     function getCategory(){
+      
+         $this->loadModel('Categorymanager');
+        $q=$this->Categorymanager->find('all',array(
+                               'order' => array('id' => 'DESC'),
+                               'limit'=>4
+                               ));
+        return $q;
+    }
+    function getNewsId($id){
+         $this->loadModel('News_category');
+          $q=$this->News_category->find('all',array('cat_id'=>$id));
+                               
+        return $q;
     }
     
 }

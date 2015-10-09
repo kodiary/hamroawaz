@@ -39,7 +39,7 @@ class DashboardController extends AppController
        $ext=end($arr);
         $rand=rand(100000,999999).'_'.rand(100000,999999).'.'.$ext;
         
-         if($ext == 'jpg' || $ext == 'JPGE'|| $ext == 'png'|| $ext == 'gif'|| $ext == 'JPG'|| $ext == 'PNG'|| $ext == 'GIF'){
+         if($ext == 'jpg' || $ext == 'JPGE'||$ext == 'jpeg'|| $ext == 'png'|| $ext == 'gif'|| $ext == 'JPG'|| $ext == 'PNG'|| $ext == 'GIF'){
         $path=APP.'/webroot/news/image/'.$rand;
        
         //$thumbpath=APP.'/webroot/news/image/thumb/'.$rand;
@@ -71,7 +71,7 @@ class DashboardController extends AppController
         $ext=end($arr);
         $rand2=rand(100000,999999).'_'.rand(100000,999999).'.'.$ext;
         $slidename=rand(100000,999999).rand(100000,999999).'.'.$ext;
-        if($ext == 'jpg' || $ext == 'JPGE'|| $ext == 'png'|| $ext == 'gif'|| $ext == 'JPG'|| $ext == 'PNG'|| $ext == 'GIF'){
+        if($ext == 'jpg' || $ext == 'JPGE'||$ext == 'jpeg'|| $ext == 'png'|| $ext == 'gif'|| $ext == 'JPG'|| $ext == 'PNG'|| $ext == 'GIF'){
         $path2=APP.'webroot/slider/main'.$rand2;
          $pathslide=APP.'webroot/slider/'.$rand2;
          $_POST['slider']=$rand2;
@@ -169,7 +169,7 @@ class DashboardController extends AppController
         $arr=explode('.',$images);
         $ext=end($arr);
         $rand=rand(100000,999999).'_'.rand(100000,999999).'.'.$ext;
-         if($ext == 'jpg' || $ext == 'JPGE'|| $ext == 'png'|| $ext == 'gif'|| $ext == 'JPG'|| $ext == 'PNG'|| $ext == 'GIF'){
+         if($ext == 'jpg' || $ext == 'JPGE'||$ext == 'jpeg'|| $ext == 'png'|| $ext == 'gif'|| $ext == 'JPG'|| $ext == 'PNG'|| $ext == 'GIF'){
         $path=APP.'/webroot/news/image/'.$rand;
         
         // $delimg=APP.'/webroot/news/image/thumb/'.$a['Newsmanager']['image_file'];
@@ -205,7 +205,7 @@ class DashboardController extends AppController
         $ext=end($arr);
         $rand2=rand(100000,999999).'_'.rand(100000,999999).'.'.$ext;
         
-        if($ext == 'jpg' || $ext == 'JPGE'|| $ext == 'png'|| $ext == 'gif'|| $ext == 'JPG'|| $ext == 'PNG'|| $ext == 'GIF'){
+        if($ext == 'jpg' || $ext == 'JPGE'||$ext == 'jpeg'|| $ext == 'png'|| $ext == 'gif'|| $ext == 'JPG'|| $ext == 'PNG'|| $ext == 'GIF'){
         $path2=APP.'/webroot/news/slider/main/'.$rand2;
          $pathslide=APP.'webroot/slider/'.$rand2;
      
