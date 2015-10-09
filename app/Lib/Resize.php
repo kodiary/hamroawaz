@@ -52,7 +52,7 @@ Class Resize
  imagealphablending($this->imageResized, false);
 imagesavealpha($this->imageResized, true);
    // imagecopyresampled($this->imageResized, $this->image, 0, 0, 0, 0, $optimalWidth, $optimalHeight,$this->width, $this->height);
- imagecopyresampled($this->imageResized,$this->image,0, 0, $x1,$y1,$optimalWidth, $optimalHeight,$this->width, $this->height);
+ imagecopyresampled($this->imageResized,$this->image,0, 0, $x1,$y1,$optimalWidth, $optimalHeight,$this->width - 2 * $x1, $this->height - 2 * $x1);
     // *** if option is 'crop', then crop too
     if ($option == 'crop') {
         $this->crop($optimalWidth, $optimalHeight, $newWidth, $newHeight);
