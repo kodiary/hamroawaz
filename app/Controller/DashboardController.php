@@ -20,10 +20,10 @@ class DashboardController extends AppController
     }
     function news(){
        $this->loadModel('Categorymanager');
-      $q= $this->Categorymanager->find('all',array('order' => array('display_order' => 'asc')));
-    $this->set('order',$q);
-     $this->loadModel('Newsmanager');
-     $a=$this->Newsmanager->find('all');
+       $q= $this->Categorymanager->find('all',array('order' => array('display_order' => 'asc')));
+       $this->set('order',$q);
+       $this->loadModel('Newsmanager');
+       $a=$this->Newsmanager->find('all');
        $this->set('list',$a);
     }
      function addNews(){
@@ -351,7 +351,7 @@ class DashboardController extends AppController
             if($check['Admin']['password']!=$_POST['pw'])
             {
                 $this->Session->setFlash('old password doesnot match');
-                    $this->redirect('/Dashboard/setting');
+                $this->redirect('/Dashboard/setting');
             }
             
          }
@@ -434,6 +434,21 @@ class DashboardController extends AppController
         $this->Session->setFlash('plz uplode bigger size image');
          $this->redirect('/Dashboard/slider');
          }
+    }
+    function pagemanager()
+    {
+        
+    }
+    function addpagemanager()
+    {
+        $arr['title']=$_POST['title'];
+        $arr['description']=$_POST['des'];
+        $this->loadModel('Pagemanager');
+        $this->Pagemanager->create();
+        $this->Pagemanager->save($arr);
+        $q=$this->Pagemanager->find('all');
+        echo $q;
+        die();
     }
 
   }
