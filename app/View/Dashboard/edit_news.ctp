@@ -1,34 +1,38 @@
 <div class="newcontainer" style="">
-<form action="<?php echo $this->webroot;?>dashboard/updateNews/<?php echo  $edit['Newsmanager']['id'];?>" method="POST" enctype="multipart/form-data" onsubmit="return checkForm()">
+<form action="<?php echo $this->webroot;?>dashboard/updateNews/<?php echo  $edit['Newsmanager']['id'];?>" method="POST" enctype="multipart/form-data" >
 News Title:<br />
 <input type="text" name="title" value="<?php echo  $edit['Newsmanager']['title'];?>"required="required"/><br/>
-
 Image:<br />
          <input type="hidden" id="x1" name="x1" />
         <input type="hidden" id="y1" name="y1" />
         <input type="hidden" id="x2" name="x2" />
         <input type="hidden" id="y2" name="y2" />
-       <div> <input type="file" name="image_file" id="image_file" onchange="fileSelectHandler()" /></div>
-       <div class="error"></div>
+        <input type="hidden" id="w" name="w" />
+        <input type="hidden" id="h" name="h" />
+  <div> <input type="file" name="image_file" id="image_file" onchange="fileSelectHandler()" />
+ <!-- <label>Image dimension</label> <input type="text" id="filedim" name="filedim" readonly="" />-->
+               
+        </div>
+       <div class="error"> </div>
         <div class="step2">
-            <h2>Step2: Please select a crop region</h2>
-            <img id="preview" />
-
-            <div class="info">
-                <label>File size</label> <input type="text" id="filesize" name="filesize" />
-                <label>Type</label> <input type="text" id="filetype" name="filetype" />
-                <label>Image dimension</label> <input type="text" id="filedim" name="filedim" />
-                <label>W</label> <input type="text" id="w" name="w" />
-                <label>H</label> <input type="text" id="h" name="h" />
+        <div class="cont" style="display:none;">
+            <h2 >Please select a crop region</h2>
             </div>
+            <img id="preview" />
+           
+           
 
             
-        </div>
-        <img src="<?php echo $this->webroot;?>news/image/thumb/<?php echo $edit['Newsmanager']['image_file'];?>" width="100px" height="100px"/>
+        </div><br />
+        <img src="<?php echo $this->webroot;?>news/image/thumb1/<?php echo $edit['Newsmanager']['image_file'];?>" width="100px" height="100px"/>
         <br />
  
 Audio:<br /><input type="file" name="audio" /><br />
+<?php if($edit['Newsmanager']['audio']){?>
 <?php echo $edit['Newsmanager']['audio'];?>
+<?php }else{
+    echo "No image is available";
+}?>
 <br /><br />
 Video:<br /><textarea name="video" >
 <?php echo strip_tags($edit['Newsmanager']['video']);?>
@@ -73,27 +77,14 @@ Zone:<select name="zone">
 </select>
 <br />
 </p>
-Slider:<br />
-         <input type="hidden" id="x1" name="x1" />
-        <input type="hidden" id="y1" name="y1" />
-        <input type="hidden" id="x2" name="x2" />
-        <input type="hidden" id="y2" name="y2" />
-       <div> <input type="file" name="image_file" id="image_file" onchange="fileSelectHandler()" /></div>
-       <div class="error"> </div>
-        <div class="step2">
-            <h2>Step2: Please select a crop region</h2>
-            <img id="preview" />
-
-            <div class="info">
-                <label>File size</label> <input type="text" id="filesize" name="filesize" />
-                <label>Type</label> <input type="text" id="filetype" name="filetype" />
-                <label>Image dimension</label> <input type="text" id="filedim" name="filedim" />
-                <label>W</label> <input type="text" id="w" name="w" />
-                <label>H</label> <input type="text" id="h" name="h" />
-            </div>
-
-            
-        </div><br /><br /><br />
+Slider:
+<input type="file" name="slider"/><br />
+<?php if($edit['Newsmanager']['slider']){?>
+<img src="<?php echo $this->webroot;?>slider/<?php echo $edit['Newsmanager']['slider'];?>" width="100%" height="100%"/>
+<?php }else{
+    echo "No slider is available";
+} ?>
+<br /><br />
 Is_headline:&nbsp;<input type="radio" value="1"  name="is_headline"  <?php $check=$edit['Newsmanager']['is_headline']; if(isset($check) && $check==1) echo "checked";?>/> Yes
 <input type="radio" value="0" name="is_headline"  <?php $check=$edit['Newsmanager']['is_headline']; if(isset($check) && $check==0) echo "checked";?>/> No<br/><br />
 <br />
@@ -114,7 +105,7 @@ $( 'input[name="national"]:radio' ).change(function() {
         else if (this.value == 2) {
           $(this).parent().find("p.hid").hide();
         }
-        })
+        });
         var selectedVal = "";
 var selected = $("input[type='radio'][name='national']:checked");
     selectedVal = selected.val();
@@ -123,7 +114,7 @@ var selected = $("input[type='radio'][name='national']:checked");
     }
     
    
- 
+    
 });
   
 </script>
