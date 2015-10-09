@@ -1,31 +1,36 @@
 
 <h2><button class="addnews">Add News</button></h2>
 <div class="newcontainer" style="display: none;">
-<form id="upload_form" action="<?php echo $this->webroot;?>dashboard/addNews" method="POST" enctype="multipart/form-data">
+<form id="upload_form" action="<?php echo $this->webroot;?>dashboard/addNews" method="POST" enctype="multipart/form-data" onsubmit="return checkForm()">
 News Title:<br />
 <input type="text" name="title" required="required"/><br/>
 Image:<br />
-         <input type="text" id="x1" name="x1" />
-        <input type="text" id="y1" name="y1" />
-        <input type="text" id="x2" name="x2" />
-        <input type="text" id="y2" name="y2" />
-        <input type="text" id="w" name="w" />
-        <input type="text" id="h" name="h" />
+         <input type="hidden" id="x1" name="x1" />
+        <input type="hidden" id="y1" name="y1" />
+        <input type="hidden" id="x2" name="x2" />
+        <input type="hidden" id="y2" name="y2" />
+        <input type="hidden" id="w" name="w" />
+        <input type="hidden" id="h" name="h" />
        
         
-       <div> <input type="file" name="image_file" id="image_file" onchange="fileSelectHandler()" /></div>
+       <div> <input type="file" name="image_file" id="image_file" onchange="fileSelectHandler()" />
+
+          <!--  <label>Image dimension</label> <input type="text" id="filedim" name="filedim" readonly=""/>-->
+            
+        </div>
        <div class="error"> </div>
         <div class="step2">
         <div class="cont">
-            <h2>Step2: Please select a crop region</h2>
+            <h2>Please select a crop region</h2>
             </div>
             <img id="preview" />
-            
+           
+           
 
             
         </div><br /><br /><br />
-Audio:<br /><input type="file" name="audio" required="required"/><br /><br />
-Video:<br /><textarea name="video" required="required"></textarea>
+Audio:<br /><input type="file" name="audio" /><br /><br />
+Video:<br /><textarea name="video" ></textarea>
 <br />
 Description:<br />
 <textarea name="description"  class="ckeditor required" required="required"></textarea><br />
@@ -64,6 +69,7 @@ Zone:<select name="zone">
 <br />
 </p>
 Slider:<input type="file" name="slider"/><br />
+
 Is_headline:&nbsp;<input type="radio" value="1" name="is_headline" required="required"/> Yes
 <input type="radio" value="0" name="is_headline" required="required"/> No<br/><br />
 
@@ -111,8 +117,8 @@ $(function(){
         else if (this.value == 2) {
           $(this).parent().find("p.hid").hide();
         }
-})
- 
+});
+    
 
 });
 
