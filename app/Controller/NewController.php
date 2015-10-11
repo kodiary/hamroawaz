@@ -6,11 +6,19 @@ class NewController extends AppController
     {
         $this->set('title','HamroAwaz');
         $this->loadModel('Categorymanager');
-        $this->loadModel('Slider');
-        $q=$this->Categorymanager->find('all');
-        $slider=$this->Slider->find('all');
-        $this->set('cat',$q);
+        $this->loadModel('Newsmanager');
+        $qcat=$this->Categorymanager->find('all');
+        $slider=$this->Newsmanager->find('all');
+        $this->set('cat',$qcat);
         $this->set('slider',$slider);   
+        
+        
+        $q=$this->Newsmanager->find('all',array(
+                                'conditions'=>array('is_headline'=>1),
+                                'order' => array('id' => 'DESC'),
+                               'limit'=>5
+                               ));
+        $this->set('val',$q);
     }
     
      function get_currency($from_Currency, $to_Currency, $amount) 
@@ -56,7 +64,43 @@ class NewController extends AppController
     }
     function currency()
     {
+        $this->set('title','currency converter');
         
     }
+    function getHeadline(){
+      
+         $this->loadModel('Newsmanager');
+        $q=$this->Newsmanager->find('all',array(
+            'conditions'=>array('is_headline'=>1),
+                               'order' => array('id' => 'DESC'),
+                               'limit'=>3
+                               ));
+        return $q;
+    }
+     function getCategory(){
+      
+         $this->loadModel('Categorymanager');
+        $q=$this->Categorymanager->find('all',array(
+                               'order' => array('id' => 'ASC'),
+                               'limit'=>4
+                               ));
+        return $q;
+    }
+    function getNewsId($id){
+ $this->loadModel('News_category');
+         $arr['conditions']=array('cat_id'=>$id);
+    $q=$this->News_category->find('all',$arr);
+   // debug($q);die();
     
+        return $q;
+
+     }
+     function getNewsContent($id){
+        $this->loadModel('Newsmanager');
+        $arr['conditions']=array('id'=>$id);
+        $q=$this->Newsmanager->find('all',$arr);
+        return $q;
+              
+    }
+  
 }

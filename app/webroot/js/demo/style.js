@@ -69,10 +69,9 @@ function fileSelectHandler() {
         //alert(oImage.naturalWidth);
             // display step 2
             $('.step2').fadeIn(500);
-           if(oImage.naturalWidth<400 || oImage.naturalHeight<300){ 
-            alert("image is not valid to be cropped");
-            $('#preview').attr('src','');
-            $('.step2').hide();
+           if(oImage.naturalWidth<300 || oImage.naturalHeight<400){ 
+             $('.error').html('You have selected too small file, please select bigger image file').show();
+              $('.step2').hide();
             return false;
            }
             // display some basic image info
