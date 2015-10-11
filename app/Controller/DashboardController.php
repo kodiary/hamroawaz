@@ -437,18 +437,50 @@ unlink($path);
     }
     function pagemanager()
     {
-        
+      $this->loadModel('Pagemanager');
+      $q=$this->Pagemanager->find('all');
+      $this->set('q',$q);  
     }
     function addpagemanager()
     {
-        $arr['title']=$_POST['title'];
-        $arr['description']=$_POST['des'];
         $this->loadModel('Pagemanager');
-        $this->Pagemanager->create();
-        $this->Pagemanager->save($arr);
+        $arr['description']=$_POST['des'];
+        $arr['title']=$_POST['title'];
+        if(isset($_POST['id']) &&$_POST['id'])
+        {
+            $id =$_POST['id'];
+            $this->Pagemanager->id=$id;
+            $this->Pagemanager->save($arr);            
+        }
+        else{
+           $this->Pagemanager->create();
+        $this->Pagemanager->save($arr); 
+        }
         $q=$this->Pagemanager->find('all');
-        echo $q;
+        $this->layout = 'blank';
+        $this->set('q',$q);
+    }
+    function editpage()
+    {
+        $this->layout = 'blank';
+        $id=$_POST['id'];
+        $this->loadModel('Pagemanager');
+        $q=$this->Pagemanager->find('first',array('conditions'=>array('id'=>$id))); 
+        echo $q['Pagemanager']['title'];
+        echo "_";
+        echo $q['Pagemanager']['description'];
+        echo "_";
+        echo $q['Pagemanager']['id'];
+        
         die();
+    }
+    function deletepage()
+    {
+        $this->layout = 'blank';
+        $this->loadModel('Pagemanager');
+        $this->Pagemanager->delete($_POST['id']);
+        $q=$this->Pagemanager->find('all');
+        $this->set('q',$q);
     }
 
   }
