@@ -1,10 +1,10 @@
 <?php
     App::uses('CakeEmail', 'Network/Email');
-class NewController extends AppController
+class PageController extends AppController
 {
-    function index()
+    function index($id)
     {
-        $this->set('title','HamroAwaz');
+        $this->set('title','HamroAwazPage');
         $this->loadModel('Categorymanager');
         $this->loadModel('Newsmanager');
         $qcat=$this->Categorymanager->find('all');
@@ -14,13 +14,19 @@ class NewController extends AppController
         
         
         $q=$this->Newsmanager->find('all',array(
-                                'conditions'=>array('is_headline'=>1),
-                                'order' => array('id' => 'DESC'),
+                               'order' => array('id' => 'DESC'),
                                'limit'=>5
                                ));
         $this->set('val',$q);
+        $this->loadModel('News_category');
+        $qcat=$this->News_category->find('all',array(
+                                'conditions'=>array('cat_id'=>$id),
+                               ));
+                              // debug($qcat);die();
+        $this->set('catvar',$qcat);
+       // $this->Newsmanager->find(all,array);
     }
-    
+   
      function get_currency($from_Currency, $to_Currency, $amount) 
      {
     $amount = urlencode($amount);
@@ -67,11 +73,11 @@ class NewController extends AppController
         $this->set('title','currency converter');
         
     }
-    function getHeadline(){
+    function getHeadline($id){
       
          $this->loadModel('Newsmanager');
         $q=$this->Newsmanager->find('all',array(
-            'conditions'=>array('is_headline'=>1),
+                               'conditions'=>array('id'=>$id),
                                'order' => array('id' => 'DESC'),
                                'limit'=>3
                                ));

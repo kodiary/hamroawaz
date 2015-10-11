@@ -34,9 +34,15 @@
     <div style="float: left; width: 70%; padding: 15px"><h1>Headline</h1>
     <hr />
     <ul>
-    <?php $query=$this->requestAction('/new/getHeadline');
-    foreach($query as $list){?>
-    <li><a href="javascript:void(0)"> <img src="<?php echo $this->webroot;?>news/image/thumb1/<?php echo $list['Newsmanager']['image_file'];?>" width="200px" height="150px"/></a></li>
+    <?php 
+     //debug($catvar);die();
+     if(!empty($catvar)){
+    foreach($catvar as $ask){
+        $qt=$this->requestAction('/page/getHeadline/'.$ask['News_category']['news_id']);
+      
+    
+    foreach($qt as $list){?>
+    <li><a href="javascript:void(0)"> <img src="<?php echo $this->webroot;?>news/image/thumb1/<?php echo $list['Newsmanager']['image_file'];?>"/></a></li>
   <div style="float: left;margin-left: 214px;margin-top: -159px">
   <li><h3><a href="javascript:void(0)"> <?php echo $list['Newsmanager']['title'];?></a></h3></li>
   <li> <?php if($list['Newsmanager']['description']){
@@ -48,6 +54,10 @@
   </div>
  
     <?php }
+    }
+    }else{
+       echo "No Content Available";
+    }
     
     ?>
     </ul>
@@ -120,8 +130,8 @@ echo "</ul>";
 <div class="span4">
 </div>
 
-</div>   
-<div class="clearfix"></div>
+</div> 
+  <div class="clearfix"></div>
     <div class="row recent-work margin-bottom-40" style="margin: 30px auto;">
           <div class="col-md-3 col-sm-3 col-xs-12">
             <h2><a href="portfolio.html">Upcoming projects</a></h2>
@@ -130,26 +140,36 @@ echo "</ul>";
          
           <div class="col-md-9 col-sm-9 col-xs-12">
             <div class="owl-carousel owl-carousel3">
-                <?php foreach($slider as $pro){?>
+                <?php 
+                if(!empty($catvar)){
+                 foreach($catvar as $ask){
+        $qt=$this->requestAction('/page/getHeadline/'.$ask['News_category']['news_id']);
+    
+    foreach($qt as $list){ ?>
               <div class="recent-work-item">
                 <em>
-                  <img src="<?php echo $this->webroot;?>news/image/thumb1/<?php echo $pro['Newsmanager']['image_file'];?>" alt="Amazing Project" class="img-responsive" width="200px" height="150px"/>
+                  <img src="<?php echo $this->webroot;?>news/image/thumb1/<?php echo $list['Newsmanager']['image_file'];?>" alt="Amazing Project" class="img-responsive">
                   <a href=""><i class="fa fa-link"></i></a>
-                  <a href="<?php echo $this->webroot;?>news/image/thumb1/<?php echo $pro['Newsmanager']['image_file'];?>" class="fancybox-button" title="Project Name #1" data-rel="fancybox-button"><i class="fa fa-search"></i></a>
+                  <a href="<?php echo $this->webroot;?>news/image/thumb1/<?php echo $list['Newsmanager']['image_file'];?>" class="fancybox-button" title="Project Name #1" data-rel="fancybox-button"><i class="fa fa-search"></i></a>
                 </em>
                 <a class="recent-work-description" href="#">
-                  <strong><?php echo $pro['Newsmanager']['title'];?></strong>
+                  <strong><?php echo $list['Newsmanager']['title'];?></strong>
                 </a>
               </div>
-                <?php } ?>
+                <?php }
+                }
+                }else{
+       echo "No Content Available";
+    }
+     ?>
                 
             </div>       
           </div>
-          </div>
+          </div>  
+   </div>
+  
     
  
-   </div>
-    
 
 
 
