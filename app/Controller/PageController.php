@@ -14,7 +14,7 @@ class PageController extends AppController
         
         
         $q=$this->Newsmanager->find('all',array(
-                               'order' => array('id' => 'DESC'),
+                               'order' => array         ('id' => 'DESC'),
                                'limit'=>5
                                ));
         $this->set('val',$q);

@@ -118,3 +118,63 @@ function fileSelectHandler() {
     // read selected file as DataURL
     oReader.readAsDataURL(oFile);
 }
+
+function checkslider() {
+
+    // get selected file
+    var oFile = $('#slider')[0].files[0];
+
+    // hide all errors
+    $('.slidererr').hide();
+
+    // check for image type (jpg and png are allowed)
+    var rFilter = /^(image\/jpeg|image\/png)$/i;
+    if (! rFilter.test(oFile.type)) {
+        $('.slidererr').html('Please select a valid image file (jpg and png are allowed)').show();
+        return;
+    }
+
+    // check for file size
+    if (oFile.size > 250 * 1024) {
+        $('.slidererr').html('You have selected too big file, please select a one smaller image file').show();
+        return;
+    }
+
+    // preslider element
+    var oImage = document.getElementById('preslider');
+
+    // prepare HTML5 FileReader
+    var oReader = new FileReader();
+        oReader.onload = function(e) {
+
+        // e.target.result contains the DataURL which we can use as a source of the image
+        
+        
+        oImage.src = e.target.result;
+        oImage.onload = function () { // onload event handler
+        
+        //alert(oImage.naturalWidth);
+            // display step 2
+            //$('.step2').fadeIn(500);
+           if(oImage.naturalWidth<300 || oImage.naturalHeight<400){ 
+             $('.slidererr').html('You have selected too small file, please select bigger image file').show();
+              //$('.step2').hide();
+            return false;
+           }
+            // display some basic image info
+            var sResultFileSize = bytesToSize(oFile.size);
+         
+           
+            $('#filesize').val(sResultFileSize);
+            $('#filetype').val(oFile.type);
+            $('#sliderdimension').val(oImage.naturalWidth + ' x ' + oImage.naturalHeight);
+
+
+            
+        };
+    };
+
+    // read selected file as DataURL
+    oReader.readAsDataURL(oFile);
+}
+

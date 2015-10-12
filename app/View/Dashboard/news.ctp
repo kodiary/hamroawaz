@@ -14,6 +14,7 @@ Image:<br />
        
         
        <div> <input type="file" name="image_file" id="image_file" onchange="fileSelectHandler()" />
+      
 
           <!--  <label>Image dimension</label> <input type="text" id="filedim" name="filedim" readonly=""/>-->
             
@@ -68,7 +69,9 @@ Zone:<select name="zone">
 </select>
 <br />
 </p>
-Slider:<input type="file" name="slider"/><br />
+Slider:<input type="file" name="slider" id="slider" onchange="checkslider()"/><div id="sliderdimension"></div><br />
+<div class="slidererr" style="color: red; "></div><br />
+ <img id="preslider" style="display:none;"/><br />
 
 Is_headline:&nbsp;<input type="radio" value="1" name="is_headline" required="required"/> Yes
 <input type="radio" value="0" name="is_headline" required="required"/> No<br/><br />
