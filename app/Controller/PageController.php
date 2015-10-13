@@ -4,7 +4,7 @@ class PageController extends AppController
 {
     function index($id)
     {
-        $this->set('title','HamroAwazPage');
+        $this->set('title','HamroawazPage');
         $this->loadModel('Categorymanager');
         $this->loadModel('Newsmanager');
         $qcat=$this->Categorymanager->find('all');

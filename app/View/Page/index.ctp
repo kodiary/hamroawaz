@@ -2,7 +2,7 @@
 <link href="<?php echo $this->webroot;?>css/jquery.bxslider.css" rel="stylesheet" />
 <div class="main" style="margin: 30px auto;width: 980px;">
     <div>
-    <ul><li style="float: left; padding: 0 10px;"><a href="<?php echo $this->webroot.'new/';?>"><strong>Home</strong></a></li>
+    <ul><li style="float: left; padding: 0 10px;"><a href="<?php echo $this->webroot.'new/';?>"><strong>Home </strong></a></li>
     <?php foreach($cat as $q)
     {
         ?><li style="float: left; padding: 0 10px;"><a href="<?php echo $this->webroot.'page/index/'.$q['Categorymanager']['id'];?> "><strong><?php echo $q['Categorymanager']['title']; ?></strong></a></li><?php
@@ -42,7 +42,7 @@
       
     
     foreach($qt as $list){?>
-    <li><a href="javascript:void(0)"> <img src="<?php echo $this->webroot;?>news/image/thumb1/<?php echo $list['Newsmanager']['image_file'];?>"/></a></li>
+    <li><a href="javascript:void(0)"> <img src="<?php echo $this->webroot;?>news/image/thumb1/<?php echo $list['Newsmanager']['image_file'];?>" width="200px" height="150px"/></a></li>
   <div style="float: left;margin-left: 214px;margin-top: -159px">
   <li><h3><a href="javascript:void(0)"> <?php echo $list['Newsmanager']['title'];?></a></h3></li>
   <li> <?php if($list['Newsmanager']['description']){
