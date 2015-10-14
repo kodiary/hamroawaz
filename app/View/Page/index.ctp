@@ -10,14 +10,24 @@
     ?>
     </ul>
     </div><div class="clearfix"></div>
-    <div class="marq">
-     <marquee>
-    <?php 
+    <div >
+    <ul class="contentslider">
+     <?php 
     foreach($val as $list){
     ?>
-   <a href="javascript:void(0)"><?php echo $list['Newsmanager']['title'];?></a>&nbsp;&nbsp;&nbsp;&nbsp;
+  <li><a href="<?php echo $this->webroot;?>description/detail/<?php echo $list['Newsmanager']['id'];?>"><img src="<?php echo $this->webroot;?>news/image/thumb1/<?php echo $list['Newsmanager']['image_file'];?>"width="50%"/><h4><?php echo $list['Newsmanager']['title'];?></h4>
+ <?php
+ 
+ if($list['Newsmanager']['description']){
+      echo $list['Newsmanager']['description'];
+    }else{
+        echo "<span style='color:red'>No Description Avaialble</span>";
+    }
+ 
+?>
+  </a></li> 
     <?php }?>
-    </marquee>
+    </ul>
     </div>
     <div class="clearfix"></div>
     <div>
@@ -25,13 +35,19 @@
         
           <?php foreach($slider as $a)
             {
-            ?><li><img src="<?php echo $this->webroot;?>slider/<?php echo $a['Newsmanager']['slider'];?>" /></li><?php
+            ?><li><img src="<?php echo $this->webroot;?>slider/<?php echo $a['Newsmanager']['slider'];?>" title="<?php echo $a['Newsmanager']['title'];?>" width="100%" /></li><?php
             }
            ?>
         </ul>
     </div>
    <div>
-    <div style="float: left; width: 70%; padding: 15px"><h1>Headline</h1>
+    <div style="float: left; width: 70%; padding: 15px"><h1>  <?php 
+     //debug($catvar);die();
+     if(!empty($catname)){
+     
+        echo $catname['Categorymanager']['title'];
+        
+        }?></h1>
     <hr />
     <ul>
     <?php 
@@ -42,7 +58,7 @@
       
     
     foreach($qt as $list){?>
-    <li><a href="javascript:void(0)"> <img src="<?php echo $this->webroot;?>news/image/thumb1/<?php echo $list['Newsmanager']['image_file'];?>" width="200px" height="150px"/></a></li>
+    <li><a href="<?php echo $this->webroot;?>description/detail/<?php echo $list['Newsmanager']['id'];?>"> <img src="<?php echo $this->webroot;?>news/image/thumb1/<?php echo $list['Newsmanager']['image_file'];?>" width="200px" height="150px"/></a></li>
   <div style="float: left;margin-left: 214px;margin-top: -159px">
   <li><h3><a href="javascript:void(0)"> <?php echo $list['Newsmanager']['title'];?></a></h3></li>
   <li> <?php if($list['Newsmanager']['description']){
@@ -88,44 +104,7 @@
     </div><div class="clearfix"></div>
     <div class="row" style="float: left; width: 70%; padding: 15px">
 <div class="span8">
-<?php $catlist=$this->requestAction('/new/getCategory');
-foreach($catlist as $show){
-    ?>
-     
-<div class="category" style="float: left;width: 45%;border: 1px solid #F9F9F9;height: auto;display:block">
-<h3><p style="padding: 10px"><?php echo $show['Categorymanager']['title'];?></p></h3>
-<?php  $id=$show['Categorymanager']['id'];
 
-$requst=$this->requestAction('new/getNewsId/'.$id);
-if(!empty($requst)){
-//debug($requst);die();
-
-foreach($requst as $fetch){
-    $newsid=$fetch['News_category']['news_id'];
-$ft=$this->requestAction('new/getNewsContent/'.$newsid);
-?>
-<div class="sub" style="float: left;margin-right:38px">
-<?php
-echo "<ul>";
-    foreach($ft as $content){
-       // echo "<li>".$content['Newsmanager']['img_']."</li>";
-       ?>
-     <li><img src="<?php echo $this->webroot;?>news/image/thumb1/<?php echo $content['Newsmanager']['image_file'];?>"width="81px"/></li>  
-        <?php
-        echo "<li><h4>".$content['Newsmanager']['title']."</h4></li>";
-        echo "<li>".$content['Newsmanager']['description']."</li>";
-}
-
-echo "</ul>";
-?>
-</div>
-<?php }
-}else{
-    echo "<p style='color:red;'>No Data Available At the moment</p>";
-}?>
-</div>
-<?php
-}?>
 </div>
 <div class="span4">
 </div>
@@ -134,7 +113,7 @@ echo "</ul>";
   <div class="clearfix"></div>
     <div class="row recent-work margin-bottom-40" style="margin: 30px auto;">
           <div class="col-md-3 col-sm-3 col-xs-12">
-            <h2><a href="portfolio.html">Upcoming projects</a></h2>
+            <h2><a href="portfolio.html">Slider</a></h2>
             <p>Lorem ipsum dolor sit amet, dolore eiusmod quis tempor incididunt ut et dolore Ut veniam unde voluptatem. Sed unde omnis iste natus error sit voluptatem.</p>
           </div>
          
@@ -167,25 +146,18 @@ echo "</ul>";
           </div>
           </div>  
    </div>
-  
-    
- 
-
-
-
-
-
-
-
-
-
-
-
-<script>
+  <script>
 $('.bxslider').bxSlider({
   auto: true,
    mode: 'fade',
   captions: true,
   autoControls: true
+});
+$('.contentslider').bxSlider({
+  minSlides: 4,
+  maxSlides: 4,
+  slideWidth: 500,
+  slideHeight:50,
+  slideMargin: 10
 });
 </script>

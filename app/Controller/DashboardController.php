@@ -42,7 +42,7 @@ class DashboardController extends AppController
          if($ext == 'jpg' || $ext == 'JPGE'||$ext == 'jpeg'|| $ext == 'png'|| $ext == 'gif'|| $ext == 'JPG'|| $ext == 'PNG'|| $ext == 'GIF'){
         $path=APP.'/webroot/news/image/'.$rand;
        
-        //$thumbpath=APP.'/webroot/news/image/thumb/'.$rand;
+        $thumbpath=APP.'/webroot/news/image/thumb/'.$rand;
         
          $thumbpath1=APP.'/webroot/news/image/thumb1/'.$rand;
         
@@ -50,9 +50,8 @@ class DashboardController extends AppController
              $this->Session->setFlash('Invalid File Extension');  
              $error++;
                 }
- $_POST['image_file']=$rand;
- 
-       $audio=$_FILES['audio']['name'];
+         $_POST['image_file']=$rand;
+         $audio=$_FILES['audio']['name'];
        if(!empty($_FILES['audio']['name'])){
         $arr=explode('.',$audio);
         $ext=end($arr);
@@ -89,10 +88,10 @@ class DashboardController extends AppController
          $h=$_POST['h'];
        
         move_uploaded_file($_FILES['image_file']['tmp_name'],$path);
-        //$resizeObj = new resize($path);
-        //  $resizeObj -> resizeImage($w, $h,'exact');
-        // $resizeObj -> saveImage($thumbpath, 100);
-        // unset($resizeObj);
+       // $resizeObj = new resize($path);
+       //  $resizeObj -> resizeImage($w, $h,'exact',$_POST['x1'],$_POST['y1']);
+       //  $resizeObj -> saveImage($thumbpath, 100);
+       //  unset($resizeObj);
          $resizeObj = new resize($path);
          $resizeObj -> resizeImage($w, $h,'exact',$_POST['x1'],$_POST['y1']);
          $resizeObj -> saveImage($thumbpath1, 100);
@@ -153,9 +152,9 @@ class DashboardController extends AppController
        if(isset($_POST)){
       
         
-         $this->loadModel('Newsmanager');
-         $arr['conditions']=array('id'=>$id);
-       $list=$this->Newsmanager->find('all',$arr);
+      $this->loadModel('Newsmanager');
+      $arr['conditions']=array('id'=>$id);
+      $list=$this->Newsmanager->find('all',$arr);
        //echo $list['Newsmanager']['image'];die();
     foreach($list as $a){
     $a['Newsmanager']['slider'];
@@ -172,7 +171,7 @@ class DashboardController extends AppController
          if($ext == 'jpg' || $ext == 'JPGE'||$ext == 'jpeg'|| $ext == 'png'|| $ext == 'gif'|| $ext == 'JPG'|| $ext == 'PNG'|| $ext == 'GIF'){
         $path=APP.'/webroot/news/image/'.$rand;
         
-        // $delimg=APP.'/webroot/news/image/thumb/'.$a['Newsmanager']['image_file'];
+         $delimg=APP.'/webroot/news/image/thumb/'.$a['Newsmanager']['image_file'];
         $delimg1=APP.'/webroot/news/image/thumb1/'.$a['Newsmanager']['image_file'];
         }else{
              $this->Session->setFlash('Invalid Image Extension');    
@@ -217,7 +216,7 @@ class DashboardController extends AppController
     if($error==0){
     
     /* -------------Image Upload----------------*/
-       //unlink($delimg);
+      
      
        
   if($_FILES['image_file']['name']){
@@ -227,12 +226,12 @@ class DashboardController extends AppController
         $w=$_POST['w'];
          $h=$_POST['h'];
       unlink($delimg1);
+     // unlink($delimg);
   move_uploaded_file($_FILES['image_file']['tmp_name'],$path);
-      
-// $thumbpath=APP.'/webroot/news/image/thumb/'.$rand;
+       $thumbpath=APP.'/webroot/news/image/thumb/'.$rand;
          $thumbpath1=APP.'/webroot/news/image/thumb1/'.$rand;
-        // $resizeObj = new resize($path);
-         // $resizeObj -> resizeImage($w,$h,'exact');
+       // $resizeObj = new resize($path);
+     //  $resizeObj -> resizeImage($w, $h,'exact',$_POST['x1'],$_POST['y1']);
         // $resizeObj -> saveImage($thumbpath, 100);
         // unset($resizeObj);
          $resizeObj = new resize($path);
@@ -289,7 +288,9 @@ class DashboardController extends AppController
     
     $img=$q['Newsmanager']['image_file'];
     $path=APP.'/webroot/news/image/thumb1/'.$img;
-unlink($path);
+    $ppath=APP.'/webroot/news/image/thumb/'.$img;
+    unlink($path);
+   // unlink($ppath);
     $pathh=APP.'/webroot/news/image/'.$img;
     unlink($pathh);
     

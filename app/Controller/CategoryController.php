@@ -1,36 +1,30 @@
 <?php
     App::uses('CakeEmail', 'Network/Email');
-class PageController extends AppController
-{
-    function index($id)
-    {
-        $this->set('title','HamroawazPage');
-        $this->loadModel('Categorymanager');
+class CategoryController extends AppController{
+    
+    public function CategoryList($id){
+        $this->set('title','HamroawazCategory');
         $this->loadModel('Newsmanager');
-        $pcat=$this->Categorymanager->find('all');
-        $catname=$this->Categorymanager->find('first',array(
-        'conditions'=>array('id'=>$id)
-        ));
-        $this->set('catname',$catname);
-        $slider=$this->Newsmanager->find('all');
-        $this->set('cat',$pcat);
-        $this->set('slider',$slider);   
+        $this->loadModel('Categorymanager');
+        $arr['conditions']=array('id'=>$id);
+        $query=$this->Categorymanager->find('first',$arr);
+        
+        $this->set('query',$query);
+        //$this->loadModel('Categorymanager');
+       $pcat=$this->Categorymanager->find('all');
+     //  debug($pcat);die();
+     $this->set('cat',$pcat);
+       // $this->set('slider',$slider);   
         
         
-        $q=$this->Newsmanager->find('all',array(
-                               'order' => array         ('id' => 'DESC'),
-                               'limit'=>5
-                               ));
+        $q=$this->Newsmanager->find('all',array('order' => array('id' => 'DESC'),'limit'=>5));
+       // debug($q);die();
         $this->set('val',$q);
         $this->loadModel('News_category');
-        $qcat=$this->News_category->find('all',array(
-                                'conditions'=>array('cat_id'=>$id),
-                               ));
-                              // debug($qcat);die();
+        $qcat=$this->News_category->find('all',array('conditions'=>array('cat_id'=>$id)));
         $this->set('catvar',$qcat);
-       // $this->Newsmanager->find(all,array);
+        
     }
-   
      function get_currency($from_Currency, $to_Currency, $amount) 
      {
     $amount = urlencode($amount);
@@ -77,26 +71,7 @@ class PageController extends AppController
         $this->set('title','currency converter');
         
     }
-    function getHeadline($id){
-      
-         $this->loadModel('Newsmanager');
-        $q=$this->Newsmanager->find('all',array(
-                               'conditions'=>array('id'=>$id),
-                               'order' => array('id' => 'DESC'),
-                               //'limit'=>3
-                               ));
-        return $q;
-    }
-     function getCategory(){
-      
-         $this->loadModel('Categorymanager');
-        $q=$this->Categorymanager->find('all',array(
-                               'order' => array('id' => 'ASC'),
-                               'limit'=>4
-                               ));
-        return $q;
-    }
-    function getNewsId($id){
+     function getNewsId($id){
  $this->loadModel('News_category');
          $arr['conditions']=array('cat_id'=>$id);
     $q=$this->News_category->find('all',$arr);
@@ -105,12 +80,14 @@ class PageController extends AppController
         return $q;
 
      }
-     function getNewsContent($id){
-        $this->loadModel('Newsmanager');
-        $arr['conditions']=array('id'=>$id);
-        $q=$this->Newsmanager->find('all',$arr);
+      function getNews($id){
+ $this->loadModel('Newsmanager');
+         $arr['conditions']=array('id'=>$id);
+    $q=$this->Newsmanager->find('first',$arr);
+   // debug($q);die();
+    
         return $q;
-              
-    }
-  
+
+     }
+    
 }

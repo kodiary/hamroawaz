@@ -1,26 +1,28 @@
 <?php
     App::uses('CakeEmail', 'Network/Email');
-class NewController extends AppController
-{
-    function index()
-    {
-        $this->set('title','HamroAwaz');
-        $this->loadModel('Categorymanager');
-        $this->loadModel('Newsmanager');
-        $qcat=$this->Categorymanager->find('all');
-        $slider=$this->Newsmanager->find('all');
-        $this->set('cat',$qcat);
-        $this->set('slider',$slider);   
-        
-        
-        $q=$this->Newsmanager->find('all',array(
-                                //'conditions'=>array('is_headline'=>1),
-                                'order' => array('id' => 'DESC'),
-                               'limit'=>5
-                               ));
-        $this->set('val',$q);
-    }
+class DescriptionController extends AppController{
     
+    public function detail($id){
+         $this->set('title','HamroawazDescription');
+        $this->loadModel('Newsmanager');
+        $arr['conditions']=array('id'=>$id);
+        $query=$this->Newsmanager->find('first',$arr);
+        
+        $this->set('query',$query);
+        $this->loadModel('Categorymanager');
+       $pcat=$this->Categorymanager->find('all');
+       
+       $this->set('cat',$pcat);
+       // $this->set('slider',$slider);   
+        
+        
+        $q=$this->Newsmanager->find('all',array('order' => array('id' => 'DESC'),'limit'=>5));
+        $this->set('val',$q);
+        $this->loadModel('News_category');
+        $qcat=$this->News_category->find('all',array('conditions'=>array('cat_id'=>$id)));
+        $this->set('catvar',$qcat);
+        
+    }
      function get_currency($from_Currency, $to_Currency, $amount) 
      {
     $amount = urlencode($amount);
@@ -67,40 +69,5 @@ class NewController extends AppController
         $this->set('title','currency converter');
         
     }
-    function getHeadline(){
-      
-         $this->loadModel('Newsmanager');
-        $q=$this->Newsmanager->find('all',array(
-            'conditions'=>array('is_headline'=>1),
-                               'order' => array('id' => 'DESC'),
-                               'limit'=>3
-                               ));
-        return $q;
-    }
-     function getCategory(){
-      
-         $this->loadModel('Categorymanager');
-        $q=$this->Categorymanager->find('all',array(
-                               'order' => array('id' => 'ASC'),
-                               'limit'=>4
-                               ));
-        return $q;
-    }
-    function getNewsId($id){
- $this->loadModel('News_category');
-         $arr['conditions']=array('cat_id'=>$id);
-    $q=$this->News_category->find('all',$arr);
-   // debug($q);die();
     
-        return $q;
-
-     }
-     function getNewsContent($id){
-        $this->loadModel('Newsmanager');
-        $arr['conditions']=array('id'=>$id);
-        $q=$this->Newsmanager->find('all',$arr);
-        return $q;
-              
-    }
-  
 }

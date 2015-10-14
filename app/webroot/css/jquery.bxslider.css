@@ -36,7 +36,7 @@
 	border:  5px solid #fff;
 	left: -5px;
 	background: #fff;
-	height:290px !important;
+	height:290px ;
 	/*fix other elements on the page moving (on Chrome)*/
 	-webkit-transform: translatez(0);
 	-moz-transform: translatez(0);
@@ -44,6 +44,7 @@
     	-o-transform: translatez(0);
     	transform: translatez(0);
 }
+
 
 .bx-wrapper .bx-pager,
 .bx-wrapper .bx-controls-auto {

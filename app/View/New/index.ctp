@@ -10,14 +10,24 @@
     ?>
     </ul>
     </div><div class="clearfix"></div>
-    <div class="marq">
-     <marquee>
-    <?php 
+    <div >
+    <ul class="contentslider">
+     <?php 
     foreach($val as $list){
     ?>
-   <a href="javascript:void(0)"><?php echo $list['Newsmanager']['title'];?></a>&nbsp;&nbsp;&nbsp;&nbsp;
+  <li><a href="<?php echo $this->webroot;?>description/detail/<?php echo $list['Newsmanager']['id'];?>"><img src="<?php echo $this->webroot;?>news/image/thumb1/<?php echo $list['Newsmanager']['image_file'];?>"width="50%"/><h4><?php echo $list['Newsmanager']['title'];?></h4>
+ <?php
+ 
+ if($list['Newsmanager']['description']){
+      echo $list['Newsmanager']['description'];
+    }else{
+        echo "<span style='color:red'>No Description Avaialble</span>";
+    }
+ 
+?>
+  </a></li> 
     <?php }?>
-    </marquee>
+    </ul>
     </div>
     <div class="clearfix"></div>
     <div>
@@ -25,7 +35,7 @@
         
           <?php foreach($slider as $a)
             {
-            ?><li><img src="<?php echo $this->webroot;?>slider/<?php echo $a['Newsmanager']['slider'];?>" /></li><?php
+            ?><li><img src="<?php echo $this->webroot;?>slider/<?php echo $a['Newsmanager']['slider'];?>" title="<?php echo $a['Newsmanager']['title'];?>" /></li><?php
             }
            ?>
         </ul>
@@ -36,14 +46,16 @@
     <ul>
     <?php $query=$this->requestAction('/new/getHeadline');
     foreach($query as $list){?>
-    <li><a href="javascript:void(0)"> <img src="<?php echo $this->webroot;?>news/image/thumb1/<?php echo $list['Newsmanager']['image_file'];?>" width="200px" height="150px"/></a></li>
+    <a href="<?php echo $this->webroot;?>description/detail/<?php echo $list['Newsmanager']['id'];?>">
+    <li><img src="<?php echo $this->webroot;?>news/image/thumb1/<?php echo $list['Newsmanager']['image_file'];?>" width="200px" height="150px"/></li>
   <div style="float: left;margin-left: 214px;margin-top: -159px">
-  <li><h3><a href="javascript:void(0)"> <?php echo $list['Newsmanager']['title'];?></a></h3></li>
+  <li><h3> <?php echo $list['Newsmanager']['title'];?></h3></li>
   <li> <?php if($list['Newsmanager']['description']){
     echo $list['Newsmanager']['description'];
     }
     else{
         echo"No description available";}?></li>
+        </a>
  
   </div>
  
@@ -83,7 +95,7 @@ foreach($catlist as $show){
     ?>
      
 <div class="category" style="float: left;width: 45%;border: 1px solid #F9F9F9;height: auto;display:block">
-<h3><p style="padding: 10px"><?php echo $show['Categorymanager']['title'];?></p></h3>
+<h3><p style="padding: 10px"><a href="<?php echo $this->webroot;?>category/CategoryList/<?php echo $show['Categorymanager']['id'];?>"><?php echo $show['Categorymanager']['title'];?></a></p></h3>
 <?php  $id=$show['Categorymanager']['id'];
 
 $requst=$this->requestAction('new/getNewsId/'.$id);
@@ -100,10 +112,12 @@ echo "<ul>";
     foreach($ft as $content){
        // echo "<li>".$content['Newsmanager']['img_']."</li>";
        ?>
+       <a href="<?php echo $this->webroot;?>description/detail/<?php echo $content['Newsmanager']['id'];?>">
      <li><img src="<?php echo $this->webroot;?>news/image/thumb1/<?php echo $content['Newsmanager']['image_file'];?>"width="81px"/></li>  
         <?php
         echo "<li><h4>".$content['Newsmanager']['title']."</h4></li>";
         echo "<li>".$content['Newsmanager']['description']."</li>";
+        echo "</a>";
 }
 
 echo "</ul>";
@@ -167,5 +181,12 @@ $('.bxslider').bxSlider({
    mode: 'fade',
   captions: true,
   autoControls: true
+});
+$('.contentslider').bxSlider({
+  minSlides: 4,
+  maxSlides: 4,
+  slideWidth: 500,
+  slideHeight:50,
+  slideMargin: 10
 });
 </script>
