@@ -1,11 +1,20 @@
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.5&appId=506034659558768";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
 <script src="<?php echo $this->webroot;?>js/jquery.bxslider.min.js"></script>
 <link href="<?php echo $this->webroot;?>css/jquery.bxslider.css" rel="stylesheet" />
 <div class="main" style="margin: 30px auto;width: 980px;">
     <div>
-    <ul><li style="float: left; padding: 0 10px;"><a href="<?php echo $this->webroot.'new/';?>"><strong>Home </strong></a></li>
+    <ul><li style="float: left; padding: 0 10px;"><a href="<?php echo $this->webroot;?>"><strong>Home </strong></a></li>
     <?php foreach($cat as $q)
     {
-        ?><li style="float: left; padding: 0 10px;"><a href="<?php echo $this->webroot.'page/index/'.$q['Categorymanager']['id'];?> "><strong><?php echo $q['Categorymanager']['title']; ?></strong></a></li><?php
+        ?><li style="float: left; padding: 0 10px;"><a href="<?php echo $this->webroot.'page/'.$q['Categorymanager']['slug'];?> "><strong><?php echo $q['Categorymanager']['title']; ?></strong></a></li><?php
     }
     ?>
     </ul>
@@ -13,20 +22,22 @@
     <div >
     <ul class="contentslider">
      <?php 
+     if($val){
     foreach($val as $list){
     ?>
-  <li><a href="<?php echo $this->webroot;?>description/detail/<?php echo $list['Newsmanager']['id'];?>"><img src="<?php echo $this->webroot;?>news/image/thumb1/<?php echo $list['Newsmanager']['image_file'];?>"width="600px" height="230px"/><h4><?php echo $list['Newsmanager']['title'];?></h4>
+  <li><a href="<?php echo $this->webroot;?>description/<?php echo $list['Newsmanager']['slug'];?>"><img src="<?php echo $this->webroot;?>news/image/thumb1/<?php echo $list['Newsmanager']['image_file'];?>"/></a><h4><?php echo $list['Newsmanager']['title'];?></h4>
  <?php
  
  if($list['Newsmanager']['description']){
-      echo $list['Newsmanager']['description'];
+      echo substr($list['Newsmanager']['description'],0,100);
+       echo '<br/><a href="'.$this->webroot.'description/'.$list['Newsmanager']['slug'].'">view</a>';
     }else{
         echo "<span style='color:red'>No Description Avaialble</span>";
     }
  
 ?>
-  </a></li> 
-    <?php }?>
+  </li> 
+    <?php }}?>
     </ul>
     </div>
     <div class="clearfix"></div>
@@ -45,13 +56,21 @@
         }?></h1>
     <hr />
     <ul>
-  <li> <img src="<?php echo $this->webroot;?>news/image/thumb1/<?php echo $query['Newsmanager']['image_file'];?>" width="600px" height="230px"/></li><br
+  <li> <img src="<?php echo $this->webroot;?>news/image/thumb/<?php echo $query['Newsmanager']['image_file'];?>" /></li><br
   <div style="float: left;margin-left: 214px;margin-top: -159px">
   <li> <?php if($query['Newsmanager']['description']){
     echo $query['Newsmanager']['description'];
+    ?>
+    
+    <div class="fb-like"  data-layout="standard" data-action="like" data-show-faces="true" data-share="true"></div>
+  
+    <?php
   }
     else{
-        echo"No description available";}?></li>
+        echo"No description available";}?>
+     
+</li>
+<div class="fb-comments" data-width="600" data-numposts="100"></div>
  
   </div>
     </ul>
@@ -79,18 +98,21 @@
     
         <a href=" <?php echo $this->webroot; ?>New/currency">Currency Converter</a>
     </div>
-    </div><div class="clearfix"></div>
-    <div class="row" style="float: left; width: 70%; padding: 15px">
-<div class="span8">
-
-</div>
-<div class="span4">
-</div>
-
-</div> 
-  <div class="clearfix"></div>
+    <div class="clearfix"></div>
+    <div class="footer">
+    <p>Powered By Kodiary.com</p>
+    <div>
+    <ul><li style="float: left; padding: 0 10px;"><a href="<?php echo $this->webroot;?>"><strong>Home</strong></a></li>
+    <?php foreach($cat as $q)
+    {
+        ?><li style="float: left; padding: 0 10px;"><a href="<?php echo $this->webroot.'page/'.$q['Categorymanager']['slug'];?> "><strong><?php echo $q['Categorymanager']['title']; ?></strong></a></li><?php
+    }
+    ?>
+    </ul>
+    </div>
+    </div>
+    </div>
     
-   </div>
   <script>
 $('.bxslider').bxSlider({
   auto: true,

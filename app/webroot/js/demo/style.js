@@ -1,4 +1,3 @@
-
 function bytesToSize(bytes) {
     var sizes = ['Bytes', 'KB', 'MB'];
     if (bytes == 0) return 'n/a';
@@ -41,17 +40,17 @@ function fileSelectHandler() {
     $('.error').hide();
 
     // check for image type (jpg and png are allowed)
-    var rFilter = /^(image\/jpeg|image\/png)$/i;
+ var rFilter = /^(image\/jpeg|image\/png|image\/jpg|image\/JPGimage\/JPEG|image\/PNG)$/i;
     if (! rFilter.test(oFile.type)) {
         $('.error').html('Please select a valid image file (jpg and png are allowed)').show();
         return;
     }
 
     // check for file size
-    if (oFile.size > 250 * 1024) {
+   /* if (oFile.size <250 * 1024) {
         $('.error').html('You have selected too big file, please select a one smaller image file').show();
         return;
-    }
+    }*/
 
     // preview element
     var oImage = document.getElementById('preview');
@@ -69,8 +68,8 @@ function fileSelectHandler() {
         //alert(oImage.naturalWidth);
             // display step 2
             $('.step2').fadeIn(500);
-           if(oImage.naturalWidth<300 || oImage.naturalHeight<400){ 
-             $('.error').html('You have selected too small file, please select bigger image file').show();
+           if(oImage.naturalWidth<600 || oImage.naturalHeight<400){ 
+             $('.error').html('Minimus image size should be 600px x 400px').show();
               $('.step2').hide();
             return false;
            }
@@ -91,15 +90,17 @@ function fileSelectHandler() {
             setTimeout(function(){
                 // initialize Jcrop
                 $('#preview').Jcrop({
-                    minSize: [200,150], // min crop size
-                     
+                    minSize: [600,400], // min crop size
+                      boxWidth: 928,   //Maximum width you want for your bigger images
+                     boxHeight: 522,
                      //xsize=$prevcnt.width(),
                      //ysize=$prevcnt.height(),
                     bgFade: true, // use fade effect
                     bgOpacity: .3, // fade opacity
                     onChange: updateInfo,
                     onSelect: updateInfo,
-                    onRelease: clearInfo
+                    onRelease: clearInfo,
+                    aspectRatio:3/2
                 }, function(){
 
                     // use the Jcrop API to get the real image size

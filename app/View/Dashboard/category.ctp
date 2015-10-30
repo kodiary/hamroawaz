@@ -28,7 +28,8 @@
        <div><button >Add Category</button></div>
        <div class="cat" style="display: none;" >
        <form action="<?php echo $this->webroot; ?>Dashboard/addcategory" method="post">
-       <input type="text" placeholder="title" name="title"  />
+       <input type="text" placeholder="title" class="titlename" name="title"  />
+       <input type="text" class="slug" name="slug" />
        <input type="submit" value="submit"/>
        </form>
        </div>
@@ -53,7 +54,8 @@
        </div>
        <div class="ed" style="display: none;">
                     <form action="" id="form1" method="post">
-                    <input type="text" placeholder="" name="title" id='title1' />
+                    <input type="text" placeholder="" name="title" class="titlename" id='title1' />
+                    <input type="text" class="slug" name="slug" id="slug"/>
                     <input type="submit" value="submit"/>
                     </form>
                      </div>
@@ -75,6 +77,21 @@ $(function(){
     
     //$(this).parent().find(".ed").toggle('slow');
     });  
+    
+    $('.titlename').change(function(){
+   var title= $(".titlename").val();
+   alert(title);
+      $.ajax({
+          url: "<?php echo $this->webroot; ?>Dashboard/getSlug",
+            data: "title="+title,
+            type: "post",
+            success: function(response){
+             $('.slug').val(response);
+            }
+                         
+        });
+   
+})
     
    
 });

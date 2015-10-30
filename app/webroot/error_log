@@ -1,0 +1,6 @@
+[19-Oct-2015 06:18:19 UTC] PHP Parse error:  syntax error, unexpected 'elseif' (T_ELSEIF) in /home/kodiary/public_html/hamroawaz.com/app/View/Layouts/default.ctp on line 17
+[19-Oct-2015 06:19:02 UTC] PHP Parse error:  syntax error, unexpected end of file in /home/kodiary/public_html/hamroawaz.com/app/View/Layouts/default.ctp on line 59
+[19-Oct-2015 06:19:49 UTC] PHP Parse error:  syntax error, unexpected '>' in /home/kodiary/public_html/hamroawaz.com/app/View/Layouts/default.ctp on line 16
+[19-Oct-2015 09:45:38 UTC] PHP Parse error:  syntax error, unexpected ';' in /home/kodiary/public_html/hamroawaz.com/app/Controller/DescriptionController.php on line 78
+[19-Oct-2015 09:45:39 UTC] PHP Parse error:  syntax error, unexpected ';' in /home/kodiary/public_html/hamroawaz.com/app/Controller/DescriptionController.php on line 78
+[28-Oct-2015 06:21:49 UTC] PHP Parse error:  syntax error, unexpected '}' in /home/kodiary/public_html/hamroawaz.com/app/Controller/DashboardController.php on line 537

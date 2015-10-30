@@ -2,26 +2,27 @@
     App::uses('CakeEmail', 'Network/Email');
 class DescriptionController extends AppController{
     
-    public function detail($id){
-         $this->set('title','HamroawazDescription');
+    public function detail($slug){
+        $this->set('title','HamroawazDescription');
         $this->loadModel('Newsmanager');
-        $arr['conditions']=array('id'=>$id);
+        $arr['conditions']=array('slug'=>$slug);
         $query=$this->Newsmanager->find('first',$arr);
-        
         $this->set('query',$query);
         $this->loadModel('Categorymanager');
-       $pcat=$this->Categorymanager->find('all');
-       
+        $pcat=$this->Categorymanager->find('all');
        $this->set('cat',$pcat);
-       // $this->set('slider',$slider);   
-        
-        
-        $q=$this->Newsmanager->find('all',array('order' => array('id' => 'DESC'),'limit'=>5));
-        $this->set('val',$q);
-        $this->loadModel('News_category');
-        $qcat=$this->News_category->find('all',array('conditions'=>array('cat_id'=>$id)));
-        $this->set('catvar',$qcat);
-        
+        $current=strtotime(date('Y-m-d G:i:s'));
+       $checktime=strtotime(date('Y-m-d G:i:s',mktime(10,0,0, date("m") , date("d"),date("Y"))));
+       $dateObject = new DateTime(date('Y-m-d G:i:s'));
+       $today=$dateObject->format('Y-m-d');
+       $yesterday = date("Y-m-d", mktime(0,0,0, date("m") , date("d")-1,date("Y")));
+         if($checktime>=$current){
+       $q=$this->Newsmanager->find('all',array('order' => array('id' => 'DESC'),'limit'=>5,'conditions'=>array('created_date'=>$yesterday)));
+     $this->set('val',$q);
+      }else{
+          $q=$this->Newsmanager->find('all',array('order' => array('id' => 'DESC'),'limit'=>5,'conditions'=>array('created_date'=>$today)));
+       $this->set('val',$q);
+    }
     }
      function get_currency($from_Currency, $to_Currency, $amount) 
      {
@@ -69,5 +70,13 @@ class DescriptionController extends AppController{
         $this->set('title','currency converter');
         
     }
+    function getContent($slug){
+    $this->loadModel('Newsmanager');
+    $q=$this->Newsmanager->find('first',array('conditions'=>array('slug'=>$slug)));
+    
+    return $q;
+    
+    }
+    
     
 }

@@ -8,9 +8,10 @@ Class Resize
     
     function __construct($fileName)
     {
+  
         // *** Open up the file
         $this->image = $this->openImage($fileName);
- 
+
          $this->width  = imagesx($this->image);
         $this->height = imagesy($this->image);
     }
@@ -25,10 +26,12 @@ Class Resize
                 $img=@imagecreatefromjpeg($file);
                 break;
             case'.gif':
+             case'.GIF':
                 $img=@imagecreatefromgif($file);
                 break;
                 
             case'.png':
+            case'.PNG':
                 $img=@imagecreatefromjpeg($file);
                 break;
              default:
@@ -40,7 +43,7 @@ Class Resize
     }
     public function resizeImage($newWidth,$newHeight,$option="auto",$x1=0,$y1=0)
 {
- 
+
     // *** Get optimal width and height - based on $option
     $optionArray = $this->getDimensions($newWidth, $newHeight, strtolower($option));
  
@@ -49,20 +52,34 @@ Class Resize
  
     // *** Resample - create image canvas of x, y size
     $this->imageResized = imagecreatetruecolor($optimalWidth, $optimalHeight);
- imagealphablending($this->imageResized, false);
-imagesavealpha($this->imageResized, true);
+ //imagealphablending($this->imageResized, false);
+//imagesavealpha($this->imageResized, true);
    // imagecopyresampled($this->imageResized, $this->image, 0, 0, 0, 0, $optimalWidth, $optimalHeight,$this->width, $this->height);
    if($x1==0 || $y1==0){
- imagecopyresampled($this->imageResized,$this->image,0, 0, $x1,$y1,$optimalWidth, $optimalHeight,$this->width,$this->height);
+
+ imagecopyresampled($this->imageResized,$this->image,0, 0, 0,0,$optimalWidth, $optimalHeight,$this->width,$this->height);
  }
- else{
+ else{ 
+ 
  imagecopyresampled($this->imageResized,$this->image,0, 0, $x1,$y1,$optimalWidth, $optimalHeight,$newWidth,$newHeight);
  }   // *** if option is 'crop', then crop too
     if ($option == 'crop') {
         $this->crop($optimalWidth, $optimalHeight, $newWidth, $newHeight);
     }
 }
+ 
+     public function croppedimage($newWidth,$newHeight,$option="auto",$x1=0,$y1=0){
+        $optionArray = $this->getDimensions($newWidth, $newHeight, strtolower($option));
+        $optimalWidth  = $optionArray['optimalWidth'];
+         $optimalHeight = $optionArray['optimalHeight'];
+ 
+    // *** Resample - create image canvas of x, y size
+    $this->imageResized = imagecreatetruecolor($optimalWidth, $optimalHeight);
+  imagecopyresampled($this->imageResized,$this->image,0, 0, 0,0,$optimalWidth, $optimalHeight,$this->width,$this->height);
     
+}
+    
+   
      private function getDimensions($newWidth, $newHeight, $option)
 {
  

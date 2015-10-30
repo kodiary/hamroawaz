@@ -2,10 +2,10 @@
 <link href="<?php echo $this->webroot;?>css/jquery.bxslider.css" rel="stylesheet" />
 <div class="main" style="margin: 30px auto;width: 980px;">
     <div>
-    <ul><li style="float: left; padding: 0 10px;"><a href="<?php echo $this->webroot.'new/';?>"><strong>Home </strong></a></li>
+    <ul><li style="float: left; padding: 0 10px;"><a href="<?php echo $this->webroot;?>"><strong>Home </strong></a></li>
     <?php foreach($cat as $q)
     {
-        ?><li style="float: left; padding: 0 10px;"><a href="<?php echo $this->webroot.'page/index/'.$q['Categorymanager']['id'];?> "><strong><?php echo $q['Categorymanager']['title']; ?></strong></a></li><?php
+        ?><li style="float: left; padding: 0 10px;"><a href="<?php echo $this->webroot.'page/'.$q['Categorymanager']['slug'];?> "><strong><?php echo $q['Categorymanager']['title']; ?></strong></a></li><?php
     }
     ?>
     </ul>
@@ -15,31 +15,23 @@
      <?php 
     foreach($val as $list){
     ?>
-  <li><a href="<?php echo $this->webroot;?>description/detail/<?php echo $list['Newsmanager']['id'];?>"><img src="<?php echo $this->webroot;?>news/image/thumb1/<?php echo $list['Newsmanager']['image_file'];?>"width="50%"/><h4><?php echo $list['Newsmanager']['title'];?></h4>
+  <li><a href="<?php echo $this->webroot;?>description/<?php echo $list['Newsmanager']['slug'];?>"><img src="<?php echo $this->webroot;?>news/image/thumb1/<?php echo $list['Newsmanager']['image_file'];?>"width=""/><h4><?php echo $list['Newsmanager']['title'];?></a></h4>
  <?php
  
  if($list['Newsmanager']['description']){
-      echo $list['Newsmanager']['description'];
+      echo substr($list['Newsmanager']['description'],0,100);
+       echo '<br/><a href="'.$this->webroot.'description/'.$list['Newsmanager']['slug'].'">view</a>';
     }else{
         echo "<span style='color:red'>No Description Avaialble</span>";
     }
  
 ?>
-  </a></li> 
+  </li> 
     <?php }?>
     </ul>
     </div>
     <div class="clearfix"></div>
-    <div>
-        <ul class="bxslider">
-        
-          <?php foreach($slider as $a)
-            {
-            ?><li><img src="<?php echo $this->webroot;?>slider/<?php echo $a['Newsmanager']['slider'];?>" title="<?php echo $a['Newsmanager']['title'];?>" width="100%" /></li><?php
-            }
-           ?>
-        </ul>
-    </div>
+   
    <div>
     <div style="float: left; width: 70%; padding: 15px"><h1>  <?php 
      //debug($catvar);die();
@@ -52,17 +44,20 @@
     <ul>
     <?php 
      //debug($catvar);die();
-     if(!empty($catvar)){
+     if($catvar){
     foreach($catvar as $ask){
+        //echo $ask['News_category']['news_id'].'_';continue;
         $qt=$this->requestAction('/page/getHeadline/'.$ask['News_category']['news_id']);
+       // debug($qt);die();
       
     
     foreach($qt as $list){?>
-    <li><a href="<?php echo $this->webroot;?>description/detail/<?php echo $list['Newsmanager']['id'];?>"> <img src="<?php echo $this->webroot;?>news/image/thumb1/<?php echo $list['Newsmanager']['image_file'];?>" width="200px" height="150px"/></a></li>
+    <li><a href="<?php echo $this->webroot;?>description/<?php echo $list['Newsmanager']['slug'];?>"> <img src="<?php echo $this->webroot;?>news/image/thumb1/<?php echo $list['Newsmanager']['image_file'];?>" width="200px" height="150px"/></a></li>
   <div style="float: left;margin-left: 214px;margin-top: -159px">
   <li><h3><a href="javascript:void(0)"> <?php echo $list['Newsmanager']['title'];?></a></h3></li>
   <li> <?php if($list['Newsmanager']['description']){
-    echo $list['Newsmanager']['description'];
+    echo substr(strip_tags($list['Newsmanager']['description']),1,100);
+    
     }
     else{
         echo"No description available";}?></li>
@@ -111,40 +106,37 @@
 
 </div> 
   <div class="clearfix"></div>
-    <div class="row recent-work margin-bottom-40" style="margin: 30px auto;">
-          <div class="col-md-3 col-sm-3 col-xs-12">
-            <h2><a href="portfolio.html">Slider</a></h2>
-            <p>Lorem ipsum dolor sit amet, dolore eiusmod quis tempor incididunt ut et dolore Ut veniam unde voluptatem. Sed unde omnis iste natus error sit voluptatem.</p>
-          </div>
-         
-          <div class="col-md-9 col-sm-9 col-xs-12">
-            <div class="owl-carousel owl-carousel3">
-                <?php 
-                if(!empty($catvar)){
-                 foreach($catvar as $ask){
-        $qt=$this->requestAction('/page/getHeadline/'.$ask['News_category']['news_id']);
-    
-    foreach($qt as $list){ ?>
-              <div class="recent-work-item">
-                <em>
-                  <img src="<?php echo $this->webroot;?>news/image/thumb1/<?php echo $list['Newsmanager']['image_file'];?>" alt="Amazing Project" class="img-responsive">
-                  <a href=""><i class="fa fa-link"></i></a>
-                  <a href="<?php echo $this->webroot;?>news/image/thumb1/<?php echo $list['Newsmanager']['image_file'];?>" class="fancybox-button" title="Project Name #1" data-rel="fancybox-button"><i class="fa fa-search"></i></a>
-                </em>
-                <a class="recent-work-description" href="#">
-                  <strong><?php echo $list['Newsmanager']['title'];?></strong>
-                </a>
-              </div>
-                <?php }
-                }
-                }else{
-       echo "No Content Available";
+  <div>
+        <ul class="audioslider">
+        
+          <?php foreach($slider as $a)
+            {
+    ?><li>
+    <?php  if($a['Newsmanager']['video']&&$a['Newsmanager']['audio']){?>
+            <div class="ytvideo"><?php echo $a['Newsmanager']['video'];?></div>
+            <audio controls>
+<source src="<?php echo $this->webroot;?>news/audio/<?php echo $a['Newsmanager']['audio'];?>" type="audio/mpeg">
+    <source src="<?php echo $this->webroot;?>news/audio/<?php echo $a['Newsmanager']['audio'];?>" type="audio/wav">
+Your browser does not support the audio element.
+</audio><?php }?></li><?php
+           // die();
+             }
+           ?>
+        </ul>
+    </div> 
+     <div class="clearfix"></div>
+    <div class="footer">
+    <p>Powered By Kodiary.com</p>
+    <div>
+    <ul><li style="float: left; padding: 0 10px;"><a href="<?php echo $this->webroot;?>"><strong>Home</strong></a></li>
+    <?php foreach($cat as $q)
+    {
+        ?><li style="float: left; padding: 0 10px;"><a href="<?php echo $this->webroot.'page/'.$q['Categorymanager']['slug'];?> "><strong><?php echo $q['Categorymanager']['title']; ?></strong></a></li><?php
     }
-     ?>
-                
-            </div>       
-          </div>
-          </div>  
+    ?>
+    </ul>
+    </div>
+    </div>
    </div>
   <script>
 $('.bxslider').bxSlider({
@@ -154,6 +146,13 @@ $('.bxslider').bxSlider({
   autoControls: true
 });
 $('.contentslider').bxSlider({
+  minSlides: 4,
+  maxSlides: 4,
+  slideWidth: 500,
+  slideHeight:50,
+  slideMargin: 10
+});
+$('.audioslider').bxSlider({
   minSlides: 4,
   maxSlides: 4,
   slideWidth: 500,

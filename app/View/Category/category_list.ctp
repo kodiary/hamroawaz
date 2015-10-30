@@ -55,7 +55,7 @@
        $fres=$this->requestAction('/Category/getNews/'.$newsid);
        
     ?>
-     <a href="<?php echo $this->webroot;?>description/detail/<?php echo $fres['Newsmanager']['id'];?>">
+     <a href="<?php echo $this->webroot;?>description/<?php echo $fres['Newsmanager']['id'];?>">
     <ul>
   <li><img src="<?php echo $this->webroot;?>news/image/thumb1/<?php echo $fres['Newsmanager']['image_file'];?>" width="200px" height="150px"/></li>
   <div style="float: left;margin-left: 214px;margin-top: -159px">

@@ -1,7 +1,7 @@
 @charset 'UTF-8';
 @font-face{font-family:'FontAwesome'!important;src:url('font/fontawesome-webfont.eot?v=4.0.1')!important;src:url('font/fontawesome-webfont.eot?#iefix&v=4.0.1') format('embedded-opentype'),url('font/fontawesome-webfont.woff?v=4.0.1') format('woff'),url('font/fontawesome-webfont.ttf?v=4.0.1') format('truetype'),url('font/fontawesome-webfont.svg?v=4.0.1#fontawesomeregular') format('svg')!important;font-weight:normal!important;font-style:normal!important;}
 .loginfrm{width:400px;margin:100px auto;background:#e5e5e5;color:#333;padding:10px;border-radius:10px;text-align:center;}
-.wrapper{width:950px;margin:0 auto;}
+.wrapper{width:100%;margin:0 auto;}
 .clear{clear:both;}
 
 .header{background:#444;color:#FFF;height:70px;padding:10px;border-radius:10px 10px 0 0;}
@@ -78,7 +78,8 @@ h1,h2{font-size:20px!important;color:#444!important;}
 		.fa-spin{-webkit-animation:spin 2s infinite linear;-moz-animation:spin 2s infinite linear;-o-animation:spin 2s infinite linear;animation:spin 2s infinite linear}
 		@-moz-keyframes spin{0%{-moz-transform:rotate(0deg)} 100%{-moz-transform:rotate(359deg)}}@-webkit-keyframes spin{0%{-webkit-transform:rotate(0deg)} 100%{-webkit-transform:rotate(359deg)}}@-o-keyframes spin{0%{-o-transform:rotate(0deg)} 100%{-o-transform:rotate(359deg)}}@-ms-keyframes spin{0%{-ms-transform:rotate(0deg)} 100%{-ms-transform:rotate(359deg)}}@keyframes spin{0%{transform:rotate(0deg)} 100%{transform:rotate(359deg)}}.fa-rotate-90{filter:progid:DXImageTransform.Microsoft.BasicImage(rotation=1);-webkit-transform:rotate(90deg);-moz-transform:rotate(90deg);-ms-transform:rotate(90deg);-o-transform:rotate(90deg);transform:rotate(90deg)}
 		.fa-glass:before {
-  content: "\f000";
+  
+  : "\f000";
 }
 .fa-music:before {
   content: "\f001";

@@ -27,6 +27,10 @@
 	Router::connect('/', array('controller' => 'new', 'action' => 'index'));
  Router::connect('/dashboard', array('controller' => 'dashboard', 'action' => 'index'));
  Router::connect('/category', array('controller' => 'dashboard', 'action' => 'category'));
+ Router::connect('/page/getHeadline/*', array('controller' => 'page', 'action' => 'getHeadline'));
+ Router::connect('/page/*', array('controller' => 'page', 'action' => 'index'));
+ Router::connect('/description/getContent/*', array('controller' => 'description', 'action' => 'getContent'));
+Router::connect('/description/*', array('controller' => 'description', 'action' => 'detail'));
 /**
  * ...and connect the rest of 'Pages' controller's URLs.
  */

@@ -25,6 +25,7 @@
         
         </script>
 	</head>
+
 	<body>
     <div class="wrapper">
     <div class="header">
@@ -45,7 +46,7 @@
     </div>
     <div class="footer">
         <hr />
-        &copy; Copyright 2014. SHH<br />Powered by <a href="http://www.kodiary.com/">Kodiary</a>
+        &copy; Copyright 2014. Hamroawaz<br />Powered by <a href="http://www.kodiary.com/">Kodiary</a>
     </div>
     </div>
     </body>

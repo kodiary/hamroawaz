@@ -1,9 +1,10 @@
 <div class="newcontainer" style="">
 <form action="<?php echo $this->webroot;?>dashboard/updateNews/<?php echo  $edit['Newsmanager']['id'];?>" method="POST" enctype="multipart/form-data" >
 News Title:<br />
-<input type="text" name="title" value="<?php echo  $edit['Newsmanager']['title'];?>"required="required"/><br/>
+<input type="text" name="title" class="titlename" value="<?php echo  $edit['Newsmanager']['title'];?>"required="required"/><br/>
+<input type="hidden" name="slug" value="<?php echo $edit['Newsmanager']['slug'];?>" class="slug" required="required" readonly=""/><br />
 Image:<br />
-         <input type="hidden" id="x1" name="x1" />
+        <input type="hidden" id="x1" name="x1" />
         <input type="hidden" id="y1" name="y1" />
         <input type="hidden" id="x2" name="x2" />
         <input type="hidden" id="y2" name="y2" />
@@ -31,11 +32,11 @@ Audio:<br /><input type="file" name="audio" /><br />
 <?php if($edit['Newsmanager']['audio']){?>
 <?php echo $edit['Newsmanager']['audio'];?>
 <?php }else{
-    echo "No image is available";
+    echo "No Audio is available";
 }?>
 <br /><br />
 Video:<br /><textarea name="video" >
-<?php echo strip_tags($edit['Newsmanager']['video']);?>
+<?php echo $edit['Newsmanager']['video'];?>
 </textarea>
 <br />
 Description:<br />
@@ -113,7 +114,20 @@ var selected = $("input[type='radio'][name='national']:checked");
         $("p.hid").show();
     }
     
+   $('.titlename').change(function(){
+   var title= $(".titlename").val();
+  
+      $.ajax({
+          url: "<?php echo $this->webroot; ?>Dashboard/getSlug",
+            data: "title="+title,
+            type: "post",
+            success: function(response){
+             $('.slug').val(response);
+            }
+                         
+        });
    
+})
     
 });
   

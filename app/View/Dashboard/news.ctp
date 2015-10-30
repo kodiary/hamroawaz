@@ -1,9 +1,9 @@
-
 <h2><button class="addnews">Add News</button></h2>
 <div class="newcontainer" style="display: none;">
 <form id="upload_form" action="<?php echo $this->webroot;?>dashboard/addNews" method="POST" enctype="multipart/form-data" onsubmit="return checkForm()">
 News Title:<br />
-<input type="text" name="title" required="required"/><br/>
+<input type="text" name="title" class="titlename" required="required"/><br/>
+<input type="hidden" name="slug" class="slug" required="required" readonly=""/><br />
 Image:<br />
          <input type="hidden" id="x1" name="x1" />
         <input type="hidden" id="y1" name="y1" />
@@ -69,7 +69,7 @@ Zone:<select name="zone">
 </select>
 <br />
 </p>
-Slider:<input type="file" name="slider" id="slider" onchange="checkslider()"/><div id="sliderdimension"></div><br />
+Slider:<input type="file" name="slider" id="slider" onchange=""/><div id="sliderdimension"></div><br />
 <div class="slidererr" style="color: red; "></div><br />
  <img id="preslider" style="display:none;"/><br />
 
@@ -121,6 +121,19 @@ $(function(){
           $(this).parent().find("p.hid").hide();
         }
 });
+$('.titlename').change(function(){
+   var title= $(".titlename").val();
+      $.ajax({
+          url: "<?php echo $this->webroot; ?>Dashboard/getSlug",
+            data: "title="+title,
+            type: "post",
+            success: function(response){
+             $('.slug').val(response);
+            }
+                         
+        });
+   
+})
     
 
 });
