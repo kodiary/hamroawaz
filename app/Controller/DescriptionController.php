@@ -77,6 +77,29 @@ class DescriptionController extends AppController{
     return $q;
     
     }
+    function getCategoryId($id){
     
+      $this->loadModel('News_category');
+        $arr['conditions']=array('news_id'=>$id);
+       // debug($arr);die();
+        $q=$this->News_category->find('first',array('conditions'=>array('news_id'=>$id)));
+       $catid=$q['News_category']['cat_id'];
+       $nxtq=$this->News_category->find('all',array('conditions'=>array('cat_id'=>$catid)));
     
-}
+      return $nxtq;
+    }
+    function getSimilarnews($id){
+         $dateObject = new DateTime(date('Y-m-d G:i:s'));
+       $today=$dateObject->format('Y-m-d');
+      // echo $today;die();
+       $this->loadModel('Newsmanager');
+        $q=$this->Newsmanager->find('first',array('conditions'=>array('id'=>$id,'created_date'=>$today),'limit'=>5));
+       // debug($q);die();
+       if($q){ return $q;}else{
+        $null='NULL';
+        return $null;
+       }
+        
+    }
+    
+    }

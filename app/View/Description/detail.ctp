@@ -25,12 +25,12 @@
      if($val){
     foreach($val as $list){
     ?>
-  <li><a href="<?php echo $this->webroot;?>description/<?php echo $list['Newsmanager']['slug'];?>"><img src="<?php echo $this->webroot;?>news/image/thumb1/<?php echo $list['Newsmanager']['image_file'];?>"/></a><h4><?php echo $list['Newsmanager']['title'];?></h4>
+  <li><a href="<?php echo $this->webroot;?>description/<?php echo $list['Newsmanager']['slug'];?>"><img class="view" title="<?php echo $list['Newsmanager']['title'];?>" src="<?php echo $this->webroot;?>news/image/thumb1/<?php echo $list['Newsmanager']['image_file'];?>"/></a><h4><?php echo $list['Newsmanager']['title'];?></h4>
  <?php
  
  if($list['Newsmanager']['description']){
       echo substr($list['Newsmanager']['description'],0,100);
-       echo '<br/><a href="'.$this->webroot.'description/'.$list['Newsmanager']['slug'].'">view</a>';
+       echo '<br/><a class="view" title="'.$list['Newsmanager']['title'].'" href="'.$this->webroot.'description/'.$list['Newsmanager']['slug'].'">view</a>';
     }else{
         echo "<span style='color:red'>No Description Avaialble</span>";
     }
@@ -46,7 +46,6 @@
     <div style="float: left; width: 70%; padding: 15px"><h1>  <?php 
      //debug($catvar);die();
      //debug($query);die();
-
      if(!empty($query)){
      
         echo $query['Newsmanager']['title'];
@@ -99,6 +98,44 @@
         <a href=" <?php echo $this->webroot; ?>New/currency">Currency Converter</a>
     </div>
     <div class="clearfix"></div>
+    <div>
+    <h1>Related News</h1>
+    <ul>
+    <?php  $fid=$query['Newsmanager']['id'];
+   // echo $fid;die('here');
+    $output= $this->requestAction('/description/getCategoryId/'.$fid);
+    
+   foreach ($output as $similarnews){
+    $nid=$similarnews['News_category']['news_id'];
+    
+    if($nid!=$fid){
+        $simnews=$this->requestAction('/description/getSimilarnews/'.$nid);
+        //debug($simnews);die();
+        if($simnews!='NULL'){
+        ?>
+        <a class="view" title="<?php echo $simnews['Newsmanager']['title'];?>" href="<?php echo $this->webroot;?>description/<?php echo $simnews['Newsmanager']['slug'];?>">
+    <li><img src="<?php echo $this->webroot;?>news/image/thumb1/<?php echo $simnews['Newsmanager']['image_file'];?>"  /></li>
+  <div>
+  <li><h3> <?php echo $simnews['Newsmanager']['title'];?></h3></li>
+  <li> <?php if($simnews['Newsmanager']['description']){
+    echo substr(strip_tags($simnews['Newsmanager']['description']),1,100);
+    }
+    else{
+        echo"No description available";}?></li>
+        </a>
+ 
+  </div>
+        
+        
+        <?php
+        }
+    }else{
+      // echo 'no need to show';
+    }
+   }
+    ?>
+    </ul>
+    </div>
     <div class="footer">
     <p>Powered By Kodiary.com</p>
     <div>
@@ -127,4 +164,20 @@ $('.contentslider').bxSlider({
   slideHeight:50,
   slideMargin: 10
 });
+$(function(){
+    $('.view').click(function(){
+       var title=$(this).attr('title');
+      // alert(title);
+    $.ajax({
+       url: "<?php echo $this->webroot;?>new/checkview",
+       data:"title="+title, 
+       type:"post",
+       //dataType:"html",
+       success: function(response){
+        alert(response);
+       }
+       
+    });
+    });
+})
 </script>

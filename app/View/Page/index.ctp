@@ -15,12 +15,12 @@
      <?php 
     foreach($val as $list){
     ?>
-  <li><a href="<?php echo $this->webroot;?>description/<?php echo $list['Newsmanager']['slug'];?>"><img src="<?php echo $this->webroot;?>news/image/thumb1/<?php echo $list['Newsmanager']['image_file'];?>"width=""/><h4><?php echo $list['Newsmanager']['title'];?></a></h4>
+  <li><a href="<?php echo $this->webroot;?>description/<?php echo $list['Newsmanager']['slug'];?>"><img src="<?php echo $this->webroot;?>news/image/thumb1/<?php echo $list['Newsmanager']['image_file'];?>" class="view" title="<?php echo $list['Newsmanager']['title'];?>"/><h4><?php echo $list['Newsmanager']['title'];?></a></h4>
  <?php
  
  if($list['Newsmanager']['description']){
       echo substr($list['Newsmanager']['description'],0,100);
-       echo '<br/><a href="'.$this->webroot.'description/'.$list['Newsmanager']['slug'].'">view</a>';
+       echo '<br/><a class="view" title="'.$list['Newsmanager']['title'].'" href="'.$this->webroot.'description/'.$list['Newsmanager']['slug'].'">view</a>';
     }else{
         echo "<span style='color:red'>No Description Avaialble</span>";
     }
@@ -52,7 +52,7 @@
       
     
     foreach($qt as $list){?>
-    <li><a href="<?php echo $this->webroot;?>description/<?php echo $list['Newsmanager']['slug'];?>"> <img src="<?php echo $this->webroot;?>news/image/thumb1/<?php echo $list['Newsmanager']['image_file'];?>" width="200px" height="150px"/></a></li>
+    <li><a class="view" title="<?php echo $list['Newsmanager']['title'];?>" href="<?php echo $this->webroot;?>description/<?php echo $list['Newsmanager']['slug'];?>"> <img src="<?php echo $this->webroot;?>news/image/thumb1/<?php echo $list['Newsmanager']['image_file'];?>" width="200px" height="150px"/></a></li>
   <div style="float: left;margin-left: 214px;margin-top: -159px">
   <li><h3><a href="javascript:void(0)"> <?php echo $list['Newsmanager']['title'];?></a></h3></li>
   <li> <?php if($list['Newsmanager']['description']){
@@ -159,4 +159,20 @@ $('.audioslider').bxSlider({
   slideHeight:50,
   slideMargin: 10
 });
+$(function(){
+        /*--------------------------------------------------*/
+    $('.view').click(function(){
+       var title=$(this).attr('title');
+    $.ajax({
+       url: "<?php echo $this->webroot;?>new/checkview",
+       data:"title="+title, 
+       type:"post",
+       //dataType:"html",
+       success: function(response){
+        alert(response);
+       }
+       
+    });
+    });
+})
 </script>

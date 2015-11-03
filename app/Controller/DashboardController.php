@@ -20,6 +20,7 @@ class DashboardController extends AppController
     {
        
     }
+    
     function news(){
        $this->loadModel('Categorymanager');
        $q= $this->Categorymanager->find('all',array('order' => array('display_order' => 'asc')));
@@ -35,6 +36,7 @@ class DashboardController extends AppController
         $date=$dateObject->format('Y-m-d'); 
         $_POST['created_date']=$date;
          $slug=$this->checkSlug($_POST['slug']);
+         
          //echo $slug;die();
          $_POST['slug']=$slug;
         $this->loadModel('Newsmanager');

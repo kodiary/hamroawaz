@@ -30,7 +30,18 @@
  Router::connect('/page/getHeadline/*', array('controller' => 'page', 'action' => 'getHeadline'));
  Router::connect('/page/*', array('controller' => 'page', 'action' => 'index'));
  Router::connect('/description/getContent/*', array('controller' => 'description', 'action' => 'getContent'));
+ Router::connect('/description/getCategoryId/*', array('controller' => 'description', 'action' => 'getCategoryId'));
+ Router::connect('/description/getSimilarnews/*', array('controller' => 'description', 'action' => 'getSimilarnews'));
 Router::connect('/description/*', array('controller' => 'description', 'action' => 'detail'));
+
+Router::connect('/archive/months_in_string/*', array('controller' => 'archive', 'action' => 'months_in_string'));
+Router::connect('/archive/getHeadline/*', array('controller' => 'archive', 'action' => 'getHeadline'));
+Router::connect('/archive/getCategory', array('controller' => 'archive', 'action' => 'getCategory'));
+Router::connect('/archive/getNewsId/*', array('controller' => 'archive', 'action' => 'getNewsId'));
+Router::connect('/archive/getNewsContent/*', array('controller' => 'archive', 'action' => 'getNewsContent'));
+Router::connect('/archive/days_in_month', array('controller' => 'archive', 'action' => 'days_in_month'));
+Router::connect('/archive/findmostView/*', array('controller' => 'archive', 'action' => 'findmostView'));
+Router::connect('/archive/*', array('controller' => 'archive', 'action' => 'index'));
 /**
  * ...and connect the rest of 'Pages' controller's URLs.
  */

@@ -31,7 +31,7 @@ Image:<br />
             
         </div><br /><br /><br />
 Audio:<br /><input type="file" name="audio" /><br /><br />
-Video:<br /><textarea name="video" ></textarea>
+Video:<br /><textarea  class="video"name="video" ></textarea>
 <br />
 Description:<br />
 <textarea name="description"  class="ckeditor required" required="required"></textarea><br />
@@ -133,7 +133,29 @@ $('.titlename').change(function(){
                          
         });
    
-})
+});
+//====================================================================
+function getId(url) {
+    var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+    var match = url.match(regExp);
+
+    if (match && match[2].length == 11) {
+        return match[2];
+    } else {
+        return 'error';
+    }
+}
+
+var myId;
+
+$(document.body).on('blur','.video',function(){
+    //alert('hello');
+    var myUrl = $('.video').val();
+
+    myId = getId(myUrl);
+
+    $('.video').val('<iframe width="300" height="250" src="//www.youtube.com/embed/' + myId + '" frameborder="0" allowfullscreen></iframe>');
+});
     
 
 });

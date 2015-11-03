@@ -14,7 +14,11 @@
     <div >
     <ul class="contentslider">
      <?php 
+     
+     if(!empty($val)){
+      
     foreach($val as $list){
+        
     ?>
   <li><a href="<?php echo $this->webroot;?>description/<?php echo $list['Newsmanager']['slug'];?>"><img class="view" title="<?php echo $list['Newsmanager']['title'];?>" src="<?php echo $this->webroot;?>news/image/thumb1/<?php echo $list['Newsmanager']['image_file'];?>"width=""/></a><h4><?php echo $list['Newsmanager']['title'];?></h4>
  <?php
@@ -28,17 +32,30 @@
  
 ?>
   </li> 
-    <?php }?>
+    
+        <?php
+    }}else{
+        ?>
+        <li><img src="<?php echo $this->webroot;?>img/no.png"width="980px" height="300px"/><h4></h4></li>
+        
+        <?php
+    }?>
     </ul>
     </div>
     <div class="clearfix"></div>
     <div>
+    <br />
         <ul class="bxslider">
        <?php
+       if(!empty($slider)){
            foreach($slider as $a)
             {
             ?><li><img  src="<?php echo $this->webroot;?>slider/<?php echo $a['Newsmanager']['slider'];?>" title="<?php echo $a['Newsmanager']['title'];?>" /></li><?php
             }
+            }else{
+                ?>
+                <li><img src="<?php echo $this->webroot;?>img/no.png"width="980px" height="300px"/><h4></h4></li>
+           <?php }
            ?>
         </ul>
     </div>
@@ -46,7 +63,7 @@
     <!--<div style="float: left; width: 70%; padding: 15px" class="headline"><h1>Headline</h1>
     <hr />
     <ul>
-    <?php $query=$this->requestAction('/new/getHeadline');
+    <?php $query=$this->requestAction('/archive/getHeadline/'.$date);
     foreach($query as $list){?>
     <a class="view" title="<?php echo $list['Newsmanager']['title'];?>" href="<?php echo $this->webroot;?>description/<?php echo $list['Newsmanager']['slug'];?>">
     <li><img src="<?php echo $this->webroot;?>news/image/thumb1/<?php echo $list['Newsmanager']['image_file'];?>" width="200px" height="150px" /></li>
@@ -72,7 +89,8 @@
     </div><div class="clearfix"></div>
     <div class="row" >
 <div class="span8" style="float: left; width: 70%; padding: 15px">
-<?php $catlist=$this->requestAction('/new/getCategory');
+<?php $catlist=$this->requestAction('/archive/getCategory');
+
 foreach($catlist as $show){
     ?>
      
@@ -80,13 +98,14 @@ foreach($catlist as $show){
 <h3><p style="padding: 10px"><a href="<?php echo $this->webroot;?>category/CategoryList/<?php echo $show['Categorymanager']['id'];?>"><?php echo $show['Categorymanager']['title'];?></a></p></h3>
 <?php  $id=$show['Categorymanager']['id'];
 
-$requst=$this->requestAction('new/getNewsId/'.$id);
-if(!empty($requst)){
+$requst=$this->requestAction('archive/getNewsId/'.$id.'/'.$date);
+
+if($requst){
 //debug($requst);die();
 
 foreach($requst as $fetch){
     $newsid=$fetch['News_category']['news_id'];
-$ft=$this->requestAction('new/getNewsContent/'.$newsid);
+$ft=$this->requestAction('archive/getNewsContent/'.$newsid.'/'.$date);
 if($ft){
 ?>
 <div class="sub" style="float: left;margin-right:38px">
@@ -119,10 +138,14 @@ echo "</ul>";
 
 <?php
 }
+?>
+<a href="<?php echo $this->webroot;?>page/<?php echo $show['Categorymanager']['title'];?>">view all</a>
+<?php
 }else{
    echo "";
-}?>
-<a href="<?php echo $this->webroot;?>page/<?php echo $show['Categorymanager']['title'];?>">view all</a>
+}
+?>
+
 </div>
 
 <?php
@@ -218,7 +241,7 @@ echo '<a class="year" href="#">'.$dates[0][0].'</a>';
  <option value="0">Select Month</option>
  <?php 
  for($j=1;$j<=12;$j++){
-    $res=$this->requestAction('/new/months_in_string/'.$j);
+    $res=$this->requestAction('archive/months_in_string/'.$j);
    echo '<option value="'.$j.'">';
     echo $res;
     echo '</option>';
@@ -228,7 +251,7 @@ echo '<a class="year" href="#">'.$dates[0][0].'</a>';
  ?>
  </select><br />
  
- <select class="dayhere" style="display: none;">
+ <select class="dayhere" title="lalustine" style="display: none;">
  
  
  
@@ -257,8 +280,9 @@ echo '<a class="year" href="#">'.$dates[0][0].'</a>';
 <div class="row">
 <ul>
 <h3>Mostly Viewed Post</h3>
-<?php $result=$this->requestAction('/new/findmostView');
-//debug($result);die();
+<?php $result=$this->requestAction('/archive/findmostView/'.$date);
+
+if($result!='NULL'){
 foreach($result as $mostviewed){
     ?>
     <a class="view" title="<?php echo $mostviewed['Newsmanager']['title'];?>" href="<?php echo $this->webroot;?>description/<?php echo $mostviewed['Newsmanager']['slug'];?>">
@@ -274,6 +298,8 @@ foreach($result as $mostviewed){
  
   </div>
  <?php
+}}else{
+    echo "<h5>NO POST AVAILABLE</h5>";
 }
 ?>
 </ul>
@@ -281,7 +307,9 @@ foreach($result as $mostviewed){
 <div>
         <ul class="audioslider">
         
-          <?php foreach($slider as $a)
+          <?php 
+          if($slider){
+          foreach($slider as $a)
             {
     ?><li>
     <?php  if($a['Newsmanager']['video']&&$a['Newsmanager']['audio']&&$a['Newsmanager']['audio']){?>
@@ -292,6 +320,10 @@ foreach($result as $mostviewed){
 Your browser does not support the audio element.
 </audio><?php }?></li><?php
            // die();
+             }}else{
+                ?>
+                <li><img src="<?php echo $this->webroot;?>img/no.png"width="980px" height="300px"/><h4></h4></li>
+                <?php
              }
            ?>
         </ul>
@@ -317,7 +349,7 @@ $(function(){
         id=this.value;
         if(id!=0){
         $.ajax({
-           url: "<?php echo $this->webroot;?>new/headLinefilter",
+           url: "<?php echo $this->webroot;?>archive/headLinefilter",
             data: "id="+id,
             type: "post",
             dataType: "html",
@@ -343,7 +375,7 @@ $(function(){
           if(id!=0){
         $('.loader').show();
            $.ajax({
-           url: "<?php echo $this->webroot;?>new/newstandard",
+           url: "<?php echo $this->webroot;?>archive/newstandard",
             data: "standard="+id,
             type: "post",
             dataType: "html",
@@ -360,7 +392,7 @@ $(function(){
        var title=$(this).attr('title');
        //alert(title);
     $.ajax({
-       url: "<?php echo $this->webroot;?>new/checkview",
+       url: "<?php echo $this->webroot;?>archive/checkview",
        data:"title="+title, 
        type:"post",
        //dataType:"html",
@@ -373,40 +405,36 @@ $(function(){
     
     /*--------------------------------------------------*/
        $(document.body).on('click','.year',function(){
-    //  
+     
      // $(this).parent().find('.yy').val(year);
      $(this).parent().find('.month').toggle("slow");
         
      });
            
     $(document.body).on('change','.months',function(){
-      var month=$(this).val();
-      //$(this).parent().find('.mm').val(month);
+     var month=$(this).val();
       var year=$(this).parent().parent().find('.year').attr('title'); 
-     // alert(year);
+
       $.ajax({
-        url:"<?php $this->webroot;?>new/days_in_month",
+        url:"<?php $this->webroot;?>days_in_month",
         data:"month="+month+"&year="+year,
         type:"post",
         success:function(response){
-            //alert(response);
+        
             var str='';
             var i=1;
             for(i;i<=response;i++){
                 str=str+"<option value="+i+">"+i+"</option>";
             }
             
-          $('.months').parent().find('.dayhere').html(str);
-            
-              
+         $('.months').parent().find('.dayhere').html(str);
+        
+         
         }
       })
+       $(this).parent().find('.dayhere').toggle("slow");
+      });
 
-    $(this).parent().find('.dayhere').toggle("slow");
-    // $(this).parent().find('.month').toggle("slow");
-        
-     });
-     
      $(document.body).on('change','.dayhere',function(){
         var year=$(this).parent().parent().find('.year').attr('title');
         var month=$(this).parent().find('.months option:selected').val();
