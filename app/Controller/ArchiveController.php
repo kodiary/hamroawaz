@@ -4,7 +4,15 @@ class ArchiveController extends AppController
 {
     function index($date)
     {
+        //echo $date;die();
        
+if(!($cachedate = Cache::read('cached_date'))) {
+    Cache::write('cached_date', $date);
+//$selectedate = Cache::read('cached_date');
+}else{
+     Cache::delete('cached_date');
+     Cache::write('cached_date', $date);
+}
 $convert = new DateTime($date);
  $date=$convert->format('Y-m-d');
 
@@ -118,9 +126,10 @@ $convert = new DateTime($date);
     foreach($q as $check){
         $nid=$check['News_category']['news_id'];
         
-       $collect=$this->Newsmanager->find('first',array('conditions'=>array('id'=>$nid,'created_date'=>$date)));
+       $collect[]=$this->Newsmanager->find('first',array('conditions'=>array('id'=>$nid,'created_date'=>$date)));
     }
-  //  debug($collect);die();
+    $collect=array_filter($collect);
+   //debug($collect);die();
     if(!empty($collect)){
         return $q;
     }
@@ -150,30 +159,7 @@ $convert = new DateTime($date);
         
    
     }
-    function headLinefilter(){
-        
-        $id=$_POST['id'];
-        
-       $newsid=$this->getNewsId($id);
-    $this->layout='blank';
-      if(!empty($newsid)){
-               
-                  /*  foreach($newsid as $nid){
-        $news=$nid['News_category']['news_id'];
-        $q=$this->Newsmanager->find('all',array(
-        'conditions'=>array('is_headline'=>1,'created_date'=>$yesterday,'id'=>$news),
-                               'order' => array('id' => 'DESC'),
-                               'limit'=>3
-                               ));
-                               //debug($q);die();
-        $this->set('value',$q);
-        }*/
-        $this->set('value',$newsid);
-        }else{
-            $this->set('value','empty');
-        }
-       
-        }
+    
         
         function Newsheadline($id){
        $this->loadModel('Newsmanager');
@@ -184,85 +170,45 @@ $convert = new DateTime($date);
         }
         
         function newstandard(){
-            
+        $this->layout='blank';    
        $standard=$_POST['standard'];
+       $date=$_POST['date'];
+      // echo $date = preg_replace('~\x{00a0}~u', ' ', $date);die();
+       $convert = new DateTime($date);
+      $date=$convert->format('Y-m-d');
        $this->set('title','HamroAwaz');
        $this->loadModel('Categorymanager');
        $this->loadModel('Newsmanager');
        $qcat=$this->Categorymanager->find('all');
        $this->set('cat',$qcat);
        $this->set('standard',$standard);
+       $this->set('date',$date);
+      // echo "response";die();
       
         }
-        function checkstandard($standard,$classname='0'){
+        function checkstandard($standard,$date,$classname='0'){
             
             $this->loadModel('Newsmanager');
-            $current=strtotime(date('Y-m-d G:i:s'));
-       $checktime=strtotime(date('Y-m-d G:i:s',mktime(10,0,0, date("m") , date("d"),date("Y"))));
-       $dateObject = new DateTime(date('Y-m-d G:i:s'));
-       $today=$dateObject->format('Y-m-d');
-       $yesterday = date("Y-m-d", mktime(0,0,0, date("m") , date("d")-1,date("Y")));
-     //  echo $classname;
+            
              if($classname== '0'){
-      
-                 if($checktime>=$current ){
-           $q=$this->Newsmanager->find('all',array('conditions'=>array('created_date'=>$yesterday,'national'=>$standard),'order' => array('id' => 'DESC'),'limit'=>5));
+             $q=$this->Newsmanager->find('all',array('conditions'=>array('created_date'=>$date,'national'=>$standard),'order' => array('id' => 'DESC'),'limit'=>5));
              return $q;
-               
-            }
-           if($checktime < $current ){
-          $q=$this->Newsmanager->find('all',array('conditions'=>array('created_date'=>$today,'national'=>$standard),'order' => array('id' => 'DESC'),'limit'=>5));
-             return $q;
-        }
-        }else{
-            
-             if($checktime>=$current ){
-       $q=$this->Newsmanager->find('all',array('conditions'=>array('created_date'=>$yesterday,'national'=>1,$classname=>$standard),'order' => array('id' => 'DESC'),'limit'=>5));
+            }else{
+       $q=$this->Newsmanager->find('all',array('conditions'=>array('created_date'=>$date,'national'=>1,$classname=>$standard),'order' => array('id' => 'DESC'),'limit'=>5));
          return $q;
-           
-        }
-       if($checktime < $current ){
-    $q=$this->Newsmanager->find('all',array('conditions'=>array('created_date'=>$today,'national'=>1,$classname=>$standard),'order' => array('id' => 'DESC'),'limit'=>5));
-         return $q;
-        }
-        }
-            
-            
-        }
-        function checkslider($standard,$classname='0'){
+    }
+   }
+        function checkslider($standard,$date,$classname='0'){
             $this->loadModel('Newsmanager');
-            $current=strtotime(date('Y-m-d G:i:s'));
-       $checktime=strtotime(date('Y-m-d G:i:s',mktime(10,0,0, date("m") , date("d"),date("Y"))));
-       $dateObject = new DateTime(date('Y-m-d G:i:s'));
-       $today=$dateObject->format('Y-m-d');
-       $yesterday = date("Y-m-d", mktime(0,0,0, date("m") , date("d")-1,date("Y")));
        if($classname=='0'){
-             if($checktime>=$current ){
-       $arr['conditions']=array('created_date'=>$yesterday,'national'=>$standard);
+       $arr['conditions']=array('created_date'=>$date,'national'=>$standard);
        $slider=$this->Newsmanager->find('all',$arr);
        return $slider;
-           
-        }
-       if($checktime < $current ){
-       $arr['conditions']=array('created_date'=>$today,'national'=>$standard);
-       $slider=$this->Newsmanager->find('all',$arr);
-       return $slider;  
-      
-        }
-        }else{
-             if($checktime>=$current ){
-       $arr['conditions']=array('created_date'=>$yesterday,'national'=>1,$classname=>$standard);
+       }else{
+        $arr['conditions']=array('created_date'=>$date,'national'=>1,$classname=>$standard);
        $slider=$this->Newsmanager->find('all',$arr);
        return $slider;
-           
-        }
-       if($checktime < $current ){
-       $arr['conditions']=array('created_date'=>$today,'national'=>1,$classname=>$standard);
-       $slider=$this->Newsmanager->find('all',$arr);
-       return $slider;  
-      
-        }
-        }
+       }
         
         }
         
@@ -407,6 +353,25 @@ function months_in_string($month_int){
         break;
     }
     return $month_string;
+}
+
+function checkDate(){
+    $this->layout='blank';
+    if($cachedate = Cache::read('cached_date')) {
+    Cache::delete('cached_date');
+    }
+     $dateObject = new DateTime(date('Y-m-d G:i:s'));
+       $today=$dateObject->format('Y-m-d');
+       $date=$_POST['date'];
+       
+      $convert = new DateTime($date);
+ $date=$convert->format('Y-m-d');
+ //echo $date;die();
+       if($date==$today){
+        echo 'true';die();
+       }else{
+        echo 'false';die();
+       }
 }
 
 

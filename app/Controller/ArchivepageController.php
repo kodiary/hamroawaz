@@ -1,9 +1,12 @@
 <?php
     App::uses('CakeEmail', 'Network/Email');
-class PageController extends AppController
+class ArchivepageController extends AppController
 {
     function index($slug)
     {
+        $cachedate = Cache::read('cached_date');
+        $convert=new DateTime($cachedate);
+        $cachedate=$convert->format('Y-m-d');
         //echo $title;
         $this->set('title','HamroawazPage');
         $this->loadModel('Categorymanager');
@@ -11,37 +14,24 @@ class PageController extends AppController
         $pcat=$this->Categorymanager->find('all');
          $this->set('cat',$pcat);
         $catname = $this->Categorymanager->find('first',array(
-        'conditions'=>array('slug LIKE "'.$slug.'"')
+        'conditions'=>array('slug'=>$slug)
         ));
+        //debug($catname['Categorymanager']['id']);die();
         $this->set('catname',$catname);
-         $current=strtotime(date('Y-m-d G:i:s'));
-       $checktime=strtotime(date('Y-m-d G:i:s',mktime(10,0,0, date("m") , date("d"),date("Y"))));
-       $dateObject = new DateTime(date('Y-m-d G:i:s'));
-       $today=$dateObject->format('Y-m-d');
-       $yesterday = date("Y-m-d", mktime(0,0,0, date("m") , date("d")-1,date("Y")));
-        if($checktime>=$current){
-        $slider=$this->Newsmanager->find('all',array('conditions'=>array('created_date'=>$yesterday)));
+        $slider=$this->Newsmanager->find('all',array('conditions'=>array('created_date'=>$cachedate)));
          $this->set('slider',$slider);
         $q=$this->Newsmanager->find('all',array(
-                                'conditions'=>array('created_date'=>$yesterday),
+                                'conditions'=>array('created_date'=>$cachedate),
                                'order' => array('id' => 'DESC'),
                                'limit'=>5
                                ));
                 $this->set('val',$q);
-        }else{
-             $slider=$this->Newsmanager->find('all',array('conditions'=>array('created_date'=>$today)));
-         $this->set('slider',$slider);
-        $q=$this->Newsmanager->find('all',array(
-                                'conditions'=>array('created_date'=>$today),
-                               'order' => array('id' => 'DESC'),
-                               'limit'=>5
-                               ));
-                $this->set('val',$q);
-        }
+        
         $this->loadModel('News_category');
         $qcat=$this->News_category->find('all',array(
                                 'conditions'=>array('cat_id'=>$catname['Categorymanager']['id']),
                                ));
+                               
         $this->set('catvar',$qcat);
        
     }
@@ -93,20 +83,13 @@ class PageController extends AppController
         
     }
     function getHeadline($id){
-     $current=strtotime(date('Y-m-d G:i:s'));
-       $checktime=strtotime(date('Y-m-d G:i:s',mktime(10,0,0, date("m") , date("d"),date("Y"))));
-       $dateObject = new DateTime(date('Y-m-d G:i:s'));
-       $today=$dateObject->format('Y-m-d');
-       $yesterday = date("Y-m-d", mktime(0,0,0, date("m") , date("d")-1,date("Y")));
-         $this->loadModel('Newsmanager');
-          if($checktime>=$current){
-         $q=$this->Newsmanager->find('all',array('conditions'=>array('id'=>$id,'created_date'=>$yesterday),'order' => array('id' => 'DESC'),));
+         $cachedate = Cache::read('cached_date');
+        $convert=new DateTime($cachedate);
+        $cachedate=$convert->format('Y-m-d');
+        $this->loadModel('Newsmanager');
+         $q=$this->Newsmanager->find('all',array('conditions'=>array('id'=>$id,'created_date'=>$cachedate),'order' => array('id' => 'DESC'),));
          return $q;
-          }else{ 
-            $q=$this->Newsmanager->find('all',array('conditions'=>array('id'=>$id,'created_date'=>$today),'order' => array('id' => 'DESC')));
-            return $q;
-          } 
-            
+         
             }
             
      function getCategory(){

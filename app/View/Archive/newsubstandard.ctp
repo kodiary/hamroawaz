@@ -4,6 +4,7 @@
 <div class="main" style="margin: 30px auto;width: 980px;">
     <div>
     <ul><li style="float: left; padding: 0 10px;"><a href="<?php echo $this->webroot;?>"><strong>Home</strong></a></li>
+    
     <?php foreach($cat as $q)
     {
         ?><li style="float: left; padding: 0 10px;"><a href="<?php echo $this->webroot.'page/'.$q['Categorymanager']['slug'];?> "><strong><?php echo $q['Categorymanager']['title']; ?></strong></a></li><?php
@@ -14,8 +15,9 @@
     <div >
     <ul class="contentslider">
      <?php 
-    // echo $standard;die();
-     $result=$this->requestAction('new/checkstandard/'.$standard);
+     
+     $result=$this->requestAction('new/checkstandard/'.$standard.'/'.$classname);
+
     if($result){
     foreach($result as $list){
     ?>
@@ -37,7 +39,7 @@
     <div class="clearfix"></div>
     <div>
         <ul class="bxslider">
-         <?php $slider=$this->requestAction('new/checkslider/'.$standard);
+         <?php $slider=$this->requestAction('new/checkslider/'.$standard.'/'.$classname);
          if($slider){
           foreach($slider as $a)
             {
@@ -49,7 +51,29 @@
         </ul>
     </div>
    <div>
-   
+    <div style="float: left; width: 70%; padding: 15px" class="headline"><h1>Headline</h1>
+    <hr />
+    <ul>
+    <?php $query=$this->requestAction('/new/getHeadline/'.$standard.'/'.$classname);
+    foreach($query as $list){?>
+    <a href="<?php echo $this->webroot;?>description/<?php echo $list['Newsmanager']['slug'];?>">
+    <li><img src="<?php echo $this->webroot;?>news/image/thumb1/<?php echo $list['Newsmanager']['image_file'];?>" width="200px" height="150px"/></li>
+  <div style="float: left;margin-left: 214px;margin-top: -159px">
+  <li><h3> <?php echo $list['Newsmanager']['title'];?></h3></li>
+  <li> <?php if($list['Newsmanager']['description']){
+    echo substr(strip_tags($list['Newsmanager']['description']),1,100);
+    }
+    else{
+        echo"No description available";}?></li>
+        </a>
+ 
+  </div>
+ 
+    <?php }
+    
+    ?>
+    </ul>
+    </div>
     <div style="float: left; padding: 5px "><h1>Widgets</h1>
     <hr />
     <h2>Currency</h2>
@@ -90,7 +114,7 @@ if(!empty($requst)){
 
 foreach($requst as $fetch){
     $newsid=$fetch['News_category']['news_id'];
-$ft=$this->requestAction('new/getNewsContent/'.$newsid.'/'.$standard);
+$ft=$this->requestAction('new/getNewsContent/'.$newsid.'/'.$standard.'/'.$classname);
 if($ft){
 ?>
 <div class="sub" style="float: left;margin-right:38px">
@@ -137,19 +161,52 @@ Filter By Category: <br/><select class="categoryfilter">
 
 Filter By News Standards:<br /><select class="standardfilter">
 <option value="0">select standard</option>
-<option value="1" <?php if($standard==1){echo "selected";}?>>National</option>
-<option value="2" <?php if($standard==2){echo "selected";}?>>International</option>
+<option value="1" selected="selected">National</option>
+<option value="2">International</option>
 </select>
-<div class="substandardfilter" <?php if($standard==2){ ?>style="display: none;"<?php }else if($standard==1){}?>>
+<div class="substandardfilter">
+<?php if($classname=='region'){ ?>
 Region:<select name="region" class="region">
+<option value="0" >Select Region</option>
+<option value="1" <?php if($standard==1){echo "selected";} ?>>Himalayan</option>
+<option value="2" <?php if($standard==2){echo "selected";} ?>>Hilly</option>
+<option value="3" <?php if($standard==3){echo "selected";} ?>>Terai</option>
+</select><br />
+<?php }else{ ?>
+    Region:<select name="region" class="region">
 <option value="0">Select Region</option>
 <option value="1">Himalayan</option>
 <option value="2">Hilly</option>
 <option value="3">Terai</option>
 </select><br />
+<?php    
+}
+if($classname=='zone'){
+?>
 Zone:<select name="zone" class="zone">
-<option value="0">Select Zone</option>
-<option value="1">Mechi</option>
+<option value="0" >Select Zone</option>
+<option value="1" <?php if($standard==1){echo "selected";} ?>>Mechi</option>
+<option value="2" <?php if($standard==2){echo "selected";} ?>>Koshi</option>
+<option value="3" <?php if($standard==3){echo "selected";} ?>>Sagarmatha</option>
+<option value="4" <?php if($standard==4){echo "selected";} ?>>Janakpur</option>
+<option value="5" <?php if($standard==5){echo "selected";} ?>>Bagmati</option>
+<option value="6" <?php if($standard==6){echo "selected";} ?>>Narayani</option>
+<option value="7" <?php if($standard==7){echo "selected";} ?>>Gandaki</option>
+<option value="8" <?php if($standard==8){echo "selected";} ?>>Lumbini</option>
+<option value="9" <?php if($standard==9){echo "selected";} ?>>Dhawalagiri</option>
+<option value="10" <?php if($standard==10){echo "selected";} ?>>Rapti</option>
+<option value="11" <?php if($standard==11){echo "selected";} ?>>Karnali</option>
+<option value="12" <?php if($standard==12){echo "selected";} ?>>Bheri</option>
+<option value="13" <?php if($standard==13){echo "selected";} ?>>Seti</option>
+<option value="14" <?php if($standard==14){echo "selected";} ?>>Mahakali</option>
+</select>
+<br />
+<?php }
+else{
+?>
+Zone:<select name="zone" class="zone">
+<option value="0" >Select Zone</option>
+<option value="1" >Mechi</option>
 <option value="2">Koshi</option>
 <option value="3">Sagarmatha</option>
 <option value="4">Janakpur</option>
@@ -165,66 +222,9 @@ Zone:<select name="zone" class="zone">
 <option value="14">Mahakali</option>
 </select>
 <br />
+<?php }?>
 </div>
 </form>
-<div >
-<h1>Archives</h1>
-
-<?php
-/*
-$month=10;
-$year=2015;
-$this->requestAction('/new/days_in_month/'.$month.'/'.$year);*/
-$dates=$this->requestAction('new/getDates');
- if($dates[0][0]==$dates[1][0]){
-echo '<a class="year" href="#">'.$dates[0][0].'</a>';
- }else{
- $diff=$dates[1][0]-$dates[0][0];
- $startyear=$dates[0][0];
- for($i=0;$i<=$diff;$i++){
-  ?>
-  <div>
-  <?php
- echo '<a class="year" title="'.$startyear.'"href="javascript:void(0)">'.$startyear.'</a><br>';
- ?>
- <div style="display:none;" class="month">
- <select class="months">
- <option value="0">Select Month</option>
- <?php 
- for($j=1;$j<=12;$j++){
-    $res=$this->requestAction('/new/months_in_string/'.$j);
-   echo '<option value="'.$j.'">';
-    echo $res;
-    echo '</option>';
-    
-    
- }
- ?>
- </select><br />
- 
- <select class="dayhere" style="display: none;">
- 
- 
- 
- </select>
- <?php 
- 
-
- ?>
- </div>
- </div>
- <?php
- ++$startyear;
-        
-    }
- }
-
-
-?>
-
-
-</div>
-
 <div class="loader" style="display: none;"><img src="<?php echo $this->webroot;?>img/loader.gif"/></div>
 </div>
 
@@ -308,7 +308,6 @@ $(function(){
 var className = $('.region').attr('class');
         if(id!=0){
         $('.loader').show();
-
            $.ajax({
            url: "<?php echo $this->webroot;?>new/newsubstandard",
             data: 'sub='+id+'&classname='+className,
@@ -322,6 +321,7 @@ var className = $('.region').attr('class');
             
         });}
     });
+    
     $('.zone').change(function(){
        var id=this.value; 
 var className = $('.zone').attr('class');
@@ -340,61 +340,6 @@ var className = $('.zone').attr('class');
             
         });}
     });
-      /*--------------------------------------------------*/
-       $(document.body).on('click','.year',function(){
-    //  
-     // $(this).parent().find('.yy').val(year);
-     $(this).parent().find('.month').toggle("slow");
-        
-     });
-           
-    $(document.body).on('change','.months',function(){
-      var month=$(this).val();
-      //$(this).parent().find('.mm').val(month);
-      var year=$(this).parent().parent().find('.year').attr('title'); 
-     // alert(year);
-      $.ajax({
-        url:"<?php $this->webroot;?>new/days_in_month",
-        data:"month="+month+"&year="+year,
-        type:"post",
-        success:function(response){
-            //alert(response);
-            var str='';
-            var i=1;
-            for(i;i<=response;i++){
-                str=str+"<option value="+i+">"+i+"</option>";
-            }
-            
-          $('.months').parent().find('.dayhere').html(str);
-            
-              
-        }
-      })
-
-    $(this).parent().find('.dayhere').toggle("slow");
-    // $(this).parent().find('.month').toggle("slow");
-        
-     });
-     
-     $(document.body).on('change','.dayhere',function(){
-        var year=$(this).parent().parent().find('.year').attr('title');
-        var month=$(this).parent().find('.months option:selected').val();
-        var day=$(this).val();
-        var date=year+"-"+month+"-"+day;
-        $.ajax({
-            url:"<?php echo $this->webroot;?>archive/checkDate",
-            data:"date="+date,
-            type:"post",
-            success:function(response){
-            
-                if(response=='true'){
-                     window.location.href='http://localhost/hamroawaz';
-                }
-            }
-        })
-        window.location.href='http://localhost/hamroawaz/archive/'+date;
-     });
-    /*--------------------------------------------------*/
 });
 $('.bxslider').bxSlider({
   auto: true,

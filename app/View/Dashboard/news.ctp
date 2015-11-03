@@ -121,7 +121,7 @@ $(function(){
           $(this).parent().find("p.hid").hide();
         }
 });
-$('.titlename').change(function(){
+$(document.body).on('blur','.titlename',function(){
    var title= $(".titlename").val();
       $.ajax({
           url: "<?php echo $this->webroot; ?>Dashboard/getSlug",
@@ -153,10 +153,23 @@ $(document.body).on('blur','.video',function(){
     var myUrl = $('.video').val();
 
     myId = getId(myUrl);
-
+if(myId!='error'){
     $('.video').val('<iframe width="300" height="250" src="//www.youtube.com/embed/' + myId + '" frameborder="0" allowfullscreen></iframe>');
-});
+}
+else{
+   $.ajax({
+    url:"<?php echo $this->webroot;?>new/embedcode",
+    data:"embed="+myUrl,
+    type:"post",
+    success:function(response){
+         $('.video').val(response);
+    }
     
+   })
+}
+});
+    /*
+*/
 
 });
 

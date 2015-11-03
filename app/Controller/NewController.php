@@ -408,11 +408,15 @@ foreach($q as $mostview){
   $arr[]=$mostview['Newsmanager']['views'];
    
 }
+
 rsort($arr);
+
 for($i=0;$i<=$count-1;$i++){
+    if($arr[$i]!=0){
 $resarr[]=$this->Newsmanager->find('first',array('conditions'=>array('views'=>$arr[$i])));
-  
+  }
 }
+//debug($resarr);die();
 return $resarr;
 }
 
@@ -470,6 +474,61 @@ function months_in_string($month_int){
     return $month_string;
 }
 
+
+
+function resizeMarkup($markup, $dimensions)
+{
+$w = $dimensions['width'];
+$h = $dimensions['height'];
+
+$patterns = array();
+$replacements = array();
+if( !empty($w) )
+{
+$patterns[] = '/width="([0-9]+)"/';
+$patterns[] = '/width:([0-9]+)/';
+
+$replacements[] = 'width="'.$w.'"';
+$replacements[] = 'width:'.$w;
+}
+
+if( !empty($h) )
+{
+$patterns[] = '/height="([0-9]+)"/';
+$patterns[] = '/height:([0-9]+)/';
+
+$replacements[] = 'height="'.$h.'"';
+$replacements[] = 'height:'.$h;
+}
+
+return preg_replace($patterns, $replacements, $markup);
+}
+
+function embedcode(){
+    $this->layout='blank';
+    $embedcode=$_POST['embed'];
+    $youtube = $this->resizeMarkup($embedcode, array(
+'width'=>300,
+'height'=>250
+));
+echo $youtube;die();
+}
+
+function checkDate(){
+    $this->layout='blank';
+    $dateObject = new DateTime(date('Y-m-d G:i:s'));
+       $today=$dateObject->format('Y-m-d');
+       $date=$_POST['date'];
+       
+      $convert = new DateTime($date);
+ $date=$convert->format('Y-m-d');
+ //echo $date;die();
+       if($date==$today){
+        echo 'true';die();
+       }else{
+        echo 'false';die();
+       }
+}
 
     
   

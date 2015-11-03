@@ -114,7 +114,7 @@ var selected = $("input[type='radio'][name='national']:checked");
         $("p.hid").show();
     }
     
-   $('.titlename').change(function(){
+$(document.body).on('blur','.titlename',function(){
    var title= $(".titlename").val();
   
       $.ajax({
