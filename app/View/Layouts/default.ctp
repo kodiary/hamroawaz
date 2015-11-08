@@ -27,6 +27,8 @@ $result=$this->requestAction('/description/getContent/'.$ext);
 <?php }?>
 
 <link rel="stylesheet" media="screen" href="<?php echo $this->webroot;?>css/superfish.css" type="text/css" />
+<!-- <link rel="stylesheet"  href="<?php echo $this->webroot;?>css/bootsrap.css" type="text/css" />
+<link rel="stylesheet"  href="<?php echo $this->webroot;?>css/bootsrap.min.css" type="text/css" />-->
 <link rel="stylesheet" media="screen" href="<?php echo $this->webroot;?>css/stylesheet.css" type="text/css" />
 <link rel="stylesheet" media="screen" href="<?php echo $this->webroot;?>css/style.css" type="text/css" />
 <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Droid+Serif:regular,italic,bold,bolditalic" type="text/css" />

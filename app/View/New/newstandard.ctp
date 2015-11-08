@@ -48,10 +48,73 @@
            ?>
         </ul>
     </div>
-   <div>
-   
-    <div style="float: left; padding: 5px "><h1>Widgets</h1>
-    <hr />
+  <div class="clearfix"></div>
+    <div class="row" >
+<div class="span8">
+<?php $catlist=$this->requestAction('new/getCategory');
+foreach($catlist as $show){
+    ?>
+     
+<div class="category" style="float: left;width: 45%;border: 1px solid #F9F9F9;height: auto;display:block">
+<h3><p style="padding: 10px"><?php echo $show['Categorymanager']['title'];?></p></h3>
+<?php  $id=$show['Categorymanager']['id'];
+
+$requst=$this->requestAction('new/getNewsId/'.$id.'/'.$standard);
+;
+if($requst){
+
+
+foreach($requst as $fetch){
+    $newsid=$fetch['News_category']['news_id'];
+$ft=$this->requestAction('new/getNewsContent/'.$newsid.'/'.$standard);
+if($ft){
+?>
+<div class="sub" style="float: left;margin-right:38px">
+<?php
+echo "<ul>";
+    foreach($ft as $content){
+      ?>
+       <a href="<?php echo $this->webroot;?>description/<?php echo $content['Newsmanager']['slug'];?>"  class="view" title="<?php echo $content['Newsmanager']['title'];?>">
+     <li><img src="<?php echo $this->webroot;?>news/image/thumb1/<?php echo $content['Newsmanager']['image_file'];?>"width="81px" class="view" title="<?php echo $content['Newsmanager']['title'];?>"/></li>
+        <?php
+        echo "<li><h4>".$content['Newsmanager']['title']."</h4></li>";
+        echo "<li>".substr(strip_tags($list['Newsmanager']['description']),1,100)."</li>";
+       echo "</a>";
+        ?>
+
+        <?php
+}
+?>
+
+<?php
+echo "</ul>";
+?>
+
+</div>
+
+<?php }else{
+   // echo "No data available";
+} 
+?>
+
+<?php
+}
+?>
+<a href="<?php echo $this->webroot;?>page/<?php echo $show['Categorymanager']['title'];?>">view all</a>
+<?php
+}else{
+   echo "";
+}
+?>
+
+</div>
+
+<?php
+}?>
+</div>
+<div class="span4" style="float:right;margin-top:-109px">
+  <h1>Widgets</h1>
+   <hr />
     <h2>Currency</h2>
     <hr />
         <?php
@@ -72,69 +135,8 @@
         </table>
     
         <a href=" <?php echo $this->webroot; ?>New/currency">Currency Converter</a>
-    </div>
-    </div><div class="clearfix"></div>
-    <div class="row" >
-<div class="span8" style="float: left; width: 70%; padding: 15px">
-<?php $catlist=$this->requestAction('/new/getCategory');
-foreach($catlist as $show){
-    ?>
-     
-<div class="category" style="float: left;width: 45%;border: 1px solid #F9F9F9;height: auto;display:block">
-<h3><p style="padding: 10px"><a href="<?php echo $this->webroot;?>category/CategoryList/<?php echo $show['Categorymanager']['id'];?>"><?php echo $show['Categorymanager']['title'];?></a></p></h3>
-<?php  $id=$show['Categorymanager']['id'];
-
-$requst=$this->requestAction('new/getNewsId/'.$id);
-if(!empty($requst)){
-//debug($requst);die();
-
-foreach($requst as $fetch){
-    $newsid=$fetch['News_category']['news_id'];
-$ft=$this->requestAction('new/getNewsContent/'.$newsid.'/'.$standard);
-if($ft){
-?>
-<div class="sub" style="float: left;margin-right:38px">
-<?php
-echo "<ul>";
-    foreach($ft as $content){
-       // echo "<li>".$content['Newsmanager']['img_']."</li>";
-       ?>
-       <a href="<?php echo $this->webroot;?>description/<?php echo $content['Newsmanager']['slug'];?>">
-     <li><img src="<?php echo $this->webroot;?>news/image/thumb1/<?php echo $content['Newsmanager']['image_file'];?>"width="81px"/></li>  
-        <?php
-        echo "<li><h4>".$content['Newsmanager']['title']."</h4></li>";
-        echo "<li>".substr(strip_tags($content['Newsmanager']['description']),1,100)."</li>";
-        echo "</a>";
-        ?>
-
-        <?php
-}
-
-echo "</ul>";
-?>
-</div>
-
-<?php }else{
-   // echo "No data available";
-} }
-}else{
-   echo "";
-}?>
-</div>
-<?php
-}?>
-</div>
-<div class="span4">
+    
 <form action="" method="POST" >
-Filter By Category: <br/><select class="categoryfilter">
-<option value="0">select category </option>
-
-<?php foreach($cat as $listcat){?>
-<option value="<?php echo $listcat['Categorymanager']['id'];?>"><?php echo $listcat['Categorymanager']['title'];?></option>
-<?php }?>
-</select>
-<br />
-
 Filter By News Standards:<br /><select class="standardfilter">
 <option value="0">select standard</option>
 <option value="1" <?php if($standard==1){echo "selected";}?>>National</option>
@@ -167,7 +169,6 @@ Zone:<select name="zone" class="zone">
 <br />
 </div>
 </form>
-<div >
 <h1>Archives</h1>
 
 <?php
@@ -176,8 +177,33 @@ $month=10;
 $year=2015;
 $this->requestAction('/new/days_in_month/'.$month.'/'.$year);*/
 $dates=$this->requestAction('new/getDates');
+if($dates!='NULL'){
  if($dates[0][0]==$dates[1][0]){
-echo '<a class="year" href="#">'.$dates[0][0].'</a>';
+ $startyear=$dates[0][0];   
+echo '<a class="year" title="'.$startyear.'" href="javascript:void(0)">'.$dates[0][0].'</a>';
+?>
+ <div style="display:none;" class="month">
+ <select class="months">
+ <option value="0">Select Month</option>
+ <?php 
+ for($j=1;$j<=12;$j++){
+    $res=$this->requestAction('archive/months_in_string/'.$j);
+   echo '<option value="'.$j.'">';
+    echo $res;
+    echo '</option>';
+    
+    
+ }
+ ?>
+ </select><br />
+ 
+ <select class="dayhere" title="lalustine" style="display: none;">
+ 
+ 
+ 
+ </select>
+ </div>
+ <?php
  }else{
  $diff=$dates[1][0]-$dates[0][0];
  $startyear=$dates[0][0];
@@ -218,20 +244,47 @@ echo '<a class="year" href="#">'.$dates[0][0].'</a>';
         
     }
  }
-
+}else{
+    echo "No archive available!!";
+    echo "<br>";
+}
 
 ?>
-
-
-</div>
 
 <div class="loader" style="display: none;"><img src="<?php echo $this->webroot;?>img/loader.gif"/></div>
 </div>
 
 
-
-</div>   
+</div> 
 <div class="clearfix"></div>
+<div class="row">
+<ul>
+<h3>Mostly Viewed Post</h3>
+<?php $result=$this->requestAction('/new/findmostView/'.$standard);
+if($result!='NULL'){
+foreach($result as $mostviewed){
+    ?>
+    <a class="view" title="<?php echo $mostviewed['Newsmanager']['title'];?>" href="<?php echo $this->webroot;?>description/<?php echo $mostviewed['Newsmanager']['slug'];?>">
+    <li><img src="<?php echo $this->webroot;?>news/image/thumb1/<?php echo $mostviewed['Newsmanager']['image_file'];?>" width="200px" height="150px" /></li>
+  <div style="float: left;margin-left: 214px;margin-top: -159px">
+  <li><h3> <?php echo $mostviewed['Newsmanager']['title'];?></h3></li>
+  <li> <?php if($mostviewed['Newsmanager']['description']){
+    echo substr(strip_tags($mostviewed['Newsmanager']['description']),1,100);
+    }
+    else{
+        echo"No description available";}?></li>
+        </a>
+ 
+  </div>
+ <?php
+}
+}else{
+    echo "No Post Available!!";
+    echo "<br>";
+}
+?>
+</ul>
+</div>
 <div>
         <ul class="audioslider">
         
@@ -263,15 +316,12 @@ Your browser does not support the audio element.
     </div>
     </div>
     </div>
-<script>
-
-
-$(function(){
-    
+    <script>
+    $(function(){
     $('.categoryfilter').change(function(){
         var id;
         id=this.value;
-          if(id!=0){
+        if(id!=0){
         $.ajax({
            url: "<?php echo $this->webroot;?>new/headLinefilter",
             data: "id="+id,
@@ -281,13 +331,21 @@ $(function(){
             $('.headline').html(response);
             } 
             
-        });
-        }
+        });}
     });
+      /*--------------------------------------------------*/
     $('.standardfilter').change(function(){
-        
+       
         var id;
         id=this.value;
+        if(id==1){
+        $('.substandardfilter').show();
+        }
+         else if(id==2){
+             $('.substandardfilter').hide();
+                    
+         }           
+               
           if(id!=0){
         $('.loader').show();
            $.ajax({
@@ -303,7 +361,8 @@ $(function(){
             
         });}
     });
-    $('.region').change(function(){
+    
+     $('.region').change(function(){
        var id=this.value; 
 var className = $('.region').attr('class');
         if(id!=0){
@@ -339,63 +398,28 @@ var className = $('.zone').attr('class');
             } 
             
         });}
+         });
+    /*--------------------------------------------------*/
+    $('.view').click(function(){
+       var title=$(this).attr('title');
+       //alert(title);
+    $.ajax({
+       url: "<?php echo $this->webroot;?>new/checkview",
+       data:"title="+title, 
+       type:"post",
+       //dataType:"html",
+       success: function(response){
+        alert(response);
+       }
+       
     });
-      /*--------------------------------------------------*/
-       $(document.body).on('click','.year',function(){
-    //  
-     // $(this).parent().find('.yy').val(year);
-     $(this).parent().find('.month').toggle("slow");
-        
-     });
-           
-    $(document.body).on('change','.months',function(){
-      var month=$(this).val();
-      //$(this).parent().find('.mm').val(month);
-      var year=$(this).parent().parent().find('.year').attr('title'); 
-     // alert(year);
-      $.ajax({
-        url:"<?php $this->webroot;?>new/days_in_month",
-        data:"month="+month+"&year="+year,
-        type:"post",
-        success:function(response){
-            //alert(response);
-            var str='';
-            var i=1;
-            for(i;i<=response;i++){
-                str=str+"<option value="+i+">"+i+"</option>";
-            }
-            
-          $('.months').parent().find('.dayhere').html(str);
-            
-              
-        }
-      })
-
-    $(this).parent().find('.dayhere').toggle("slow");
-    // $(this).parent().find('.month').toggle("slow");
-        
-     });
-     
-     $(document.body).on('change','.dayhere',function(){
-        var year=$(this).parent().parent().find('.year').attr('title');
-        var month=$(this).parent().find('.months option:selected').val();
-        var day=$(this).val();
-        var date=year+"-"+month+"-"+day;
-        $.ajax({
-            url:"<?php echo $this->webroot;?>archive/checkDate",
-            data:"date="+date,
-            type:"post",
-            success:function(response){
-            
-                if(response=='true'){
-                     window.location.href='http://localhost/hamroawaz';
-                }
-            }
-        })
-        window.location.href='http://localhost/hamroawaz/archive/'+date;
-     });
+    });
+    
+    
+    
     /*--------------------------------------------------*/
 });
+
 $('.bxslider').bxSlider({
   auto: true,
    mode: 'fade',
@@ -417,3 +441,4 @@ minSlides: 4,
   slideMargin: 10
 });
 </script>
+    

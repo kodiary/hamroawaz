@@ -30,6 +30,7 @@ class DashboardController extends AppController
        $this->set('list',$a);
     }
      function addNews(){
+       // debug($_POST);die();
               $error=0;
         if(isset($_POST)){
          $dateObject = new DateTime(date('Y-m-d G:i:s'));
@@ -55,6 +56,11 @@ class DashboardController extends AppController
              $error++;
                 }
          $_POST['image_file']=$rand;
+         
+         if(!isset($_POST['category'])){
+             $this->Session->setFlash('No category have been selected');  
+             $error++;
+         }
          $audio=$_FILES['audio']['name'];
        if(!empty($_FILES['audio']['name'])){
         $arr=explode('.',$audio);

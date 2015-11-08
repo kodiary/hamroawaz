@@ -2,6 +2,7 @@ function bytesToSize(bytes) {
     var sizes = ['Bytes', 'KB', 'MB'];
     if (bytes == 0) return 'n/a';
     var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
+    
     return (bytes / Math.pow(1024, i)).toFixed(1) + ' ' + sizes[i];
 };
 
@@ -11,6 +12,8 @@ function checkForm() {
     $('.error').html('Please select a crop region and then press Upload').show();
     return false;
 };
+
+
 
 // update info by cropping (onChange and onSelect events handler)
 function updateInfo(e) {

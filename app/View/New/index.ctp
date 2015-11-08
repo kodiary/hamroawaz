@@ -42,47 +42,20 @@
            ?>
         </ul>
     </div>
-   <div>
-    <!--<div style="float: left; width: 70%; padding: 15px" class="headline"><h1>Headline</h1>
-    <hr />
-    <ul>
-    <?php $query=$this->requestAction('/new/getHeadline');
-    foreach($query as $list){?>
-    <a class="view" title="<?php echo $list['Newsmanager']['title'];?>" href="<?php echo $this->webroot;?>description/<?php echo $list['Newsmanager']['slug'];?>">
-    <li><img src="<?php echo $this->webroot;?>news/image/thumb1/<?php echo $list['Newsmanager']['image_file'];?>" width="200px" height="150px" /></li>
-  <div style="float: left;margin-left: 214px;margin-top: -159px">
-  <li><h3> <?php echo $list['Newsmanager']['title'];?></h3></li>
-  <li> <?php if($list['Newsmanager']['description']){
-    echo substr(strip_tags($list['Newsmanager']['description']),1,100);
-    }
-    else{
-        echo"No description available";}?></li>
-        </a>
- 
-  </div>
- 
-    <?php }
-    
-    ?>
-    </ul>
-    </div>-->
-    <div style="float: left; padding: 5px "><h1>Widgets</h1>
-  
-    </div>
-    </div><div class="clearfix"></div>
+  <div class="clearfix"></div>
     <div class="row" >
-<div class="span8" style="float: left; width: 70%; padding: 15px">
-<?php $catlist=$this->requestAction('/new/getCategory');
+<div class="span8">
+<?php $catlist=$this->requestAction('new/getCategory');
 foreach($catlist as $show){
     ?>
      
 <div class="category" style="float: left;width: 45%;border: 1px solid #F9F9F9;height: auto;display:block">
-<h3><p style="padding: 10px"><a href="<?php echo $this->webroot;?>category/CategoryList/<?php echo $show['Categorymanager']['id'];?>"><?php echo $show['Categorymanager']['title'];?></a></p></h3>
+<h3><p style="padding: 10px"><?php echo $show['Categorymanager']['title'];?></p></h3>
 <?php  $id=$show['Categorymanager']['id'];
 
 $requst=$this->requestAction('new/getNewsId/'.$id);
-if(!empty($requst)){
-//debug($requst);die();
+if($requst){
+
 
 foreach($requst as $fetch){
     $newsid=$fetch['News_category']['news_id'];
@@ -119,17 +92,23 @@ echo "</ul>";
 
 <?php
 }
+?>
+<a href="<?php echo $this->webroot;?>page/<?php echo $show['Categorymanager']['title'];?>">view all</a>
+<?php
 }else{
    echo "";
-}?>
-<a href="<?php echo $this->webroot;?>page/<?php echo $show['Categorymanager']['title'];?>">view all</a>
+}
+?>
+
 </div>
 
 <?php
 }?>
 </div>
-<div class="span4">
-  <hr />
+<div class="span4"  style="float:right;margin-top:-109px">
+ 
+  <h1>Widgets</h1>
+   <hr />
     <h2>Currency</h2>
     <hr />
         <?php
@@ -148,19 +127,9 @@ echo "</ul>";
         <tr><td>India</td><td>1</td><td><?php echo "NRs".$india;?></td></tr>
         <tr><td>USA</td><td>1</td><td><?php echo "NRs".$usa;?></td></tr>
         </table>
-    
-        <a href=" <?php echo $this->webroot; ?>New/currency">Currency Converter</a>
-      
-<form action="" method="POST" >
-Filter By Category: <br/><select class="categoryfilter">
-<option value="0">select category </option>
-
-<?php foreach($cat as $listcat){?>
-<option value="<?php echo $listcat['Categorymanager']['id'];?>"><?php echo $listcat['Categorymanager']['title'];?></option>
-<?php }?>
-</select>
-<br />
-<div class="loader" style="display: none;"><img src="<?php echo $this->webroot;?>img/loader.gif"/></div>
+   
+   <a href=" <?php echo $this->webroot; ?>New/currency">Currency Converter</a>
+      <form action="" method="POST" >
 Filter By News Standards:<br /><select class="standardfilter">
 <option value="0">select standard</option>
 <option value="1">National</option>
@@ -193,7 +162,7 @@ Zone:<select name="zone">
 <br />
 </div>
 </form>
-<div >
+<div class="archiveclass">
 <h1>Archives</h1>
 
 <?php
@@ -202,11 +171,37 @@ $month=10;
 $year=2015;
 $this->requestAction('/new/days_in_month/'.$month.'/'.$year);*/
 $dates=$this->requestAction('new/getDates');
+if($dates!='NULL'){
  if($dates[0][0]==$dates[1][0]){
-echo '<a class="year" href="#">'.$dates[0][0].'</a>';
+ $startyear=$dates[0][0];   
+echo '<a class="year" title="'.$startyear.'" href="javascript:void(0)">'.$dates[0][0].'</a>';
+?>
+ <div style="display:none;" class="month">
+ <select class="months">
+ <option value="0">Select Month</option>
+ <?php 
+ for($j=1;$j<=12;$j++){
+    $res=$this->requestAction('archive/months_in_string/'.$j);
+   echo '<option value="'.$j.'">';
+    echo $res;
+    echo '</option>';
+    
+    
+ }
+ ?>
+ </select><br />
+ 
+ <select class="dayhere" title="lalustine" style="display: none;">
+ 
+ 
+ 
+ </select>
+ </div>
+ <?php
  }else{
  $diff=$dates[1][0]-$dates[0][0];
  $startyear=$dates[0][0];
+ 
  for($i=0;$i<=$diff;$i++){
   ?>
   <div>
@@ -233,23 +228,22 @@ echo '<a class="year" href="#">'.$dates[0][0].'</a>';
  
  
  </select>
- <?php 
+ </div>
+ </div>
  
-
- ?>
- </div>
- </div>
  <?php
  ++$startyear;
         
     }
  }
-
+}else{
+    echo 'No archive available!!';
+    echo "<br/>";
+    }
 
 ?>
-
-
 </div>
+<div class="loader" style="display: none;"><img src="<?php echo $this->webroot;?>img/loader.gif"/></div>
 </div>
 
 </div>   
@@ -259,6 +253,7 @@ echo '<a class="year" href="#">'.$dates[0][0].'</a>';
 <h3>Mostly Viewed Post</h3>
 <?php $result=$this->requestAction('/new/findmostView');
 //debug($result);die();
+if($result!='NULL'){
 foreach($result as $mostviewed){
     ?>
     <a class="view" title="<?php echo $mostviewed['Newsmanager']['title'];?>" href="<?php echo $this->webroot;?>description/<?php echo $mostviewed['Newsmanager']['slug'];?>">
@@ -274,6 +269,10 @@ foreach($result as $mostviewed){
  
   </div>
  <?php
+}
+}else{
+    echo "No Post Available!!";
+    echo "<br>";
 }
 ?>
 </ul>
@@ -312,21 +311,7 @@ Your browser does not support the audio element.
 <script>
 
 $(function(){
-    $('.categoryfilter').change(function(){
-        var id;
-        id=this.value;
-        if(id!=0){
-        $.ajax({
-           url: "<?php echo $this->webroot;?>new/headLinefilter",
-            data: "id="+id,
-            type: "post",
-            dataType: "html",
-            success: function(response){
-            $('.headline').html(response);
-            } 
-            
-        });}
-    });
+  
       /*--------------------------------------------------*/
     $('.standardfilter').change(function(){
        
@@ -355,6 +340,44 @@ $(function(){
             
         });}
     });
+    
+     $('.region').change(function(){
+       var id=this.value; 
+var className = $('.region').attr('class');
+        if(id!=0){
+        $('.loader').show();
+
+           $.ajax({
+           url: "<?php echo $this->webroot;?>new/newsubstandard",
+            data: 'sub='+id+'&classname='+className,
+            type: "post",
+            dataType: "html",
+            success: function(response){
+                $('.loader').hide();
+            $('.main').html(response);
+           
+            } 
+            
+        });}
+    });
+    $('.zone').change(function(){
+       var id=this.value; 
+var className = $('.zone').attr('class');
+        if(id!=0){
+        $('.loader').show();
+           $.ajax({
+           url: "<?php echo $this->webroot;?>new/newsubstandard",
+            data: 'sub='+id+'&classname='+className,
+            type: "post",
+            dataType: "html",
+            success: function(response){
+                $('.loader').hide();
+            $('.main').html(response);
+           
+            } 
+            
+        });}
+         });
     /*--------------------------------------------------*/
     $('.view').click(function(){
        var title=$(this).attr('title');
@@ -373,8 +396,8 @@ $(function(){
     
     /*--------------------------------------------------*/
        $(document.body).on('click','.year',function(){
-    //  
-     // $(this).parent().find('.yy').val(year);
+    
+     $(this).parent().parent().find('.month').css({"display":"block"}).hide();
      $(this).parent().find('.month').toggle("slow");
         
      });
@@ -390,9 +413,10 @@ $(function(){
         type:"post",
         success:function(response){
             //alert(response);
-            var str='';
+           var  str="<option value='0'>select day</option>";
             var i=1;
             for(i;i<=response;i++){
+               
                 str=str+"<option value="+i+">"+i+"</option>";
             }
             
@@ -411,6 +435,7 @@ $(function(){
         var year=$(this).parent().parent().find('.year').attr('title');
         var month=$(this).parent().find('.months option:selected').val();
         var day=$(this).val();
+     if(day!=0){
         var date=year+"-"+month+"-"+day;
         $.ajax({
             url:"<?php echo $this->webroot;?>archive/checkDate",
@@ -424,6 +449,10 @@ $(function(){
             }
         })
         window.location.href='http://localhost/hamroawaz/archive/'+date;
+        }else{
+            alert('Invalid Choice');
+        }
+        
      });
     /*--------------------------------------------------*/
 });

@@ -7,7 +7,7 @@
     
     <?php foreach($cat as $q)
     {
-        ?><li style="float: left; padding: 0 10px;"><a href="<?php echo $this->webroot.'page/'.$q['Categorymanager']['slug'];?> "><strong><?php echo $q['Categorymanager']['title']; ?></strong></a></li><?php
+        ?><li style="float: left; padding: 0 10px;"><a href="<?php echo $this->webroot.'archivepage/'.$q['Categorymanager']['slug'].'/'.$date;?> "><strong><?php echo $q['Categorymanager']['title']; ?></strong></a></li><?php
     }
     ?>
     </ul>
@@ -16,7 +16,7 @@
     <ul class="contentslider">
      <?php 
      
-     $result=$this->requestAction('new/checkstandard/'.$standard.'/'.$classname);
+     $result=$this->requestAction('/archive/checkstandard/'.$standard.'/'.$date.'/'.$classname);
 
     if($result){
     foreach($result as $list){
@@ -39,7 +39,7 @@
     <div class="clearfix"></div>
     <div>
         <ul class="bxslider">
-         <?php $slider=$this->requestAction('new/checkslider/'.$standard.'/'.$classname);
+         <?php $slider=$this->requestAction('archive/checkslider/'.$standard.'/'.$date.'/'.$classname);
          if($slider){
           foreach($slider as $a)
             {
@@ -50,31 +50,73 @@
            ?>
         </ul>
     </div>
-   <div>
-    <div style="float: left; width: 70%; padding: 15px" class="headline"><h1>Headline</h1>
-    <hr />
-    <ul>
-    <?php $query=$this->requestAction('/new/getHeadline/'.$standard.'/'.$classname);
-    foreach($query as $list){?>
-    <a href="<?php echo $this->webroot;?>description/<?php echo $list['Newsmanager']['slug'];?>">
-    <li><img src="<?php echo $this->webroot;?>news/image/thumb1/<?php echo $list['Newsmanager']['image_file'];?>" width="200px" height="150px"/></li>
-  <div style="float: left;margin-left: 214px;margin-top: -159px">
-  <li><h3> <?php echo $list['Newsmanager']['title'];?></h3></li>
-  <li> <?php if($list['Newsmanager']['description']){
-    echo substr(strip_tags($list['Newsmanager']['description']),1,100);
-    }
-    else{
-        echo"No description available";}?></li>
-        </a>
- 
-  </div>
- 
-    <?php }
-    
+   <div class="clearfix"></div>
+    <div class="row" >
+<div class="span8">
+<?php $catlist=$this->requestAction('/archive/getCategory');
+
+foreach($catlist as $show){
     ?>
-    </ul>
-    </div>
-    <div style="float: left; padding: 5px "><h1>Widgets</h1>
+     
+<div class="category" style="float: left;width: 45%;border: 1px solid #F9F9F9;height: auto;display:block">
+<h3><p style="padding: 10px"><?php echo $show['Categorymanager']['title'];?></p></h3>
+<?php  $id=$show['Categorymanager']['id'];
+
+$requst=$this->requestAction('archive/getNewsId/'.$id.'/'.$date.'/'.$standard.'/'.$classname);
+
+if($requst){
+
+
+foreach($requst as $fetch){
+    $newsid=$fetch['News_category']['news_id'];
+$ft=$this->requestAction('archive/getNewsContent/'.$newsid.'/'.$date.'/'.$standard.'/'.$classname);
+if($ft){
+?>
+<div class="sub" style="float: left;margin-right:38px">
+<?php
+echo "<ul>";
+    foreach($ft as $content){
+      ?>
+       <a href="<?php echo $this->webroot;?>archivedescription/<?php echo $content['Newsmanager']['slug'];?>"  class="view" title="<?php echo $content['Newsmanager']['title'];?>">
+     <li><img src="<?php echo $this->webroot;?>news/image/thumb1/<?php echo $content['Newsmanager']['image_file'];?>"width="81px" class="view" title="<?php echo $content['Newsmanager']['title'];?>"/></li>
+        <?php
+        echo "<li><h4>".$content['Newsmanager']['title']."</h4></li>";
+        echo "<li>".substr(strip_tags($content['Newsmanager']['description']),1,100)."</li>";
+       echo "</a>";
+        ?>
+
+        <?php
+}
+?>
+
+<?php
+echo "</ul>";
+?>
+
+</div>
+
+<?php }else{
+   // echo "No data available";
+} 
+?>
+
+<?php
+}
+?>
+<a href="<?php echo $this->webroot;?>archivepage/<?php echo $show['Categorymanager']['title'].'/'.$date;?>">view all</a>
+<?php
+}else{
+   echo "";
+}
+?>
+
+</div>
+
+<?php
+}?>
+</div>
+<div class="span4" style="float:right;margin-top:-109px">
+<h1>Widgets</h1>
     <hr />
     <h2>Currency</h2>
     <hr />
@@ -94,77 +136,14 @@
         <tr><td>India</td><td>1</td><td><?php echo "NRs".$india;?></td></tr>
         <tr><td>USA</td><td>1</td><td><?php echo "NRs".$usa;?></td></tr>
         </table>
-    
-        <a href=" <?php echo $this->webroot; ?>New/currency">Currency Converter</a>
-    </div>
-    </div><div class="clearfix"></div>
-    <div class="row" >
-<div class="span8" style="float: left; width: 70%; padding: 15px">
-<?php $catlist=$this->requestAction('/new/getCategory');
-foreach($catlist as $show){
-    ?>
-     
-<div class="category" style="float: left;width: 45%;border: 1px solid #F9F9F9;height: auto;display:block">
-<h3><p style="padding: 10px"><a href="<?php echo $this->webroot;?>category/CategoryList/<?php echo $show['Categorymanager']['id'];?>"><?php echo $show['Categorymanager']['title'];?></a></p></h3>
-<?php  $id=$show['Categorymanager']['id'];
-
-$requst=$this->requestAction('new/getNewsId/'.$id);
-if(!empty($requst)){
-//debug($requst);die();
-
-foreach($requst as $fetch){
-    $newsid=$fetch['News_category']['news_id'];
-$ft=$this->requestAction('new/getNewsContent/'.$newsid.'/'.$standard.'/'.$classname);
-if($ft){
-?>
-<div class="sub" style="float: left;margin-right:38px">
-<?php
-echo "<ul>";
-    foreach($ft as $content){
-       // echo "<li>".$content['Newsmanager']['img_']."</li>";
-       ?>
-       <a href="<?php echo $this->webroot;?>description/<?php echo $content['Newsmanager']['slug'];?>">
-     <li><img src="<?php echo $this->webroot;?>news/image/thumb1/<?php echo $content['Newsmanager']['image_file'];?>"width="81px"/></li>  
-        <?php
-        echo "<li><h4>".$content['Newsmanager']['title']."</h4></li>";
-        echo "<li>".substr(strip_tags($content['Newsmanager']['description']),1,100)."</li>";
-        echo "</a>";
-        ?>
-
-        <?php
-}
-
-echo "</ul>";
-?>
-</div>
-
-<?php }else{
-   // echo "No data available";
-} }
-}else{
-   echo "";
-}?>
-</div>
-<?php
-}?>
-</div>
-<div class="span4">
+    <a href=" <?php echo $this->webroot; ?>New/currency">Currency Converter</a>
 <form action="" method="POST" >
-Filter By Category: <br/><select class="categoryfilter">
-<option value="0">select category </option>
-
-<?php foreach($cat as $listcat){?>
-<option value="<?php echo $listcat['Categorymanager']['id'];?>"><?php echo $listcat['Categorymanager']['title'];?></option>
-<?php }?>
-</select>
-<br />
-
-Filter By News Standards:<br /><select class="standardfilter">
+Filter By News Standards:<br /><select class="standardfilter" title="<?php echo $date?>">
 <option value="0">select standard</option>
-<option value="1" selected="selected">National</option>
-<option value="2">International</option>
+<option value="1" selected="">National</option>
+<option value="2" >International</option>
 </select>
-<div class="substandardfilter">
+<div class="substandardfilter" title="<?php if($cachedate = Cache::read('cached_date')){echo $cachedate;}else{echo 'NULL';}?>">
 <?php if($classname=='region'){ ?>
 Region:<select name="region" class="region">
 <option value="0" >Select Region</option>
@@ -225,13 +204,117 @@ Zone:<select name="zone" class="zone">
 <?php }?>
 </div>
 </form>
+<h1>Archives</h1>
+
+<?php
+/*
+$month=10;
+$year=2015;
+$this->requestAction('/new/days_in_month/'.$month.'/'.$year);*/
+$dates=$this->requestAction('new/getDates');
+ if($dates[0][0]==$dates[1][0]){
+ $startyear=$dates[0][0];   
+echo '<a class="year" title="'.$startyear.'" href="javascript:void(0)">'.$dates[0][0].'</a>';
+?>
+ <div style="display:none;" class="month">
+ <select class="months">
+ <option value="0">Select Month</option>
+ <?php 
+ for($j=1;$j<=12;$j++){
+    $res=$this->requestAction('archive/months_in_string/'.$j);
+   echo '<option value="'.$j.'">';
+    echo $res;
+    echo '</option>';
+    
+    
+ }
+ ?>
+ </select><br />
+ 
+ <select class="dayhere" title="lalustine" style="display: none;">
+ 
+ 
+ 
+ </select>
+ </div>
+ <?php
+ }else{
+ $diff=$dates[1][0]-$dates[0][0];
+ $startyear=$dates[0][0];
+ 
+ for($i=0;$i<=$diff;$i++){
+  ?>
+  <div>
+  <?php
+ echo '<a class="year" title="'.$startyear.'"href="javascript:void(0)">'.$startyear.'</a><br>';
+ ?>
+ <div style="display:none;" class="month">
+ <select class="months">
+ <option value="0">Select Month</option>
+ <?php 
+ for($j=1;$j<=12;$j++){
+    $res=$this->requestAction('/archive/months_in_string/'.$j);
+   echo '<option value="'.$j.'">';
+    echo $res;
+    echo '</option>';
+    
+    
+ }
+ ?>
+ </select><br />
+ 
+ <select class="dayhere" style="display: none;">
+ 
+ 
+ 
+ </select>
+ <?php 
+ 
+
+ ?>
+ </div>
+ </div>
+ <?php
+ ++$startyear;
+        
+    }
+ }
+
+
+?>
+
 <div class="loader" style="display: none;"><img src="<?php echo $this->webroot;?>img/loader.gif"/></div>
 </div>
 
-
-
-</div>   
+</div> 
 <div class="clearfix"></div>
+<div class="row">
+<ul>
+<h3>Mostly Viewed Post</h3>
+<?php $result=$this->requestAction('/archive/findmostView/'.$date.'/'.$standard.'/'.$classname);
+
+if($result!='NULL'){
+foreach($result as $mostviewed){
+    ?>
+    <a class="view" title="<?php echo $mostviewed['Newsmanager']['title'];?>" href="<?php echo $this->webroot;?>archivedescription/<?php echo $mostviewed['Newsmanager']['slug'];?>">
+    <li><img src="<?php echo $this->webroot;?>news/image/thumb1/<?php echo $mostviewed['Newsmanager']['image_file'];?>" width="200px" height="150px" /></li>
+  <div style="float: left;margin-left: 214px;margin-top: -159px">
+  <li><h3> <?php echo $mostviewed['Newsmanager']['title'];?></h3></li>
+  <li> <?php if($mostviewed['Newsmanager']['description']){
+    echo substr(strip_tags($mostviewed['Newsmanager']['description']),1,100);
+    }
+    else{
+        echo"No description available";}?></li>
+        </a>
+ 
+  </div>
+ <?php
+}}else{
+    echo "<h5>NO POST AVAILABLE</h5>";
+}
+?>
+</ul>
+</div>
 <div>
         <ul class="audioslider">
         
@@ -256,7 +339,7 @@ Your browser does not support the audio element.
     <ul><li style="float: left; padding: 0 10px;"><a href="<?php echo $this->webroot;?>"><strong>Home</strong></a></li>
     <?php foreach($cat as $q)
     {
-        ?><li style="float: left; padding: 0 10px;"><a href="<?php echo $this->webroot.'page/'.$q['Categorymanager']['slug'];?> "><strong><?php echo $q['Categorymanager']['title']; ?></strong></a></li><?php
+        ?><li style="float: left; padding: 0 10px;"><a href="<?php echo $this->webroot.'archivepage/'.$q['Categorymanager']['slug'].'/'.$date;?> "><strong><?php echo $q['Categorymanager']['title']; ?></strong></a></li><?php
     }
     ?>
     </ul>
@@ -264,35 +347,28 @@ Your browser does not support the audio element.
     </div>
     </div>
 <script>
-
-
 $(function(){
-    
-    $('.categoryfilter').change(function(){
-        var id;
-        id=this.value;
-          if(id!=0){
-        $.ajax({
-           url: "<?php echo $this->webroot;?>new/headLinefilter",
-            data: "id="+id,
-            type: "post",
-            dataType: "html",
-            success: function(response){
-            $('.headline').html(response);
-            } 
-            
-        });
-        }
-    });
+   
+      /*--------------------------------------------------*/
     $('.standardfilter').change(function(){
-        
+       
         var id;
         id=this.value;
+         var date=$(this).attr('title');
+         alert(date);
+        if(id==1){
+        $('.substandardfilter').show();
+        }
+         else if(id==2){
+             $('.substandardfilter').hide();
+                    
+         }           
+               
           if(id!=0){
         $('.loader').show();
            $.ajax({
-           url: "<?php echo $this->webroot;?>new/newstandard",
-            data: "standard="+id,
+           url: "<?php echo Router::url('/',true);?>archive/newstandard",
+             data: "standard="+id+"&date="+date,
             type: "post",
             dataType: "html",
             success: function(response){
@@ -303,14 +379,17 @@ $(function(){
             
         });}
     });
-    $('.region').change(function(){
+    
+     $('.region').change(function(){
        var id=this.value; 
 var className = $('.region').attr('class');
+var date=$('.standardfilter').attr('title');
         if(id!=0){
         $('.loader').show();
+
            $.ajax({
-           url: "<?php echo $this->webroot;?>new/newsubstandard",
-            data: 'sub='+id+'&classname='+className,
+           url: "<?php echo Router::url('/',true);?>archive/newsubstandard",
+            data: 'sub='+id+'&classname='+className+'&date='+date,
             type: "post",
             dataType: "html",
             success: function(response){
@@ -321,15 +400,15 @@ var className = $('.region').attr('class');
             
         });}
     });
-    
     $('.zone').change(function(){
        var id=this.value; 
 var className = $('.zone').attr('class');
+var date=$('.standardfilter').attr('title');
         if(id!=0){
         $('.loader').show();
            $.ajax({
-           url: "<?php echo $this->webroot;?>new/newsubstandard",
-            data: 'sub='+id+'&classname='+className,
+           url: "<?php echo Router::url('/',true);?>archive/newsubstandard",
+            data: 'sub='+id+'&classname='+className+'&date='+date,
             type: "post",
             dataType: "html",
             success: function(response){
@@ -339,8 +418,28 @@ var className = $('.zone').attr('class');
             } 
             
         });}
+         });
+    /*--------------------------------------------------*/
+    $('.view').click(function(){
+       var title=$(this).attr('title');
+       //alert(title);
+    $.ajax({
+       url: "<?php echo Router::url('/',true);?>archive/checkview",
+       data:"title="+title, 
+       type:"post",
+       //dataType:"html",
+       success: function(response){
+        alert(response);
+       }
+       
     });
+    });
+    
+    
+    
+    /*--------------------------------------------------*/
 });
+
 $('.bxslider').bxSlider({
   auto: true,
    mode: 'fade',

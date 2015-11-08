@@ -6,7 +6,7 @@
     <ul><li style="float: left; padding: 0 10px;"><a href="<?php echo $this->webroot;?>"><strong>Home</strong></a></li>
     <?php foreach($cat as $q)
     {
-        ?><li style="float: left; padding: 0 10px;"><a href="<?php echo $this->webroot.'page/'.$q['Categorymanager']['slug'];?> "><strong><?php echo $q['Categorymanager']['title']; ?></strong></a></li><?php
+        ?><li style="float: left; padding: 0 10px;"><a href="<?php echo $this->webroot.'archivepage/'.$q['Categorymanager']['slug'].'/'.$date;?> "><strong><?php echo $q['Categorymanager']['title']; ?></strong></a></li><?php
     }
     ?>
     </ul>
@@ -48,51 +48,26 @@
            ?>
         </ul>
     </div>
-   <div>
-
-     <div style="float: left; padding: 5px "><h1>Widgets</h1>
-    <hr />
-    <h2>Currency</h2>
-    <hr />
-        <?php
-        $arab= $this->requestAction('/new/get_currency/AED/NPR/1');
-        $uk= $this->requestAction('/new/get_currency/GBP/NPR/1');
-        $canada= $this->requestAction('/new/get_currency/CAD/NPR/1');
-        $Australia= $this->requestAction('/new/get_currency/AUD/NPR/1');
-        $india= $this->requestAction('/new/get_currency/INR/NPR/1');
-        $usa= $this->requestAction('/new/get_currency/USD/NPR/1');
-        ?>
-        <table>
-        <tr><td>UAE</td><td>1</td><td><?php echo "NRs".$arab;?></td></tr>
-        <tr><td>UK</td><td>1</td><td><?php echo  "NRs".$uk;;?></td></tr>
-        <tr><td>UAE</td><td>1</td><td><?php echo "NRs".$canada;?></td></tr>
-        <tr><td>Australia</td><td>1</td><td><?php echo "NRs".$Australia;?></td></tr>
-        <tr><td>India</td><td>1</td><td><?php echo "NRs".$india;?></td></tr>
-        <tr><td>USA</td><td>1</td><td><?php echo "NRs".$usa;?></td></tr>
-        </table>
-    
-        <a href=" <?php echo $this->webroot; ?>New/currency">Currency Converter</a>
-    </div>
-    </div><div class="clearfix"></div>
+   <div class="clearfix"></div>
     <div class="row" >
-<div class="span8" style="float: left; width: 70%; padding: 15px">
+<div class="span8">
 <?php $catlist=$this->requestAction('/archive/getCategory');
 
 foreach($catlist as $show){
     ?>
      
 <div class="category" style="float: left;width: 45%;border: 1px solid #F9F9F9;height: auto;display:block">
-<h3><p style="padding: 10px"><a href="<?php echo $this->webroot;?>category/CategoryList/<?php echo $show['Categorymanager']['id'];?>"><?php echo $show['Categorymanager']['title'];?></a></p></h3>
+<h3><p style="padding: 10px"><?php echo $show['Categorymanager']['title'];?></p></h3>
 <?php  $id=$show['Categorymanager']['id'];
 
-$requst=$this->requestAction('archive/getNewsId/'.$id.'/'.$date);
-//debug($requst);die();
+$requst=$this->requestAction('archive/getNewsId/'.$id.'/'.$date.'/'.$standard);
+
 if($requst){
 
 
 foreach($requst as $fetch){
     $newsid=$fetch['News_category']['news_id'];
-$ft=$this->requestAction('archive/getNewsContent/'.$newsid.'/'.$date);
+$ft=$this->requestAction('archive/getNewsContent/'.$newsid.'/'.$date.'/'.$standard);
 if($ft){
 ?>
 <div class="sub" style="float: left;margin-right:38px">
@@ -100,11 +75,11 @@ if($ft){
 echo "<ul>";
     foreach($ft as $content){
       ?>
-       <a href="<?php echo $this->webroot;?>description/<?php echo $content['Newsmanager']['slug'];?>"  class="view" title="<?php echo $content['Newsmanager']['title'];?>">
+       <a href="<?php echo $this->webroot;?>archivedescription/<?php echo $content['Newsmanager']['slug'].'/'.$date;?>"  class="view" title="<?php echo $content['Newsmanager']['title'];?>">
      <li><img src="<?php echo $this->webroot;?>news/image/thumb1/<?php echo $content['Newsmanager']['image_file'];?>"width="81px" class="view" title="<?php echo $content['Newsmanager']['title'];?>"/></li>
         <?php
         echo "<li><h4>".$content['Newsmanager']['title']."</h4></li>";
-        echo "<li>".substr(strip_tags($list['Newsmanager']['description']),1,100)."</li>";
+        echo "<li>".substr(strip_tags($content['Newsmanager']['description']),1,100)."</li>";
        echo "</a>";
         ?>
 
@@ -126,7 +101,7 @@ echo "</ul>";
 <?php
 }
 ?>
-<a href="<?php echo $this->webroot;?>page/<?php echo $show['Categorymanager']['title'];?>">view all</a>
+<a href="<?php echo $this->webroot;?>archivepage/<?php echo $show['Categorymanager']['title'].'/'.$date;?>">view all</a>
 <?php
 }else{
    echo "";
@@ -138,18 +113,31 @@ echo "</ul>";
 <?php
 }?>
 </div>
-<div class="span4">
+<div class="span4" style="float:right;margin-top:-109px">
+<h1>Widgets</h1>
+    <hr />
+    <h2>Currency</h2>
+    <hr />
+        <?php
+        $arab= $this->requestAction('/new/get_currency/AED/NPR/1');
+        $uk= $this->requestAction('/new/get_currency/GBP/NPR/1');
+        $canada= $this->requestAction('/new/get_currency/CAD/NPR/1');
+        $Australia= $this->requestAction('/new/get_currency/AUD/NPR/1');
+        $india= $this->requestAction('/new/get_currency/INR/NPR/1');
+        $usa= $this->requestAction('/new/get_currency/USD/NPR/1');
+        ?>
+        <table>
+        <tr><td>UAE</td><td>1</td><td><?php echo "NRs".$arab;?></td></tr>
+        <tr><td>UK</td><td>1</td><td><?php echo  "NRs".$uk;;?></td></tr>
+        <tr><td>UAE</td><td>1</td><td><?php echo "NRs".$canada;?></td></tr>
+        <tr><td>Australia</td><td>1</td><td><?php echo "NRs".$Australia;?></td></tr>
+        <tr><td>India</td><td>1</td><td><?php echo "NRs".$india;?></td></tr>
+        <tr><td>USA</td><td>1</td><td><?php echo "NRs".$usa;?></td></tr>
+        </table>
+    
+        <a href=" <?php echo $this->webroot; ?>New/currency">Currency Converter</a>
 <form action="" method="POST" >
-Filter By Category: <br/><select class="categoryfilter" title="<?php if($cachedate = Cache::read('cached_date')){echo $cachedate;}else{echo 'NULL';}?>">
-<option value="0">select category </option>
-
-<?php foreach($cat as $listcat){?>
-<option value="<?php echo $listcat['Categorymanager']['id'];?>"><?php echo $listcat['Categorymanager']['title'];?></option>
-<?php }?>
-</select>
-<br />
-
-Filter By News Standards:<br /><select class="standardfilter">
+Filter By News Standards:<br /><select class="standardfilter" title="<?php echo $date;?>">
 <option value="0">select standard</option>
 <option value="1" <?php if($standard==1){echo "selected";}?>>National</option>
 <option value="2" <?php if($standard==2){echo "selected";}?>>International</option>
@@ -181,7 +169,6 @@ Zone:<select name="zone" class="zone">
 <br />
 </div>
 </form>
-<div >
 <h1>Archives</h1>
 
 <?php
@@ -191,7 +178,31 @@ $year=2015;
 $this->requestAction('/new/days_in_month/'.$month.'/'.$year);*/
 $dates=$this->requestAction('new/getDates');
  if($dates[0][0]==$dates[1][0]){
-echo '<a class="year" href="#">'.$dates[0][0].'</a>';
+ $startyear=$dates[0][0];   
+echo '<a class="year" title="'.$startyear.'" href="javascript:void(0)">'.$dates[0][0].'</a>';
+?>
+ <div style="display:none;" class="month">
+ <select class="months">
+ <option value="0">Select Month</option>
+ <?php 
+ for($j=1;$j<=12;$j++){
+    $res=$this->requestAction('archive/months_in_string/'.$j);
+   echo '<option value="'.$j.'">';
+    echo $res;
+    echo '</option>';
+    
+    
+ }
+ ?>
+ </select><br />
+ 
+ <select class="dayhere" title="lalustine" style="display: none;">
+ 
+ 
+ 
+ </select>
+ </div>
+ <?php
  }else{
  $diff=$dates[1][0]-$dates[0][0];
  $startyear=$dates[0][0];
@@ -236,15 +247,39 @@ echo '<a class="year" href="#">'.$dates[0][0].'</a>';
 
 ?>
 
-
-</div>
 <div class="loader" style="display: none;"><img src="<?php echo $this->webroot;?>img/loader.gif"/></div>
 </div>
 
-
-
-</div>   
+</div>
+  
 <div class="clearfix"></div>
+<div class="row">
+<ul>
+<h3>Mostly Viewed Post</h3>
+<?php $result=$this->requestAction('/archive/findmostView/'.$date.'/'.$standard);
+
+if($result!='NULL'){
+foreach($result as $mostviewed){
+    ?>
+    <a class="view" title="<?php echo $mostviewed['Newsmanager']['title'];?>" href="<?php echo $this->webroot;?>archivedescription/<?php echo $mostviewed['Newsmanager']['slug'].'/'.$date;?>">
+    <li><img src="<?php echo $this->webroot;?>news/image/thumb1/<?php echo $mostviewed['Newsmanager']['image_file'];?>" width="200px" height="150px" /></li>
+  <div style="float: left;margin-left: 214px;margin-top: -159px">
+  <li><h3> <?php echo $mostviewed['Newsmanager']['title'];?></h3></li>
+  <li> <?php if($mostviewed['Newsmanager']['description']){
+    echo substr(strip_tags($mostviewed['Newsmanager']['description']),1,100);
+    }
+    else{
+        echo"No description available";}?></li>
+        </a>
+ 
+  </div>
+ <?php
+}}else{
+    echo "<h5>NO POST AVAILABLE</h5>";
+}
+?>
+</ul>
+</div>
 <div>
         <ul class="audioslider">
         
@@ -269,7 +304,7 @@ Your browser does not support the audio element.
     <ul><li style="float: left; padding: 0 10px;"><a href="<?php echo $this->webroot;?>"><strong>Home</strong></a></li>
     <?php foreach($cat as $q)
     {
-        ?><li style="float: left; padding: 0 10px;"><a href="<?php echo $this->webroot.'page/'.$q['Categorymanager']['slug'];?> "><strong><?php echo $q['Categorymanager']['title']; ?></strong></a></li><?php
+        ?><li style="float: left; padding: 0 10px;"><a href="<?php echo $this->webroot.'archivepage/'.$q['Categorymanager']['slug'].'/'.$date;?> "><strong><?php echo $q['Categorymanager']['title']; ?></strong></a></li><?php
     }
     ?>
     </ul>
@@ -277,22 +312,27 @@ Your browser does not support the audio element.
     </div>
     </div>
 <script>
-
-
 $(function(){
     
-   
+      /*--------------------------------------------------*/
     $('.standardfilter').change(function(){
-        
+       
         var id;
         id=this.value;
-        var date=$(this).attr('title');
-        alert(date);
+         var date=$(this).attr('title');
+        if(id==1){
+        $('.substandardfilter').show();
+        }
+         else if(id==2){
+             $('.substandardfilter').hide();
+                    
+         }           
+               
           if(id!=0){
         $('.loader').show();
            $.ajax({
-           url: "<?php echo $this->webroot;?>archive/newstandard",
-            data: "standard="+id,
+           url: "<?php echo Router::url('/',true);?>archive/newstandard",
+             data: "standard="+id+"&date="+date,
             type: "post",
             dataType: "html",
             success: function(response){
@@ -303,15 +343,18 @@ $(function(){
             
         });}
     });
-    $('.region').change(function(){
+    
+     $('.region').change(function(){
        var id=this.value; 
 var className = $('.region').attr('class');
+alert(className);
+ var date=$('.standardfilter').attr('title');
         if(id!=0){
         $('.loader').show();
 
            $.ajax({
-           url: "<?php echo $this->webroot;?>new/newsubstandard",
-            data: 'sub='+id+'&classname='+className,
+           url: "<?php echo Router::url('/',true);?>archive/newsubstandard",
+            data: 'sub='+id+'&classname='+className+'&date='+date,
             type: "post",
             dataType: "html",
             success: function(response){
@@ -325,11 +368,12 @@ var className = $('.region').attr('class');
     $('.zone').change(function(){
        var id=this.value; 
 var className = $('.zone').attr('class');
+var date=$('.standardfilter').attr('title');
         if(id!=0){
         $('.loader').show();
            $.ajax({
-           url: "<?php echo $this->webroot;?>new/newsubstandard",
-            data: 'sub='+id+'&classname='+className,
+           url: "<?php echo Router::url('/',true);?>archive/newsubstandard",
+            data: 'sub='+id+'&classname='+className+'&date='+date,
             type: "post",
             dataType: "html",
             success: function(response){
@@ -339,60 +383,26 @@ var className = $('.zone').attr('class');
             } 
             
         });}
+         });
+    /*--------------------------------------------------*/
+    $('.view').click(function(){
+       var title=$(this).attr('title');
+       //alert(title);
+    $.ajax({
+       url: "<?php echo Router::url('/',true);?>archive/checkview",
+       data:"title="+title, 
+       type:"post",
+       //dataType:"html",
+       success: function(response){
+        alert(response);
+       }
+       
+    });
     });
     
-    /*--------------------------------------------------*/
-       $(document.body).on('click','.year',function(){
-     
-     // $(this).parent().find('.yy').val(year);
-     $(this).parent().find('.month').toggle("slow");
-        
-     });
-           
-    $(document.body).on('change','.months',function(){
-     var month=$(this).val();
-      var year=$(this).parent().parent().find('.year').attr('title'); 
-
-      $.ajax({
-        url:"<?php $this->webroot;?>days_in_month",
-        data:"month="+month+"&year="+year,
-        type:"post",
-        success:function(response){
-        
-            var str='';
-            var i=1;
-            for(i;i<=response;i++){
-                str=str+"<option value="+i+">"+i+"</option>";
-            }
-            
-         $('.months').parent().find('.dayhere').html(str);
-        
-         
-        }
-      })
-       $(this).parent().find('.dayhere').toggle("slow");
-      });
-
-     $(document.body).on('change','.dayhere',function(){
-        var year=$(this).parent().parent().find('.year').attr('title');
-        var month=$(this).parent().find('.months option:selected').val();
-        var day=$(this).val();
-        var date=year+"-"+month+"-"+day;
-        $.ajax({
-            url:"<?php echo $this->webroot;?>archive/checkDate",
-            data:"date="+date,
-            type:"post",
-            success:function(response){
-                if(response=='true'){
-                     window.location.href='http://localhost/hamroawaz';
-                }
-            }
-        })
-        window.location.href='http://localhost/hamroawaz/archive/'+date;
-     });
-    /*--------------------------------------------------*/
     
     
+    /*--------------------------------------------------*/
 });
 $('.bxslider').bxSlider({
   auto: true,
@@ -414,4 +424,5 @@ minSlides: 4,
   slideHeight:50,
   slideMargin: 10
 });
+
 </script>

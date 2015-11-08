@@ -2,12 +2,13 @@
     App::uses('CakeEmail', 'Network/Email');
 class ArchivepageController extends AppController
 {
-    function index($slug)
+    function index($slug,$date)
     {
-        $cachedate = Cache::read('cached_date');
-        $convert=new DateTime($cachedate);
-        $cachedate=$convert->format('Y-m-d');
-        //echo $title;
+        
+      
+       // $cachedate=$convert->format('Y-m-d');
+        //$this->set('cachedate',$cachedate);
+        $this->set('date',$date);
         $this->set('title','HamroawazPage');
         $this->loadModel('Categorymanager');
         $this->loadModel('Newsmanager');
@@ -18,10 +19,10 @@ class ArchivepageController extends AppController
         ));
         //debug($catname['Categorymanager']['id']);die();
         $this->set('catname',$catname);
-        $slider=$this->Newsmanager->find('all',array('conditions'=>array('created_date'=>$cachedate)));
+        $slider=$this->Newsmanager->find('all',array('conditions'=>array('created_date'=>$date)));
          $this->set('slider',$slider);
         $q=$this->Newsmanager->find('all',array(
-                                'conditions'=>array('created_date'=>$cachedate),
+                                'conditions'=>array('created_date'=>$date),
                                'order' => array('id' => 'DESC'),
                                'limit'=>5
                                ));
@@ -38,7 +39,7 @@ class ArchivepageController extends AppController
    
      function get_currency($from_Currency, $to_Currency, $amount) 
      {
-    $amount = urlencode($amount);
+    $amount = urlencode($amount); 
     $from_Currency = urlencode($from_Currency);
     $to_Currency = urlencode($to_Currency);
 
@@ -82,12 +83,13 @@ class ArchivepageController extends AppController
         $this->set('title','currency converter');
         
     }
-    function getHeadline($id){
-         $cachedate = Cache::read('cached_date');
-        $convert=new DateTime($cachedate);
-        $cachedate=$convert->format('Y-m-d');
+    function getHeadline($id,$date){
+         
+        $convert=new DateTime($date);
+        $date=$convert->format('Y-m-d');
         $this->loadModel('Newsmanager');
-         $q=$this->Newsmanager->find('all',array('conditions'=>array('id'=>$id,'created_date'=>$cachedate),'order' => array('id' => 'DESC'),));
+         $q=$this->Newsmanager->find('all',array('conditions'=>array('id'=>$id,'created_date'=>$date),'order' => array('id' => 'DESC')));
+        
          return $q;
          
             }

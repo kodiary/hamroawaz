@@ -25,6 +25,7 @@ $convert = new DateTime($date);
        $slider=$this->Newsmanager->find('all',$arr);
        $this->set('slider',$slider);   
        $q=$this->Newsmanager->find('all',array('conditions'=>array('created_date'=>$date),'order' => array('id' => 'DESC'),'limit'=>5));
+       
          $this->set('val',$q);
          $this->set('date',$date);
       }
@@ -116,24 +117,35 @@ $convert = new DateTime($date);
     
     
     
-    function getNewsId($id,$date){
+    function getNewsId($id,$date,$standard='0',$classname='0'){
       
  $this->loadModel('News_category');
  $this->loadModel('Newsmanager');
          $arr['conditions']=array('cat_id'=>$id);
     $q=$this->News_category->find('all',$arr);
-
+    
+if($q){
+    
     foreach($q as $check){
         $nid=$check['News_category']['news_id'];
         
+        if($classname=='0'&& $standard=='0'){
        $collect[]=$this->Newsmanager->find('first',array('conditions'=>array('id'=>$nid,'created_date'=>$date)));
+      // debug($collect);die();
+       }
+       elseif($classname=='0'){
+         $collect[]=$this->Newsmanager->find('first',array('conditions'=>array('id'=>$nid,'created_date'=>$date,'national'=>$standard)));
+       }
+       else{
+         $collect[]=$this->Newsmanager->find('first',array('conditions'=>array('id'=>$nid,'created_date'=>$date,'national'=>1,$classname=>$standard)));
+       }
     }
     $collect=array_filter($collect);
    //debug($collect);die();
     if(!empty($collect)){
         return $q;
     }
-        
+      }  
 
      }
      function getNewsContent($id,$date,$standard='0',$classname='0'){
@@ -170,6 +182,7 @@ $convert = new DateTime($date);
         }
         
         function newstandard(){
+           // die('here');
         $this->layout='blank';    
        $standard=$_POST['standard'];
        $date=$_POST['date'];
@@ -187,14 +200,14 @@ $convert = new DateTime($date);
       
         }
         function checkstandard($standard,$date,$classname='0'){
-            
             $this->loadModel('Newsmanager');
-            
+                    
              if($classname== '0'){
              $q=$this->Newsmanager->find('all',array('conditions'=>array('created_date'=>$date,'national'=>$standard),'order' => array('id' => 'DESC'),'limit'=>5));
              return $q;
             }else{
        $q=$this->Newsmanager->find('all',array('conditions'=>array('created_date'=>$date,'national'=>1,$classname=>$standard),'order' => array('id' => 'DESC'),'limit'=>5));
+        
          return $q;
     }
    }
@@ -212,10 +225,11 @@ $convert = new DateTime($date);
         
         }
         
-         function newsubstandard(){
+       function newsubstandard(){
             
        $standard=$_POST['sub'];
        $classname=$_POST['classname'];
+       $date=$_POST['date'];
        $this->set('title','HamroAwaz');
        $this->loadModel('Categorymanager');
        $this->loadModel('Newsmanager');
@@ -223,25 +237,14 @@ $convert = new DateTime($date);
        $this->set('cat',$qcat);
        $this->set('standard',$standard);
        $this->set('classname',$classname);
+       $this->set('date',$date);
       
         }
-        //function checksubnewstandard($standard,classname)
+        
  
  function checkview(){
     $title=$_POST['title'];
-    $this->layout='blank';
-    
-   // echo $_SERVER['REMOTE_ADDR'];die();    
- /*   $ip=$this->get_client_ip_server();
-    echo $ip;die();
-    $this->loadModel('Ipaddress');
-    
-    if($ip=='UNKNOWN'){
-    $result=$this->Ipaddress->find('first',array('conditions'=>array('ip'=>$ip)));
-    if(empty($result)){
-    $arr['ip']=$ip;
-    $this->Ipaddress->create();
-    $this->Ipaddress->save($arr);*/    
+    $this->layout='blank'; 
     $this->loadModel('Newsmanager');
     $result=$this->Newsmanager->find('first',array('conditions'=>array('title'=>$title)));
     $view=$result['Newsmanager']['views'];
@@ -249,8 +252,7 @@ $convert = new DateTime($date);
     $view++;
     $data = array('id' => $id, 'views' =>$view);
     $this->Newsmanager->save($data);
-    //}
-    
+   
  }
  
  function get_client_ip_server() {
@@ -273,32 +275,37 @@ $convert = new DateTime($date);
 	return $ipaddress;
 }
 
-function findmostView($date){
- 
-    $this->loadModel('Newsmanager');
-    $q=$this->Newsmanager->find('all',array('conditions'=>array('created_date'=>$date)));
-    if(!empty($q)){
-    $count=$this->Newsmanager->find('count',array('conditions'=>array('created_date'=>$date)));
+function findmostView($date,$standard='0',$classname='0'){
     
-  
-   //$arr=array();
-foreach($q as $mostview){
-  $arr[]=$mostview['Newsmanager']['views'];
+    $this->loadModel('Newsmanager');
    
-}
-rsort($arr);
-for($i=0;$i<=$count-1;$i++){
-$resarr[]=$this->Newsmanager->find('first',array('conditions'=>array('views'=>$arr[$i])));
-
+    if($standard=='0' && $classname=='0'){
+    $q=$this->Newsmanager->find('all',array('conditions'=>array('created_date'=>$date,'views !='=>'0')));
+    }
+    elseif($standard!='0' && $classname=='0'){
+        $q=$this->Newsmanager->find('all',array('conditions'=>array('created_date'=>$date,'national'=>$standard,'views !='=>'0')));
+    }else{
+        $q=$this->Newsmanager->find('all',array('conditions'=>array('created_date'=>$date,'national'=>1,$standard=>$classname,'views !='=>'0')));
+    }
+    if(!empty($q)){
+        $count=$this->Newsmanager->find('count',array('conditions'=>array('created_date'=>$date,'views !='=>'0')));
+            foreach($q as $mostview){
+                $arr[0]=$mostview['Newsmanager']['views'];
+                $arr[1]=$mostview['Newsmanager']['id'];
+                $assoc[]=$arr;
+                        }
+ 
+    rsort($assoc);
+    for($i=0;$i<=$count-1;$i++){
+        $resarr[]=$this->Newsmanager->find('first',array('conditions'=>array('views'=>$assoc[$i][0],'id'=>$assoc[$i][1])));
+             }
   
-}
-
-return $resarr;
-}else{
+    return $resarr;
+      }else{
     $result='NULL';
-return $result;
-}
-}
+    return $result;
+        }
+    }
 
 function getDates(){
     $this->loadModel('Newsmanager');
@@ -357,16 +364,13 @@ function months_in_string($month_int){
 
 function checkDate(){
     $this->layout='blank';
-    if($cachedate = Cache::read('cached_date')) {
-    Cache::delete('cached_date');
-    }
-     $dateObject = new DateTime(date('Y-m-d G:i:s'));
+   $dateObject = new DateTime(date('Y-m-d G:i:s'));
        $today=$dateObject->format('Y-m-d');
        $date=$_POST['date'];
        
       $convert = new DateTime($date);
  $date=$convert->format('Y-m-d');
- //echo $date;die();
+ 
        if($date==$today){
         echo 'true';die();
        }else{

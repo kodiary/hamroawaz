@@ -1,8 +1,18 @@
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.5&appId=506034659558768";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
 <script src="<?php echo $this->webroot;?>js/jquery.bxslider.min.js"></script>
 <link href="<?php echo $this->webroot;?>css/jquery.bxslider.css" rel="stylesheet" />
 <div class="main" style="margin: 30px auto;width: 980px;">
     <div>
-    <ul><li style="float: left; padding: 0 10px;"><a href="<?php echo $this->webroot;?>"><strong>Home</strong></a></li>
+    <ul><li style="float: left; padding: 0 10px;"><a href="<?php echo $this->webroot;?>"><strong>Home </strong></a></li>
     <?php foreach($cat as $q)
     {
         ?><li style="float: left; padding: 0 10px;"><a href="<?php echo $this->webroot.'archivepage/'.$q['Categorymanager']['slug'].'/'.$date;?> "><strong><?php echo $q['Categorymanager']['title']; ?></strong></a></li><?php
@@ -13,119 +23,62 @@
     <div >
     <ul class="contentslider">
      <?php 
-     
-     if(!empty($val)){
-      
+     if($val){
     foreach($val as $list){
-        
     ?>
-  <li><a href="<?php echo $this->webroot;?>archivedescription/<?php echo $list['Newsmanager']['slug'].'/'.$date;?>"><img class="view" title="<?php echo $list['Newsmanager']['title'];?>" src="<?php echo $this->webroot;?>news/image/thumb1/<?php echo $list['Newsmanager']['image_file'];?>"width=""/></a><h4><?php echo $list['Newsmanager']['title'];?></h4>
+  <li><a href="<?php echo $this->webroot;?>archivedescription/<?php echo $list['Newsmanager']['slug'].'/'.$date;?>"><img class="view" title="<?php echo $list['Newsmanager']['title'];?>" src="<?php echo $this->webroot;?>news/image/thumb1/<?php echo $list['Newsmanager']['image_file'];?>"/></a><h4><?php echo $list['Newsmanager']['title'];?></h4>
  <?php
  
  if($list['Newsmanager']['description']){
-      echo  substr($list['Newsmanager']['description'],0,100);
-      echo '<br/><a class="view" title="'.$list['Newsmanager']['title'].'" href="'.$this->webroot.'archivedescription/'.$list['Newsmanager']['slug'].'/'.$date.'">view</a>';
+      echo substr($list['Newsmanager']['description'],0,100);
+       echo '<br/><a class="view" title="'.$list['Newsmanager']['title'].'" href="'.$this->webroot.'archivedescription/'.$list['Newsmanager']['slug'].'/'.$date.'">view</a>';
     }else{
         echo "<span style='color:red'>No Description Avaialble</span>";
     }
  
 ?>
   </li> 
-    
-        <?php
-    }}else{
-        ?>
-        <li><img src="<?php echo $this->webroot;?>img/no.png"width="980px" height="300px"/><h4></h4></li>
-        
-        <?php
-    }?>
+    <?php }}?>
     </ul>
     </div>
     <div class="clearfix"></div>
-    <div>
-    <br />
-        <ul class="bxslider">
-       <?php
-       if(!empty($slider)){
-           foreach($slider as $a)
-            {
-            ?><li><img  src="<?php echo $this->webroot;?>slider/<?php echo $a['Newsmanager']['slider'];?>" title="<?php echo $a['Newsmanager']['title'];?>" /></li><?php
-            }
-            }else{
-                ?>
-                <li><img src="<?php echo $this->webroot;?>img/no.png"width="980px" height="300px"/><h4></h4></li>
-           <?php }
-           ?>
-        </ul>
-    </div>
-  <div class="clearfix"></div>
-    <div class="row" >
-<div class="span8">
-<?php $catlist=$this->requestAction('/archive/getCategory');
-
-foreach($catlist as $show){
-    ?>
+   
+   <div>
+    <div style="float: left; width: 70%; padding: 15px"><h1>  <?php 
+     //debug($catvar);die();
+     //debug($query);die();
+     if(!empty($query)){
      
-<div class="category" style="float: left;width: 45%;border: 1px solid #F9F9F9;height: auto;display:block">
-<h3><p style="padding: 10px"><?php echo $show['Categorymanager']['title'];?></p></h3>
-<?php  $id=$show['Categorymanager']['id'];
-
-$requst=$this->requestAction('archive/getNewsId/'.$id.'/'.$date);
-
-if($requst){
-
-
-foreach($requst as $fetch){
-    $newsid=$fetch['News_category']['news_id'];
-$ft=$this->requestAction('archive/getNewsContent/'.$newsid.'/'.$date);
-if($ft){
-?>
-<div class="sub" style="float: left;margin-right:38px">
-<?php
-echo "<ul>";
-    foreach($ft as $content){
-      ?>
-       <a href="<?php echo $this->webroot;?>archivedescription/<?php echo $content['Newsmanager']['slug'].'/'.$date;?>"  class="view" title="<?php echo $content['Newsmanager']['title'];?>">
-     <li><img src="<?php echo $this->webroot;?>news/image/thumb1/<?php echo $content['Newsmanager']['image_file'];?>"width="81px" class="view" title="<?php echo $content['Newsmanager']['title'];?>"/></li>
-        <?php
-        echo "<li><h4>".$content['Newsmanager']['title']."</h4></li>";
-        echo "<li>".substr(strip_tags($content['Newsmanager']['description']),1,100)."</li>";
-       echo "</a>";
-        ?>
-
-        <?php
-}
-?>
-
-<?php
-echo "</ul>";
-?>
-
-</div>
-
-<?php }else{
-   // echo "No data available";
-} 
-?>
-
-<?php
-}
-?>
-<a href="<?php echo $this->webroot;?>archivepage/<?php echo $show['Categorymanager']['title'].'/'.$date;?>">view all</a>
-<?php
-}else{
-   echo "";
-}
-?>
-
-</div>
-
-<?php
-}?>
-</div>
-<div class="span4" style="float:right;margin-top:-109px">
+        echo $query['Newsmanager']['title'];
+        
+        }else{
+            echo "No Title Available";
+        }?></h1>
+    <hr />
+    <ul>
+  <li> <img src="<?php echo $this->webroot;?>news/image/thumb/<?php echo $query['Newsmanager']['image_file'];?>" /></li><br
+  <div style="float: left;margin-left: 214px;margin-top: -159px">
+  <li> <?php if($query['Newsmanager']['description']){
+    echo $query['Newsmanager']['description'];
+    ?>
+    
+    <div class="fb-like"  data-layout="standard" data-action="like" data-show-faces="true" data-share="true"></div>
+  
+    <?php
+  }
+    else{
+        echo"No description available";}?>
+     
+</li>
+<div class="fb-comments" data-width="600" data-numposts="100"></div>
+ 
+  </div>
+    </ul>
+    </div>
+    <div class="span4"  style="float:right;margin-top:-7px">
+ 
   <h1>Widgets</h1>
-  <hr />
+   <hr />
     <h2>Currency</h2>
     <hr />
         <?php
@@ -144,11 +97,9 @@ echo "</ul>";
         <tr><td>India</td><td>1</td><td><?php echo "NRs".$india;?></td></tr>
         <tr><td>USA</td><td>1</td><td><?php echo "NRs".$usa;?></td></tr>
         </table>
-    
-        <a href=" <?php echo $this->webroot; ?>New/currency">Currency Converter</a>
-      
-<form action="" method="POST" >
-
+   
+   <a href=" <?php echo $this->webroot; ?>New/currency">Currency Converter</a>
+      <form action="" method="POST" >
 Filter By News Standards:<br /><select class="standardfilter" title="<?php echo $date;?>">
 <option value="0">select standard</option>
 <option value="1">National</option>
@@ -181,7 +132,7 @@ Zone:<select name="zone">
 <br />
 </div>
 </form>
-<div>
+<div class="archiveclass">
 <h1>Archives</h1>
 
 <?php
@@ -190,6 +141,7 @@ $month=10;
 $year=2015;
 $this->requestAction('/new/days_in_month/'.$month.'/'.$year);*/
 $dates=$this->requestAction('new/getDates');
+if($dates!='NULL'){
  if($dates[0][0]==$dates[1][0]){
  $startyear=$dates[0][0];   
 echo '<a class="year" title="'.$startyear.'" href="javascript:void(0)">'.$dates[0][0].'</a>';
@@ -219,6 +171,7 @@ echo '<a class="year" title="'.$startyear.'" href="javascript:void(0)">'.$dates[
  }else{
  $diff=$dates[1][0]-$dates[0][0];
  $startyear=$dates[0][0];
+ 
  for($i=0;$i<=$diff;$i++){
   ?>
   <div>
@@ -230,7 +183,7 @@ echo '<a class="year" title="'.$startyear.'" href="javascript:void(0)">'.$dates[
  <option value="0">Select Month</option>
  <?php 
  for($j=1;$j<=12;$j++){
-    $res=$this->requestAction('archive/months_in_string/'.$j);
+    $res=$this->requestAction('/new/months_in_string/'.$j);
    echo '<option value="'.$j.'">';
     echo $res;
     echo '</option>';
@@ -240,81 +193,66 @@ echo '<a class="year" title="'.$startyear.'" href="javascript:void(0)">'.$dates[
  ?>
  </select><br />
  
- <select class="dayhere" title="lalustine" style="display: none;">
+ <select class="dayhere" style="display: none;">
  
  
  
  </select>
- <?php 
+ </div>
+ </div>
  
-
- ?>
- </div>
- </div>
  <?php
  ++$startyear;
         
     }
  }
-
+}else{
+    echo 'No archive available!!';
+    echo "<br/>";
+    }
 
 ?>
 </div>
-
 <div class="loader" style="display: none;"><img src="<?php echo $this->webroot;?>img/loader.gif"/></div>
 </div>
-</div>   
-<div class="clearfix"></div>
-<div class="row">
-<ul>
-<h3>Mostly Viewed Post</h3>
-<?php $result=$this->requestAction('/archive/findmostView/'.$date);
-//debug($result);die();
-if($result!='NULL'){
-foreach($result as $mostviewed){
-    ?>
-    <a class="view" title="<?php echo $mostviewed['Newsmanager']['title'];?>" href="<?php echo $this->webroot;?>archivedescription/<?php echo $mostviewed['Newsmanager']['slug'].'/'.$date;?>">
-    <li><img src="<?php echo $this->webroot;?>news/image/thumb1/<?php echo $mostviewed['Newsmanager']['image_file'];?>" width="200px" height="150px" /></li>
-  <div style="float: left;margin-left: 214px;margin-top: -159px">
-  <li><h3> <?php echo $mostviewed['Newsmanager']['title'];?></h3></li>
-  <li> <?php if($mostviewed['Newsmanager']['description']){
-    echo substr(strip_tags($mostviewed['Newsmanager']['description']),1,100);
+    <div class="clearfix"></div>
+    <div>
+    <h1>Related News</h1>
+    <ul>
+    <?php  $fid=$query['Newsmanager']['id'];
+   // echo $fid;die('here');
+    $output= $this->requestAction('/description/getCategoryId/'.$fid);
+    
+   foreach ($output as $similarnews){
+    $nid=$similarnews['News_category']['news_id'];
+    
+    if($nid!=$fid){
+        $simnews=$this->requestAction('/archivedescription/getSimilarnews/'.$nid.'/'.$date);
+        //debug($simnews);die();
+        if($simnews!='NULL'){
+        ?>
+        <a class="view" title="<?php echo $simnews['Newsmanager']['title'];?>" href="<?php echo $this->webroot;?>archivedescription/<?php echo $simnews['Newsmanager']['slug'].'/'.$date;?>">
+    <li><img src="<?php echo $this->webroot;?>news/image/thumb1/<?php echo $simnews['Newsmanager']['image_file'];?>"  /></li>
+  <div>
+  <li><h3> <?php echo $simnews['Newsmanager']['title'];?></h3></li>
+  <li> <?php if($simnews['Newsmanager']['description']){
+    echo substr(strip_tags($simnews['Newsmanager']['description']),1,100);
     }
     else{
         echo"No description available";}?></li>
         </a>
  
   </div>
- <?php
-}}else{
-    echo "<h5>NO POST AVAILABLE</h5>";
-}
-?>
-</ul>
-</div>
-<div>
-        <ul class="audioslider">
         
-          <?php 
-          if($slider){
-          foreach($slider as $a)
-            {
-    ?><li>
-    <?php  if($a['Newsmanager']['video']&&$a['Newsmanager']['audio']&&$a['Newsmanager']['audio']){?>
-            <div class="ytvideo"><?php echo $a['Newsmanager']['video'];?></div>
-            <audio controls>
-<source src="<?php echo $this->webroot;?>news/audio/<?php echo $a['Newsmanager']['audio'];?>" type="audio/mpeg">
-    <source src="<?php echo $this->webroot;?>news/audio/<?php echo $a['Newsmanager']['audio'];?>" type="audio/wav">
-Your browser does not support the audio element.
-</audio><?php }?></li><?php
-           // die();
-             }}else{
-                ?>
-                <li><img src="<?php echo $this->webroot;?>img/no.png"width="980px" height="300px"/><h4></h4></li>
-                <?php
-             }
-           ?>
-        </ul>
+        
+        <?php
+        }
+    }else{
+      // echo 'no need to show';
+    }
+   }
+    ?>
+    </ul>
     </div>
     <div class="footer">
     <p>Powered By Kodiary.com</p>
@@ -329,17 +267,41 @@ Your browser does not support the audio element.
     </div>
     </div>
     </div>
-<script>
-
+    
+  <script>
+$('.bxslider').bxSlider({
+  auto: true,
+   mode: 'fade',
+  captions: true,
+  autoControls: true
+});
+$('.contentslider').bxSlider({
+  minSlides: 4,
+  maxSlides: 4,
+  slideWidth: 500,
+  slideHeight:50,
+  slideMargin: 10
+});
 $(function(){
-   
-      /*--------------------------------------------------*/
-    $('.standardfilter').change(function(){
+    $('.view').click(function(){
+       var title=$(this).attr('title');
+      // alert(title);
+    $.ajax({
+       url: "<?php echo Router::url('/', true);?>archive/checkview",
+       data:"title="+title, 
+       type:"post",
+       //dataType:"html",
+       success: function(response){
+        alert(response);
+       }
+       
+    });
+    });
+     $('.standardfilter').change(function(){
        
         var id;
         id=this.value;
         var date=$(this).attr('title');
-        alert()
         if(id==1){
         $('.substandardfilter').show();
         }
@@ -351,7 +313,7 @@ $(function(){
           if(id!=0){
         $('.loader').show();
            $.ajax({
-           url: "<?php echo $this->webroot;?>archive/newstandard",
+           url: "<?php echo Router::url('/', true);?>archive/newstandard",
             data: "standard="+id+"&date="+date,
             type: "post",
             dataType: "html",
@@ -371,7 +333,7 @@ var className = $('.region').attr('class');
         $('.loader').show();
 
            $.ajax({
-           url: "<?php echo $this->webroot;?>archive/newsubstandard",
+           url: "<?php echo Router::url('/', true);?>archive/newsubstandard",
             data: 'sub='+id+'&classname='+className,
             type: "post",
             dataType: "html",
@@ -389,7 +351,7 @@ var className = $('.zone').attr('class');
         if(id!=0){
         $('.loader').show();
            $.ajax({
-           url: "<?php echo $this->webroot;?>archive/newsubstandard",
+           url: "<?php echo Router::url('/', true);?>archive/newsubstandard",
             data: 'sub='+id+'&classname='+className,
             type: "post",
             dataType: "html",
@@ -403,37 +365,21 @@ var className = $('.zone').attr('class');
     });
     
     /*--------------------------------------------------*/
-    $('.view').click(function(){
-       var title=$(this).attr('title');
-       //alert(title);
-    $.ajax({
-       url: "<?php echo $this->webroot;?>archive/checkview",
-       data:"title="+title, 
-       type:"post",
-       //dataType:"html",
-       success: function(response){
-        alert(response);
-       }
-       
-    });
-    });
-    
+  
     /*--------------------------------------------------*/
        $(document.body).on('click','.year',function(){
      
      $(this).parent().parent().find('.month').css({"display":"block"}).hide();
-     $(this).parent().find('.month').show("slow");
+     $(this).parent().find('.month').toggle("slow");
         
      });
            
     $(document.body).on('change','.months',function(){
      var month=$(this).val();
       var year=$(this).parent().parent().find('.year').attr('title'); 
-      //alert(month);
-      if(month!=0){
 
       $.ajax({
-        url:"<?php $this->webroot;?>days_in_month",
+        url:"<?php echo Router::url('/', true);?>archive/days_in_month",
         data:"month="+month+"&year="+year,
         type:"post",
         success:function(response){
@@ -449,9 +395,7 @@ var className = $('.zone').attr('class');
          
         }
       })
-       $(this).parent().find('.dayhere').show("slow");
-       }else{
-       $(this).parent().find('.dayhere').hide("slow");}
+       $(this).parent().find('.dayhere').toggle("slow");
       });
 
      $(document.body).on('change','.dayhere',function(){
@@ -459,9 +403,8 @@ var className = $('.zone').attr('class');
         var month=$(this).parent().find('.months option:selected').val();
         var day=$(this).val();
         var date=year+"-"+month+"-"+day;
-        if(day!=0){
         $.ajax({
-            url:"<?php echo $this->webroot;?>archive/checkDate",
+            url:"<?php echo Router::url('/', true);?>archive/checkDate",
             data:"date="+date,
             type:"post",
             success:function(response){
@@ -472,31 +415,7 @@ var className = $('.zone').attr('class');
             }
         })
         window.location.href='http://localhost/hamroawaz/archive/'+date;
-        }else{
-            
-        }
      });
     /*--------------------------------------------------*/
-});
-$('.bxslider').bxSlider({
-  auto: true,
-   mode: 'fade',
-  captions: true,
-  autoControls: true
-});
-$('.contentslider').bxSlider({
-  minSlides: 4,
-  maxSlides: 4,
-  slideWidth: 500,
-  slideHeight:50,
-  slideMargin: 10
-});
-$('.audioslider').bxSlider({
-minSlides: 4,
-  maxSlides: 4,
-  slideWidth: 500,
-  slideHeight:50,
-  slideMargin: 10
-});
-
+})
 </script>

@@ -4,10 +4,10 @@ class NewController extends AppController
 {
     function index()
     {
-        
-
-
-       $current=strtotime(date('Y-m-d G:i:s'));
+        if(!($cachedate = Cache::read('cached_date'))) {
+    Cache::delete('cached_date');
+}
+$current=strtotime(date('Y-m-d G:i:s'));
        $checktime=strtotime(date('Y-m-d G:i:s',mktime(10,0,0, date("m") , date("d"),date("Y"))));
        $dateObject = new DateTime(date('Y-m-d G:i:s'));
        $today=$dateObject->format('Y-m-d');
@@ -21,7 +21,8 @@ class NewController extends AppController
        $arr['conditions']=array('created_date'=>$yesterday);
        $slider=$this->Newsmanager->find('all',$arr);
        $this->set('slider',$slider);   
-       $q=$this->Newsmanager->find('all',array('conditions'=>array('created_date'=>$yesterday),'order' => array('id' => 'DESC'),'limit'=>5));
+       $q=$this->Newsmanager->find('all',array('conditions'=>array('created_date'=>$yesterday,'is_headline'=>1),'order' => array('id' => 'DESC'),'limit'=>5));
+       // debug($q);die();
          $this->set('val',$q);
            
         }
@@ -30,7 +31,7 @@ class NewController extends AppController
        $slider=$this->Newsmanager->find('all',$arr);
        $this->set('slider',$slider);   
        //die('lalustine');
-       $q=$this->Newsmanager->find('all',array('conditions'=>array('created_date'=>$today),'order' => array('id' => 'DESC'),'limit'=>5));
+       $q=$this->Newsmanager->find('all',array('conditions'=>array('created_date'=>$today,'is_headline'=>1),'order' => array('id' => 'DESC'),'limit'=>5));
          $this->set('val',$q);
         }
         }
@@ -151,17 +152,33 @@ class NewController extends AppController
     
     
     
-    function getNewsId($id){
-        
- $this->loadModel('News_category');
- 
+    function getNewsId($id,$standard='0',$classname='0'){
+    
+  $this->loadModel('News_category');
+ $this->loadModel('Newsmanager');
          $arr['conditions']=array('cat_id'=>$id);
     $q=$this->News_category->find('all',$arr);
-   // debug($q);die();
-    
+    if($q){
+    $dateObject = new DateTime(date('Y-m-d G:i:s'));
+       $today=$dateObject->format('Y-m-d');
+    foreach($q as $check){
+        $nid=$check['News_category']['news_id'];
+        if($standard=='0' && $classname=='0'){
+       $collect[]=$this->Newsmanager->find('first',array('conditions'=>array('id'=>$nid,'created_date'=>$today)));
+ }elseif($classname=='0'){
+    $collect[]=$this->Newsmanager->find('first',array('conditions'=>array('id'=>$nid,'created_date'=>$today,'national'=>$standard)));
+    }
+    else{
+         $collect[]=$this->Newsmanager->find('first',array('conditions'=>array('id'=>$nid,'created_date'=>$today,'national'=>1,$classname=>$standard)));
+    }
+    $collect=array_filter($collect);
+   
+    if(!empty($collect)){
+        
         return $q;
-
-     }
+    }}
+   }
+   }
      function getNewsContent($id,$standard='0',$classname='0'){
         $current=strtotime(date('Y-m-d G:i:s'));
        $checktime=strtotime(date('Y-m-d G:i:s',mktime(10,0,0, date("m") , date("d"),date("Y"))));
@@ -367,6 +384,7 @@ class NewController extends AppController
     $arr['ip']=$ip;
     $this->Ipaddress->create();
     $this->Ipaddress->save($arr);*/    
+    
     $this->loadModel('Newsmanager');
     $result=$this->Newsmanager->find('first',array('conditions'=>array('title'=>$title)));
     $view=$result['Newsmanager']['views'];
@@ -398,40 +416,78 @@ class NewController extends AppController
 	return $ipaddress;
 }
 
-function findmostView(){
+function findmostView($standard='0',$classname='0'){
+    $current=strtotime(date('Y-m-d G:i:s'));
+    $checktime=strtotime(date('Y-m-d G:i:s',mktime(10,0,0, date("m") , date("d"),date("Y"))));
+    $dateObject = new DateTime(date('Y-m-d G:i:s'));
+    $today=$dateObject->format('Y-m-d');
+    $yesterday = date("Y-m-d", mktime(0,0,0, date("m") , date("d")-1,date("Y")));
     $this->loadModel('Newsmanager');
-    $q=$this->Newsmanager->find('all');
-    $count=$this->Newsmanager->find('count');
+     if($checktime>=$current ){
+        if($standard=='0' && $classname=='0'){
+    $q=$this->Newsmanager->find('all',array('conditions'=>array('created_date'=>$yesterday,'views !='=>'0')));
+    }
+    elseif($standard!='0' && $classname=='0'){
+        $q=$this->Newsmanager->find('all',array('conditions'=>array('created_date'=>$yesterday,'national'=>$standard,'views !='=>'0')));
+    }else{
+        $q=$this->Newsmanager->find('all',array('conditions'=>array('created_date'=>$yesterday,'national'=>1,$standard=>$classname,'views !='=>'0')));
+    }
+    }
+    /**************************************************************************/
+     if($checktime < $current ){
+      if($standard=='0' && $classname=='0'){
+    $q=$this->Newsmanager->find('all',array('conditions'=>array('created_date'=>$today,'views !='=>'0')));
+    }
+    elseif($standard!='0' && $classname=='0'){
+        $q=$this->Newsmanager->find('all',array('conditions'=>array('created_date'=>$today,'national'=>$standard,'views !='=>'0')));
+    }else{
+        $q=$this->Newsmanager->find('all',array('conditions'=>array('created_date'=>$today,'national'=>1,$standard=>$classname,'views !='=>'0')));
+    }
+    }       
+    /*************************************************************************/ 
+    if(!empty($q)){
+         if($checktime>=$current ){        
+        $count=$this->Newsmanager->find('count',array('conditions'=>array('created_date'=>$yesterday,'views !='=>'0')));
+                                      }
+         if($checktime < $current ){
+            $count=$this->Newsmanager->find('count',array('conditions'=>array('created_date'=>$today,'views !='=>'0')));
+            }
+         foreach($q as $mostview){
+                $arr[0]=$mostview['Newsmanager']['views'];
+                $arr[1]=$mostview['Newsmanager']['id'];
+                $assoc[]=$arr;
+                        }
+ 
+    rsort($assoc);
+    for($i=0;$i<=$count-1;$i++){
+        $resarr[]=$this->Newsmanager->find('first',array('conditions'=>array('views'=>$assoc[$i][0],'id'=>$assoc[$i][1])));
+             }
   
-   //$arr=array();
-foreach($q as $mostview){
-  $arr[]=$mostview['Newsmanager']['views'];
-   
-}
-
-rsort($arr);
-
-for($i=0;$i<=$count-1;$i++){
-    if($arr[$i]!=0){
-$resarr[]=$this->Newsmanager->find('first',array('conditions'=>array('views'=>$arr[$i])));
-  }
-}
-//debug($resarr);die();
-return $resarr;
-}
+    return $resarr;
+      }else{
+    $result='NULL';
+    return $result;
+        }
+    }
 
 function getDates(){
+    
     $this->loadModel('Newsmanager');
     $result=$this->Newsmanager->find('all');
+    if($result){
   foreach($result as $res){
     $date[]=$res['Newsmanager']['created_date'];
+    
   }
 $mindate= min($date);
+
 $maxdate=max($date);
 $min=explode('-',$mindate);
 $max=explode('-',$maxdate);
 return array($min, $max);
-}
+}else{
+    return 'NULL';
+}}
 
 function days_in_month()
 {
